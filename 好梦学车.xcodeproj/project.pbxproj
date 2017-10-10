@@ -6188,8 +6188,8 @@
 					"$(PROJECT_DIR)/好梦学车",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "/Users/haomeng01/Desktop/好梦学车/好梦学车/PrefixHeader.pch";
-				INFOPLIST_FILE = "$(SRCROOT)/好梦学车/Info.plist";
+				GCC_PREFIX_HEADER = "/Users/haomeng01/Desktop/好梦学车/好梦学车/好梦学车/PrefixHeader.pch";
+				INFOPLIST_FILE = "/Users/haomeng01/Desktop/备份第一个版本/好梦学车/好梦学车/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -6219,8 +6219,8 @@
 					"$(PROJECT_DIR)/好梦学车",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "/Users/haomeng01/Desktop/好梦学车/好梦学车/PrefixHeader.pch";
-				INFOPLIST_FILE = "$(SRCROOT)/好梦学车/Info.plist";
+				GCC_PREFIX_HEADER = "/Users/haomeng01/Desktop/好梦学车/好梦学车/好梦学车/PrefixHeader.pch";
+				INFOPLIST_FILE = "/Users/haomeng01/Desktop/备份第一个版本/好梦学车/好梦学车/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

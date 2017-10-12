@@ -104,7 +104,7 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
     //地图部分
     BMKMapManager *manager = [[BMKMapManager alloc] init];
     
-    BOOL success = [manager start:@"cGMj1B0BAySu1lx0hyUZ9m0lTDDijtpV" generalDelegate:nil];
+    BOOL success = [manager start:@"UO9B4VG4X6TeBEYHcMo7GGfyr052WfxA" generalDelegate:nil];
     
     if (!success) {
         NSLog(@"百度地图启动成功");

@@ -14,26 +14,37 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - BaiduMapKit (3.2.1)
-  - CocoaLumberjack (3.1.0):
-    - CocoaLumberjack/Default (= 3.1.0)
-    - CocoaLumberjack/Extensions (= 3.1.0)
-  - CocoaLumberjack/Default (3.1.0)
-  - CocoaLumberjack/Extensions (3.1.0):
+  - BaiduMapKit (3.4.0)
+  - CocoaLumberjack (3.3.0):
+    - CocoaLumberjack/Default (= 3.3.0)
+    - CocoaLumberjack/Extensions (= 3.3.0)
+  - CocoaLumberjack/Default (3.3.0)
+  - CocoaLumberjack/Extensions (3.3.0):
     - CocoaLumberjack/Default
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
-  - HappyDNS (0.3.10)
-  - JCore (1.1.3)
-  - JPush (3.0.5):
+  - HappyDNS (0.3.12)
+  - JCore (1.1.5)
+  - JPush (3.0.6):
     - JCore (~> 1.1.1)
-  - Qiniu (7.1.5):
+  - Qiniu (7.1.8):
     - AFNetworking (~> 3)
     - HappyDNS (~> 0.3)
   - SVGKit (2.0.1):
     - CocoaLumberjack (~> 3.x)
-  - WechatOpenSDK (1.7.7)
+  - UMengUShare/Core (6.4.5):
+    - UMengUShare/Network
+  - UMengUShare/Network (6.4.5)
+  - UMengUShare/Social/ReducedQQ (6.4.5):
+    - UMengUShare/Core
+  - UMengUShare/Social/ReducedSina (6.4.5):
+    - UMengUShare/Core
+  - UMengUShare/Social/ReducedWeChat (6.4.5):
+    - UMengUShare/Core
+  - UMengUShare/UI (6.4.5):
+    - UMengUShare/Core
+  - WechatOpenSDK (1.8.0)
 
 DEPENDENCIES:
   - BaiduMapKit
@@ -41,6 +52,10 @@ DEPENDENCIES:
   - JPush (~> 3.0.2)
   - Qiniu (~> 7.0)
   - SVGKit (from `https://github.com/SVGKit/SVGKit.git`, branch `2.x`)
+  - UMengUShare/Social/ReducedQQ
+  - UMengUShare/Social/ReducedSina
+  - UMengUShare/Social/ReducedWeChat
+  - UMengUShare/UI
   - WechatOpenSDK
 
 EXTERNAL SOURCES:
@@ -55,16 +70,17 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  BaiduMapKit: 9c748785aa3dddfc41dcb70c14b21ce32f680930
-  CocoaLumberjack: 8311463ddf9ee86a06ef92a071dd656c89244500
+  BaiduMapKit: 0a5e5e0b1e3fd8dc5aceb40ab9b89e52e1d13df9
+  CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
-  HappyDNS: 06a9fed2796663fd87626dbf02552933265bf059
-  JCore: dff3c50e9a7522a508cd9096ca79165968e1aed3
-  JPush: dd0b776998aa705a6242b947bf72e5a640387cfe
-  Qiniu: 77a3dba411556a383d72d17e842345a9d4c83252
+  HappyDNS: 691a3041128055d09866f86e6e9ca90f24da1f18
+  JCore: 9bd9c770c877c583d98b90a68792b8361974c231
+  JPush: c41be50eb1a574a66aeb68d237f00a4ec6ec3a82
+  Qiniu: 2f1b9d13904b6a7608a66a2d02c5b7b24575622a
   SVGKit: 4055d9e809b5db8633755979cfb3b02dc5a8c20d
-  WechatOpenSDK: cbd332148eb792d444ed4eec94f421d98f2046ee
+  UMengUShare: a5711c54e640b04e3048e931d2b88d50f9cfa55c
+  WechatOpenSDK: 0ee07a8d492299d3e47372a33da5af26524a7576
 
-PODFILE CHECKSUM: d217252bea8582ed719a6db6b81ca4e9853dc082
+PODFILE CHECKSUM: ad9fa2830ae168809504d4100f3e9ef0cc01a455
 
 COCOAPODS: 1.2.1

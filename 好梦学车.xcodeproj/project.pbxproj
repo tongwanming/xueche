@@ -6186,6 +6186,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/好梦学车",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/UMSocialSDK",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/UMSocialUI",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "/Users/haomeng01/Desktop/好梦学车/好梦学车/好梦学车/PrefixHeader.pch";
@@ -6194,7 +6196,12 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/QQ",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/Sina",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/UniqueId",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/WeChat",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/UMSocialSDKPlugin",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.domainname.chaomengxuechenormal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -6217,6 +6224,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/好梦学车",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/UMSocialSDK",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/UMSocialUI",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "/Users/haomeng01/Desktop/好梦学车/好梦学车/好梦学车/PrefixHeader.pch";
@@ -6225,7 +6234,12 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/QQ",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/Sina",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/UniqueId",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/SocialLibraries/WeChat",
+					"$(PROJECT_DIR)/好梦学车/UMSocial/UMSocialSDKPlugin",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.domainname.chaomengxuechenormal;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -34,6 +34,8 @@
 
 //control
 #import "CatStyleApplyNowBtn.h"
+#import <UMSocialCore/UMSocialCore.h>
+#import <UShareUI/UShareUI.h>
 
 //test
 #import "SinginViewController.h"
@@ -230,7 +232,14 @@
 }
 
 - (void)leftBtnActive:(UIButton *)btn{
-    NSLog(@"左边按钮");
+    
+    __weak __typeof(&*self) weakSelf=self;
+    [UMSocialUIManager setPreDefinePlatforms:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_QQ),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine)]];
+    [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
+        // 根据获取的platformType确定所选平台进行下一步操作
+        [weakSelf shareImageToPlatformType:platformType];
+    }];
+    
 }
 
 - (void)rightBtnActive:(UIButton *)btn{
@@ -954,5 +963,111 @@
         }];
     });
 }
+
+//um--test
+- (void)shareImageToPlatformType:(UMSocialPlatformType)platformType
+{
+    NSString * _shareTitle =@"title";
+    NSString *   _shareImg = @"image";
+    NSString * _shareIntro = @"desc";
+    
+   // NSString *urlKey = [[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:_shareImg]];
+    
+    //UIImage *image =  [[SDImageCache sharedImageCache] imageFromCacheForKey:urlKey];
+    UIImage *image;
+    if (!image) {
+        image = [UIImage imageNamed:@"icon_order_two@3x"];
+    }
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页内容对象
+#warning 图片!
+    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:_shareTitle descr:_shareIntro thumImage:image];
+    //设置网页地址
+    shareObject.webpageUrl = @"www.baidu.com";
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+//            [self shareError];
+            NSString * result = [NSString string];
+            switch (error.code) {
+                case UMSocialPlatformErrorType_Unknow:
+                    break;
+                case UMSocialPlatformErrorType_NotSupport:
+                    result = @"不支持（url scheme 没配置，或者没有配置-ObjC， 或则SDK版本不支持或则客户端版本不支持";
+                    break;
+                case UMSocialPlatformErrorType_AuthorizeFailed:
+                    result = @"授权失败";
+                    break;
+                case UMSocialPlatformErrorType_ShareFailed:
+                    result = @"分享失败";
+                    break;
+                case UMSocialPlatformErrorType_RequestForUserProfileFailed:
+                    result = @"请求用户信息失败";
+                    break;
+                case UMSocialPlatformErrorType_ShareDataNil:
+                    result = @"分享内容为空";
+                    break;
+                case UMSocialPlatformErrorType_ShareDataTypeIllegal:
+                    result = @"分享内容不支持";
+                    break;
+                case UMSocialPlatformErrorType_CheckUrlSchemaFail:
+                    result = @"schemaurl fail";
+                    break;
+                case UMSocialPlatformErrorType_NotInstall:
+                    result = @"应用未安装";
+                    break;
+                case UMSocialPlatformErrorType_Cancel:
+                    result = @"您已取消分享";
+                    break;
+                case UMSocialPlatformErrorType_NotNetWork:
+                    result = @"网络异常";
+                    break;
+                case UMSocialPlatformErrorType_SourceError:
+                    result = @"第三方错误";
+                    break;
+                case UMSocialPlatformErrorType_ProtocolNotOverride:
+                    result = @"对应的UMSocialPlatformProvider的方法没有实现";
+                    break;
+                default:
+                    break;
+            }
+//            MBShowError(result);
+        }else{
+//            DLog(@"response data is %@",data);
+            //如果是车圈的分享成功了刷新车圈分享数量?
+//            if ([User sharedUser].shareChequan) {
+//                [User sharedUser].shareChequan = NO;
+//                [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadChequanTableViewData" object:nil];
+//            }
+//            MBShowError(@"分享成功!");
+//            [self shareSuccess];
+        }
+    }];
+}
+//分别在分享成功与失败后调用  让后台知道
+//- (void)shareSuccess{
+//    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:NUM([self.shareDic[@"sid"] intValue]),@"sid", nil];
+//    NSString * url = @"user/share.json?do=save_succeed";
+//    [YCLHttp postUrlString:url needLogin:YES parmsDic:dic success:^(id responseObj) {
+//        DLog(@"%@",responseObj);
+//    } failure:^(NSError *error) {
+//        DLog(@"%@",error);
+//    }];
+//}
+//- (void)shareError{
+//    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:NUM([self.shareDic[@"sid"] intValue]),@"sid", nil];
+//    NSString * url = @"user/share.json?do=save_failed";
+//    [YCLHttp postUrlString:url needLogin:YES parmsDic:dic success:^(id responseObj) {
+//        DLog(@"%@",responseObj);
+//    } failure:^(NSError *error) {
+//        DLog(@"%@",error);
+//    }];
+//}
+
 
 @end

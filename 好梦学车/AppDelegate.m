@@ -134,7 +134,7 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
     self.window.rootViewController = main;
     [self.window makeKeyAndVisible];
     
-     [LaunchIntroductionView sharedWithImages:@[@"welcome01.jpg",@"welcome02.jpg",@"welcome031.jpg"] buttonImage:@"" buttonFrame:CGRectMake(kScreen_width/2 - 150/2, kScreen_height - 100, 150, 45)];
+     [LaunchIntroductionView sharedWithImages:@[@"welcome01.jpg",@"welcome02.jpg",@"welcome031.png"] buttonImage:@"" buttonFrame:CGRectMake(kScreen_width/2 - 150/2, kScreen_height - 100, 150, 45)];
     
 //    [self loadDataOne];
 //    [self loadDataTwo];

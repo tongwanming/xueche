@@ -18,6 +18,7 @@
 #import "PersonCenterViewController.h"
 #import "SubjectTwoPopWebViewController.h"
 #import "installment_ViewController.h"
+#import "ServiceStationDetailViewController.h"
 
 //cell
 #import "FirstTobTableViewCellSc.h"
@@ -67,6 +68,10 @@
 @property (nonatomic, strong) NSMutableArray *htmlUrlData;
 
 @property (nonatomic, strong) NSArray *locationData;
+
+@property (nonatomic, assign)CLLocationCoordinate2D coordinate;
+
+@property (nonatomic, strong) NSString *address;
 
 @end
 
@@ -233,6 +238,7 @@
 
 - (void)leftBtnActive:(UIButton *)btn{
     
+    return;
     __weak __typeof(&*self) weakSelf=self;
     [UMSocialUIManager setPreDefinePlatforms:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_QQ),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine)]];
     [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
@@ -335,11 +341,16 @@
          }];
         
         __weak __typeof (&*self) weakSelf = self;
-        [((FirstLocationTableViewCell *)cell)  retunLoadDataWithProvinceBlock:^(NSString *province) {
+    
+        [((FirstLocationTableViewCell *)cell) retunLoadDataWithProvinceBlock:^(NSString *province, NSString *address) {
 //            [weakSelf getScrollViewDataWithProvince:province];
 //            [weakSelf loadDataWithServerStation];
 //            
 //            [weakSelf loadCarTypeData];
+            weakSelf.address = address;
+        }];
+        [((FirstLocationTableViewCell *)cell) returnCoordinateBlock:^(CLLocationCoordinate2D coordinate) {
+            weakSelf.coordinate = coordinate;
         }];
     }else if (indexPath.section == 3){
         if (!cell) {
@@ -371,6 +382,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 4) {
+        return;
+        ServiceStationDetailViewController *v = [[ServiceStationDetailViewController alloc] init];
+        v.model = _offLineData[indexPath.row];
+        v.latitude = [NSString stringWithFormat:@"%f",self.coordinate.latitude];
+        v.longitude = [NSString stringWithFormat:@"%f",self.coordinate.longitude];
+        v.address = self.address;
+        [self.navigationController pushViewController:v animated:YES];
         NSLog(@"点击线下服务站");
     }
 }
@@ -828,7 +846,7 @@
 
 - (void)loadCarTypeData{
     [CustomAlertView showAlertViewWithVC:self];
-    NSDictionary *dic =@{@"categoryCode":@""};
+    NSDictionary *dic =@{@"categoryCode":@"",@"city":@"重庆市"};
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];

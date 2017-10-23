@@ -28,7 +28,7 @@
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
 #import <BaiduMapAPI_Search/BMKSearchComponent.h>//引入检索功能所有的头文件
 #import <BaiduMapAPI_Cloud/BMKCloudSearchComponent.h>//引入云检索功能所有的头文件
-#import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
+
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>//引入计算工具所有的头文件
 #import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
 
@@ -130,7 +130,9 @@
     region.center.longitude = userLocation.location.coordinate.longitude;
     _longitude = [NSString stringWithFormat:@"%f",userLocation.location.coordinate.longitude];
     _latitude = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
-    
+    if (_coordinate) {
+        _coordinate(userLocation.location.coordinate);
+    }
     region.span.latitudeDelta = 0.2;
     region.span.longitudeDelta = 0.2;
     if (_mapView)
@@ -195,7 +197,7 @@
     if (error == BMK_SEARCH_NO_ERROR) {
         NSLog(@"当前位置%@",result.address);
         if (self.provinceBlock) {
-            self.provinceBlock(result.addressDetail.province);
+            self.provinceBlock(result.addressDetail.province,result.address);
         }
         
     }
@@ -207,6 +209,10 @@
 
 - (void)retunLoadDataWithProvinceBlock:(locationBlockProvince)block{
     _provinceBlock = block;
+}
+
+- (void)returnCoordinateBlock:(coordinate)block{
+    _coordinate = block;
 }
 
 - (void)viewWillAppear:(BOOL)animated{

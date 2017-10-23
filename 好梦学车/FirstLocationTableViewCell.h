@@ -7,10 +7,13 @@
 //
 
 #import "FirstBasicTableViewCell.h"
+#import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
 
 typedef void(^locationBlock)(NSArray *data);
 
-typedef void(^locationBlockProvince)(NSString *province);
+typedef void(^locationBlockProvince)(NSString *province,NSString *address);
+
+typedef void(^coordinate)(CLLocationCoordinate2D coordinate);
 
 @protocol FirstLocationTableViewCellDelegate <NSObject>
 
@@ -31,8 +34,12 @@ typedef void(^locationBlockProvince)(NSString *province);
 
 @property (nonatomic, copy) locationBlockProvince provinceBlock;
 
+@property (nonatomic, copy) coordinate coordinate;
+
 - (void)retunLoadDataWithBlock:(locationBlock)block;
 
 - (void)retunLoadDataWithProvinceBlock:(locationBlockProvince)block;
+
+- (void)returnCoordinateBlock:(coordinate)block;
 
 @end

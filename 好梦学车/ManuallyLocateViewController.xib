@@ -23,14 +23,21 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkj-sf-ZQz">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                     <subviews>
-                        <button opaque="NO" tag="1001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDz-mZ-zz6">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G27-EE-vy0">
+                            <rect key="frame" x="0.0" y="63.5" width="375" height="0.5"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="0.5" id="aFe-Yu-PZf"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" tag="1001" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gDz-mZ-zz6">
                             <rect key="frame" x="16" y="20" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="44" id="TCP-DM-mhJ"/>
                                 <constraint firstAttribute="height" constant="44" id="jLo-eN-Mhe"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                            <state key="normal" title="取消">
+                            <state key="normal" image="btn_back_gray.png">
                                 <color key="titleColor" red="0.0" green="0.62745098040000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </state>
                             <connections>
@@ -44,7 +51,7 @@
                                 <constraint firstAttribute="height" constant="44" id="7Eb-zz-6mJ"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                            <state key="normal" title="搜索">
+                            <state key="normal" title="取消">
                                 <color key="titleColor" red="0.0" green="0.62745098040000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </state>
                             <connections>
@@ -52,9 +59,9 @@
                             </connections>
                         </button>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="输入地址" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xby-Gh-ViA">
-                            <rect key="frame" x="80" y="22" width="235" height="40"/>
+                            <rect key="frame" x="80" y="24.5" width="235" height="35"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="i2D-0E-t82"/>
+                                <constraint firstAttribute="height" constant="35" id="i2D-0E-t82"/>
                             </constraints>
                             <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -63,12 +70,15 @@
                     </subviews>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="0.20756635273972604" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstAttribute="bottom" secondItem="G27-EE-vy0" secondAttribute="bottom" id="5aX-fH-1MO"/>
+                        <constraint firstItem="G27-EE-vy0" firstAttribute="top" secondItem="xby-Gh-ViA" secondAttribute="bottom" constant="4" id="5jj-nj-yR0"/>
                         <constraint firstAttribute="height" constant="64" id="Hws-Gs-aVt"/>
                         <constraint firstAttribute="trailing" secondItem="99k-RM-t9v" secondAttribute="trailing" constant="16" id="MC2-n5-hzf"/>
-                        <constraint firstItem="xby-Gh-ViA" firstAttribute="centerY" secondItem="gDz-mZ-zz6" secondAttribute="centerY" id="PGY-Ha-ebp"/>
                         <constraint firstAttribute="bottom" secondItem="99k-RM-t9v" secondAttribute="bottom" id="ZMH-qm-kzW"/>
                         <constraint firstItem="gDz-mZ-zz6" firstAttribute="leading" secondItem="bkj-sf-ZQz" secondAttribute="leading" constant="16" id="eEJ-yU-yTg"/>
+                        <constraint firstItem="G27-EE-vy0" firstAttribute="leading" secondItem="bkj-sf-ZQz" secondAttribute="leading" id="gum-Hy-bmo"/>
                         <constraint firstItem="99k-RM-t9v" firstAttribute="leading" secondItem="xby-Gh-ViA" secondAttribute="trailing" id="lUo-1s-QTu"/>
+                        <constraint firstAttribute="trailing" secondItem="G27-EE-vy0" secondAttribute="trailing" id="mZH-ts-xk7"/>
                         <constraint firstItem="xby-Gh-ViA" firstAttribute="leading" secondItem="gDz-mZ-zz6" secondAttribute="trailing" constant="20" id="thZ-pq-9Nb"/>
                         <constraint firstAttribute="bottom" secondItem="gDz-mZ-zz6" secondAttribute="bottom" id="wBu-fb-670"/>
                     </constraints>
@@ -90,4 +100,7 @@
             </constraints>
         </view>
     </objects>
+    <resources>
+        <image name="btn_back_gray.png" width="11" height="18"/>
+    </resources>
 </document>

@@ -37,6 +37,7 @@
 #import "CatStyleApplyNowBtn.h"
 #import <UMSocialCore/UMSocialCore.h>
 #import <UShareUI/UShareUI.h>
+#import "ManuallyLocateViewController2.h"
 
 //test
 #import "SinginViewController.h"
@@ -382,11 +383,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 4) {
-        return;
+    
         ServiceStationDetailViewController *v = [[ServiceStationDetailViewController alloc] init];
         v.model = _offLineData[indexPath.row];
-        v.latitude = [NSString stringWithFormat:@"%f",self.coordinate.latitude];
-        v.longitude = [NSString stringWithFormat:@"%f",self.coordinate.longitude];
+//        v.latitude = [NSString stringWithFormat:@"%f",self.coordinate.latitude];
+//        v.longitude = [NSString stringWithFormat:@"%f",self.coordinate.longitude];
         v.address = self.address;
         [self.navigationController pushViewController:v animated:YES];
         NSLog(@"点击线下服务站");
@@ -733,6 +734,17 @@
     }
 }
 
+#pragma mark -locationTableViewCellDelegate
+
+-(void)searchActive{
+    ManuallyLocateViewController2 *v = [[ManuallyLocateViewController2 alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:v];
+
+    [self presentViewController:nav animated:YES completion:^{
+        
+    }];
+}
+
 - (void)firstLocationTableViewCellSubCellSelectActive:(NSIndexPath *)indexpath andData:(NSArray *)array{
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
         if (array.count < 1) {
@@ -758,21 +770,11 @@
 #pragma mark - loadDataWith专业线下服务站
 - (void)loadDataWithServerStation{
     NSDictionary *dic = @{
-        @"city":@"重庆",
-        @"district":@"",
-        @"header": @{
-            @"cmd":@"string",
-            @"deviceId":@"string",
-            @"deviceName":@"string",
-            @"osName":@"string",
-            @"osVersion":@"string",
-            @"source":@"string",
-            @"ssost":@"string",
-            @"token":@"string",
-            @"versionCode":@"string"
-        },
-        @"province":@"重庆"
-        };
+                          @"city":@"重庆",
+                          @"district":@"",
+                          @"name":@"",
+                          @"province":@"重庆"
+                          };
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
@@ -821,6 +823,11 @@
                     model.phone = [dic objectForKey:@"phone"];
                     model.province = [dic objectForKey:@"province"];
                     model.imageUrl = [dic objectForKey:@"imageUrl"];
+                    
+                    model.mapImageUrl = [dic objectForKey:@"mapImageUrl"];
+                    model.lightRailDes = [dic objectForKey:@"lightRailDes"];
+                    model.publicBusName = [dic objectForKey:@"publicBusName"];
+                    model.publicBusDes = [dic objectForKey:@"publicBusDes"];
                     [_offLineData addObject:model];
                 }
                 

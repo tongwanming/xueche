@@ -70,6 +70,10 @@
     coord.latitude = [_latitude floatValue];
     coord.longitude = [_longitude floatValue];
     [_mapView setCenterCoordinate:coord animated:true];
+    
+    if ([self.delegate respondsToSelector:@selector(searchActive)]) {
+        [self.delegate performSelector:@selector(searchActive) withObject:nil];
+    }
 }
 
 - (void)createMapView{

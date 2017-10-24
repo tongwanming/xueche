@@ -9,6 +9,8 @@
 #import "ServiceStationDetailViewController.h"
 #import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
 #import <MapKit/MapKit.h>
+#import "CustomAlertView.h"
+#import "UIImageView+WebCache.h"
 
 @interface ServiceStationDetailViewController ()
 
@@ -16,21 +18,14 @@
 
 @implementation ServiceStationDetailViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    CLLocationCoordinate2D coordinate2D;
-    coordinate2D.latitude = [_model.latitude doubleValue];
-    coordinate2D.longitude = [_model.longitude doubleValue];
-    [self getInstalledMapAppWithAddr:_model.address withEndLocation:coordinate2D];
-    // Do any additional setup after loading the view from its nib.
-}
+
 - (IBAction)btnClick:(id)sender {
 
     UIButton *btn = sender;
     if (btn.tag == 1001) {
       
         [self.navigationController popToRootViewControllerAnimated:YES];
-    }else{
+    }else if(btn.tag == 1002){
         //自带地图
         CLLocationCoordinate2D coordinate;
         coordinate.latitude = [_model.latitude doubleValue];
@@ -39,9 +34,49 @@
         //test
         NSArray *arr = [self getInstalledMapAppWithAddr:_model.address withEndLocation:coordinate];
         [self showAlertViewWithData:arr andCoordinate:coordinate];
+    }else{
+        //拨打电话
+        [CustomAlertView showAlertViewWithVC:self];
+        NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",_model.phone];
+        UIWebView * callWebview = [[UIWebView alloc] init];
+        [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+        [self.view addSubview:callWebview];
+        [CustomAlertView hideAlertView];
     }
-    
+}
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+//    CLLocationCoordinate2D coordinate2D;
+//    coordinate2D.latitude = [_model.latitude doubleValue];
+//    coordinate2D.longitude = [_model.longitude doubleValue];
+//    [self getInstalledMapAppWithAddr:_model.address withEndLocation:coordinate2D];
+    [self refreshData];
+}
+
+- (void)refreshData{
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:_model.mapImageUrl] placeholderImage:[UIImage imageNamed:@""]];
+    _titleLabel.text = _model.name;
+    _addressLabel.text = _model.address;
+    _addressLabel.font = [UIFont systemFontOfSize:15*TYPERATION];
+    _bigTitleLabel.text = [NSString stringWithFormat:@"好梦学车—%@",_model.name];
+    _bigTitleLabel.font = [UIFont systemFontOfSize:21*TYPERATION];
+    _phoneLabel.text = [NSString stringWithFormat:@"电话：%@",_model.phone];
+    _phoneLabel.font = [UIFont systemFontOfSize:15*TYPERATION];
+    _metroLine.text = [NSString stringWithFormat:@"轻轨：%@",_model.lightRailDes];
+    _metroLine.font = [UIFont systemFontOfSize:15*TYPERATION];
+    _busStationNameLabel.text = [NSString stringWithFormat:@"公交：%@",_model.publicBusName];
+    _busStationNameLabel.font = [UIFont systemFontOfSize:15*TYPERATION];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 13;// 字体的行间距
+    
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName:[UIFont systemFontOfSize:15*TYPERATION],
+                                 NSParagraphStyleAttributeName:paragraphStyle
+                                 };
+    _allBusLine.attributedText = [[NSAttributedString alloc] initWithString:_model.publicBusDes attributes:attributes];
+    _allBusLine.textColor = UNMAIN_TEXT_COLOR;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,15 +84,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (NSArray *)getInstalledMapAppWithAddr:(NSString *)addrString withEndLocation:(CLLocationCoordinate2D)endLocation
 
@@ -151,7 +178,7 @@
         UIAlertAction *action = [UIAlertAction actionWithTitle:[dic objectForKey:@"title"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if ([action.title isEqualToString:@"百度地图"]) {
                 //    百度地图
-                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",_model.latitude, _model.longitude,_model.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll", _model.latitude,_model.longitude,_model.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 [[UIApplication sharedApplication]openURL:[NSURL URLWithString:urlString]];
             }else if ([action.title isEqualToString:@"高德地图"]){
                 //高德地图

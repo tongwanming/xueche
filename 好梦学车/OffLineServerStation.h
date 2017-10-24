@@ -12,14 +12,20 @@
 
 @property (nonatomic, strong) NSString *address;
 
-@property (nonatomic, strong) NSString *city;
-@property (nonatomic, strong) NSString *district;
-@property (nonatomic, strong) NSString *offLineServerId;
-@property (nonatomic, strong) NSString *imageUrl;
+@property (nonatomic, strong) NSString *city;//城市
+@property (nonatomic, strong) NSString *district;//地区
+@property (nonatomic, strong) NSString *offLineServerId;//线下服务站id
+@property (nonatomic, strong) NSString *imageUrl;//logoImage
 @property (nonatomic, strong) NSString *latitude;
 @property (nonatomic, strong) NSString *longitude;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *phone;
 @property (nonatomic, strong) NSString *province;
+
+@property (nonatomic, strong) NSString *mapImageUrl;//地图图片
+@property (nonatomic, strong) NSString *lightRailDes;//地铁站
+@property (nonatomic, strong) NSString *publicBusName;//公交站
+@property (nonatomic, strong) NSString *publicBusDes;//公交线路
+
 
 @end

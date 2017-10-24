@@ -1,12 +1,12 @@
 //
-//  ManuallyLocateViewController.m
-//  好梦学员端
+//  ManuallyLocateViewController2.m
+//  好梦学车
 //
-//  Created by haomeng on 2017/9/29.
+//  Created by haomeng on 2017/10/23.
 //  Copyright © 2017年 haomeng. All rights reserved.
 //
 
-#import "ManuallyLocateViewController.h"
+#import "ManuallyLocateViewController2.h"
 #import <BaiduMapAPI_Map/BMKMapView.h>
 
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
@@ -23,9 +23,9 @@
 #import "SearchModel.h"
 #import "FirstLocationModel.h"
 #import "CustomAlertView.h"
+#import "ChoosedPlaceViewController.h"
 
-@interface ManuallyLocateViewController ()<UITableViewDelegate,UITableViewDataSource,BMKPoiSearchDelegate>
-
+@interface ManuallyLocateViewController2 ()<UITableViewDelegate,UITableViewDataSource,BMKPoiSearchDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *inputAddTF;//输入地址框
 
@@ -35,8 +35,6 @@
 
 @property (nonatomic,strong) NSString *placeStr;
 
-
-@property (nonatomic,strong) FinishBlock block;//回调的 block
 
 
 @property (nonatomic,strong) NSString *locationCity;//定位城市
@@ -48,7 +46,7 @@
 
 @end
 
-@implementation ManuallyLocateViewController
+@implementation ManuallyLocateViewController2
 {
     
     
@@ -61,6 +59,7 @@
     
     
 }
+
 - (IBAction)btnClick:(id)sender {
     UIButton *btn = sender;
     if (btn.tag == 1001) {
@@ -68,12 +67,13 @@
     }else if (btn.tag == 1002){
         _inputAddTF.text = @"";
     }else{
-    
+        
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
+    self.navigationController.navigationBar.hidden = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.inputAddTF becomeFirstResponder];
     });
@@ -89,6 +89,14 @@
     _geocodesearch.delegate = nil;
 }
 
+
+//- (void)viewDidAppear:(BOOL)animated{
+//    [super viewDidAppear:YES];
+//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+//}
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -103,9 +111,7 @@
     // Do any additional setup after loading the view from its nib.
 }
 
-- (void)returnChoosedLoactionWithBlock:(FinishBlock)block{
-    _block = block;
-}
+
 
 #pragma mark-tableDelegate
 
@@ -167,6 +173,7 @@
     
     
     [self getDataActiveWithPt:model.pt andModle:model];
+    
     
     
     
@@ -319,12 +326,21 @@
                         model.updateTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"updateTime"]];
                         [_dataArray addObject:model];
                     }
-                
+                    
                     __weak typeof(self) wSelf = self;
                     
-                    [self dismissViewControllerAnimated:YES completion:^{
-                        wSelf.block(model.address,model.pt,_dataArray);
-                    }];
+                    //预选场地
+                    ChoosedPlaceViewController *typeVc = [[ChoosedPlaceViewController alloc] init];
+                    typeVc.allExerciseLocationData = _dataArray;
+                    typeVc.isByPersonVC = YES;
+                    typeVc.currentLocation = model.pt;
+                    typeVc.isHasSearch = YES;
+//                    [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
+//                        [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
+//                    }];
+                    self.navigationController.navigationBar.hidden = NO;
+                    [self.navigationController pushViewController:typeVc animated:YES];
+        
                 });
                 
             }else{
@@ -342,15 +358,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

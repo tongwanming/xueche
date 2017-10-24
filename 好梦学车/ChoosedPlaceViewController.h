@@ -9,6 +9,7 @@
 #import "BasicViewController.h"
 #import "ChoosedClassModel.h"
 #import "FirstLocationModel.h"
+#import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
 
 typedef void(^choosedPlaceBlock)(FirstLocationModel *place);
 
@@ -21,6 +22,11 @@ typedef void(^choosedPlaceBlock)(FirstLocationModel *place);
 @property (nonatomic, strong) ChoosedClassModel *choosedModel;
 
 @property (nonatomic, strong) NSArray *allExerciseLocationData;
+
+@property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
+
+@property (nonatomic, assign) BOOL isHasSearch;//是否有手动搜索功能
+
 
 - (void)returnHasChooedExercisePlaceBlock:(choosedPlaceBlock)block;
 @end

@@ -33,19 +33,28 @@
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
 #import <BaiduMapAPI_Search/BMKSearchComponent.h>//引入检索功能所有的头文件
 #import <BaiduMapAPI_Cloud/BMKCloudSearchComponent.h>//引入云检索功能所有的头文件
-#import <BaiduMapAPI_Location/BMKLocationComponent.h>//引入定位功能所有的头文件
+
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>//引入计算工具所有的头文件
 #import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
+#import <MapKit/MapKit.h>
 
+#import "NavigationBtn.h"
 
 /** 路线的标注*/
 @interface RouteAnnotation : BMKPointAnnotation
+
 
 @property (nonatomic) int type; ///<0:起点 1：终点 2：公交 3：地铁 4:驾乘 5:途经点
 @property (nonatomic) int degree;
 @end
 
 @implementation RouteAnnotation
+
+@end
+
+@protocol UIShowLocationTableViewCellDelegate <NSObject>
+
+- (void)UIShowLocationTableViewCellDelegateBtn:(UIButton *)btn andModel:(FirstLocationModel *)model;
 
 @end
 
@@ -59,6 +68,11 @@
 
 @property (nonatomic, strong) UIImageView *checkedImage;
 
+@property (nonatomic, strong) NavigationBtn *navigationBtn;
+
+@property (nonatomic, weak) id<UIShowLocationTableViewCellDelegate>delegate;
+
+@property (nonatomic, strong) FirstLocationModel *model;
 
 
 @end
@@ -68,24 +82,34 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier andWidth:(CGFloat)width{
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        _distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 20, width-60, 13)];
+        
+        _checkedImage = [[UIImageView alloc] initWithFrame:CGRectMake(16, 37, 20, 20)];
+        _checkedImage.contentMode = UIViewContentModeScaleAspectFit;
+        _checkedImage.backgroundColor = [UIColor clearColor];
+        
+        _distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_checkedImage.frame)+16, 20, width-60, 13)];
         _distanceLabel.textColor = UNMAIN_TEXT_COLOR;
         _distanceLabel.font = [UIFont systemFontOfSize:13];
         _distanceLabel.textAlignment = NSTextAlignmentLeft;
         
-        _titleNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, _distanceLabel.frame.origin.y+10+_distanceLabel.frame.size.height, width-60, 17)];
+        _titleNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_checkedImage.frame)+16, _distanceLabel.frame.origin.y+10+_distanceLabel.frame.size.height, width-60, 17)];
         _titleNameLabel.textColor = TEXT_COLOR;
         _titleNameLabel.font = [UIFont systemFontOfSize:17];
         _titleNameLabel.textAlignment = NSTextAlignmentLeft;
         
-        _detailTitleNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, _titleNameLabel.frame.origin.y+_titleNameLabel.frame.size.height + 11, width-60, 13)];
+        _detailTitleNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_checkedImage.frame)+16, _titleNameLabel.frame.origin.y+_titleNameLabel.frame.size.height + 11, width-60, 13)];
         _detailTitleNameLabel.textColor = UNMAIN_TEXT_COLOR;
         _detailTitleNameLabel.font = [UIFont systemFontOfSize:13];
         _detailTitleNameLabel.textAlignment = NSTextAlignmentLeft;
         
-        _checkedImage = [[UIImageView alloc] initWithFrame:CGRectMake(width-25-16, 37, 20, 20)];
-        _checkedImage.contentMode = UIViewContentModeScaleAspectFit;
-        _checkedImage.backgroundColor = [UIColor clearColor];
+        _navigationBtn = [NavigationBtn buttonWithType:UIButtonTypeCustom];
+        _navigationBtn.frame = CGRectMake(CURRENT_BOUNDS.width-80, 0, 80, 100);
+        [_navigationBtn setTitle:@"导航" forState:UIControlStateNormal];
+        [_navigationBtn setTitleColor:UNMAIN_TEXT_COLOR forState:UIControlStateNormal];
+        [_navigationBtn setImage:[UIImage imageNamed:@"btn_choose_selectbox_click@2x"] forState:UIControlStateNormal];
+//        _navigationBtn.backgroundColor = [UIColor redColor];
+        [_navigationBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_navigationBtn];
         
 //        _distanceLabel.backgroundColor = [UIColor redColor];
         [self addSubview:_distanceLabel];
@@ -96,14 +120,27 @@
     return self;
 }
 
+- (void)setModel:(FirstLocationModel *)model{
+    _model = model;
+}
+
+- (void)btnClick:(UIButton *)btn{
+    if ([self.delegate respondsToSelector:@selector(UIShowLocationTableViewCellDelegateBtn:andModel:)]) {
+        [self.delegate performSelector:@selector(UIShowLocationTableViewCellDelegateBtn:andModel:) withObject:btn withObject:_model];
+    }
+    NSLog(@"导航按钮");
+}
+
 @end
 
-@interface ChoosedPlaceViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate,UITableViewDelegate,UITableViewDataSource,BMKGeoCodeSearchDelegate>
+@interface ChoosedPlaceViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate,UITableViewDelegate,UITableViewDataSource,BMKGeoCodeSearchDelegate,UIShowLocationTableViewCellDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) FirstCatStyleModel *model;
 @property (nonatomic, strong) BMKGeoCodeSearch *geocodesearch;
 @property (nonatomic, strong)NSArray *oldData;//存放最初自己定位周围的场地信息
+
+@property (nonatomic, strong)FirstLocationModel *locationModela;
 
 
 @end
@@ -111,7 +148,7 @@
 @implementation ChoosedPlaceViewController{
     BMKMapView *_mapView;
     BMKLocationService *_locServer;
-    CLLocationCoordinate2D _currentLocation;
+//    CLLocationCoordinate2D _currentLocation;
     BMKUserLocation *_userLocationState;
     NSInteger _choosedIndex;
     BMKRouteSearch *_routSearch;
@@ -189,7 +226,10 @@
     self.title = @"预选场地";
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAcrive)];
-    [self.navigationItem setRightBarButtonItem:rightItem];
+    if (!_isHasSearch) {
+        [self.navigationItem setRightBarButtonItem:rightItem];
+    }
+    
     
 
     _oldData = [NSArray arrayWithArray:self.allExerciseLocationData];
@@ -269,8 +309,9 @@
     UIShowLocationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:index];
     if (!cell) {
         cell = [[UIShowLocationTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:index andWidth:[UIScreen mainScreen].bounds.size.width];
+        cell.delegate = self;
     }
-    
+    cell.model = _allExerciseLocationData[indexPath.row];
     cell.distanceLabel.text = ((FirstLocationModel *)_allExerciseLocationData[indexPath.row]).distance;
     cell.titleNameLabel.text = ((FirstLocationModel *)_allExerciseLocationData[indexPath.row]).name;
     cell.detailTitleNameLabel.text = ((FirstLocationModel *)_allExerciseLocationData[indexPath.row]).address;
@@ -317,7 +358,12 @@
     CLLocationCoordinate2D coord;
     coord.latitude = userLocation.location.coordinate.latitude;
     coord.longitude = userLocation.location.coordinate.longitude;
-    _currentLocation = coord;
+    if (_currentLocation.latitude) {
+        
+    }else{
+         _currentLocation = coord;
+    }
+   
     BMKPointAnnotation *_pointAnnotation = [[BMKPointAnnotation alloc] init];
     _pointAnnotation.coordinate = coord;
     
@@ -331,30 +377,57 @@
         
     });
     NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
-    _userLocationState = userLocation;
-     [self searchRouteWithFirstLocationModel:_allExerciseLocationData[0]];
-    
-    CLLocationCoordinate2D pta = (CLLocationCoordinate2D){0, 0};//初始化
-    if (userLocation.location.coordinate.longitude!= 0
-        && userLocation.location.coordinate.latitude!= 0) {
-        //如果还没有给pt赋值,那就将当前的经纬度赋值给pt
-        pt = (CLLocationCoordinate2D){userLocation.location.coordinate.latitude,
-            userLocation.location.coordinate.longitude};
+    if (_currentLocation.latitude) {
+    [self searchRouteWithFirstLocationModel:_allExerciseLocationData[0]];
+        
+        CLLocationCoordinate2D pta = (CLLocationCoordinate2D){0, 0};//初始化
+        if (userLocation.location.coordinate.longitude!= 0
+            && userLocation.location.coordinate.latitude!= 0) {
+            //如果还没有给pt赋值,那就将当前的经纬度赋值给pt
+            pt = (CLLocationCoordinate2D){_currentLocation.latitude,
+                _currentLocation.longitude};
+        }
+        BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];//初始化反编码请求
+        reverseGeocodeSearchOption.reverseGeoPoint = pt;//设置反编码的店为pt
+        
+        BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];//发送反编码请求.并返回是否成功
+        
+        
+        if(flag)
+        {
+            NSLog(@"反geo检索发送成功");
+        }
+        else
+        {
+            NSLog(@"反geo检索发送失败");
+        }
+    }else{
+        _userLocationState = userLocation;
+        [self searchRouteWithFirstLocationModel:_allExerciseLocationData[0]];
+        
+        CLLocationCoordinate2D pta = (CLLocationCoordinate2D){0, 0};//初始化
+        if (userLocation.location.coordinate.longitude!= 0
+            && userLocation.location.coordinate.latitude!= 0) {
+            //如果还没有给pt赋值,那就将当前的经纬度赋值给pt
+            pt = (CLLocationCoordinate2D){userLocation.location.coordinate.latitude,
+                userLocation.location.coordinate.longitude};
+        }
+        BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];//初始化反编码请求
+        reverseGeocodeSearchOption.reverseGeoPoint = pt;//设置反编码的店为pt
+        
+        BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];//发送反编码请求.并返回是否成功
+        
+        
+        if(flag)
+        {
+            NSLog(@"反geo检索发送成功");
+        }
+        else
+        {
+            NSLog(@"反geo检索发送失败");
+        }
     }
-    BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];//初始化反编码请求
-    reverseGeocodeSearchOption.reverseGeoPoint = pt;//设置反编码的店为pt
     
-    BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];//发送反编码请求.并返回是否成功
-
-    
-    if(flag)
-    {
-        NSLog(@"反geo检索发送成功");
-    }
-    else
-    {
-        NSLog(@"反geo检索发送失败");
-    }
 }
 
 - (void)onGetGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
@@ -382,8 +455,17 @@
     [_mapView viewWillAppear];
     _mapView.delegate = self;
     _locServer.delegate = self;
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+    });
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:YES];
+   
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -494,6 +576,19 @@
     }
 }
 
+#pragma mark - UIShowLocationTableViewCellDelegateBtnDelegate
+
+- (void)UIShowLocationTableViewCellDelegateBtn:(UIButton *)btn andModel:(FirstLocationModel *)model{
+    CLLocationCoordinate2D coordinate;
+    _locationModela = model;
+    coordinate.latitude = [model.latitude doubleValue];
+    coordinate.longitude = [model.longitude doubleValue];
+    
+    //test
+    NSArray *arr = [self getInstalledMapAppWithAddr:model.address withEndLocation:coordinate];
+    [self showAlertViewWithData:arr andCoordinate:coordinate];
+}
+
 #pragma mark 根据overlay生成对应的View
 -(BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id<BMKOverlay>)overlay {
     if ([overlay isKindOfClass:[BMKPolyline class]]) {
@@ -586,6 +681,140 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - 选择导航的功能
+
+- (NSArray *)getInstalledMapAppWithAddr:(NSString *)addrString withEndLocation:(CLLocationCoordinate2D)endLocation
+
+{
+    
+    NSMutableArray *maps = [NSMutableArray array];
+    
+    //苹果地图
+    
+    NSMutableDictionary *iosMapDic = [NSMutableDictionary dictionary];
+    
+    iosMapDic[@"title"] = @"苹果地图";
+    
+    [maps addObject:iosMapDic];
+    
+    NSString *appStr = NSLocalizedString(@"app_name", nil);
+    
+    //高德地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
+        
+        NSMutableDictionary *gaodeMapDic = [NSMutableDictionary dictionary];
+        
+        gaodeMapDic[@"title"] = @"高德地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"iosamap://path?sourceApplication=%@&sid=BGVIS1&did=BGVIS2&dname=%@&dev=0&t=2",appStr ,addrString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        gaodeMapDic[@"url"] = urlString;
+        
+        [maps addObject:gaodeMapDic];
+        
+    }
+    
+    //百度地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"baidumap://"]]) {
+        
+        NSMutableDictionary *baiduMapDic = [NSMutableDictionary dictionary];
+        
+        baiduMapDic[@"title"] = @"百度地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin=我的位置&destination=%@&mode=walking&src=%@",addrString ,appStr] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        baiduMapDic[@"url"] = urlString;
+        
+        [maps addObject:baiduMapDic];
+        
+    }
+    
+    //腾讯地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"qqmap://"]]) {
+        
+        NSMutableDictionary *qqMapDic = [NSMutableDictionary dictionary];
+        
+        qqMapDic[@"title"] = @"腾讯地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"qqmap://map/routeplan?from=我的位置&type=walk&tocoord=%f,%f&to=%@&coord_type=1&policy=0",endLocation.latitude , endLocation.longitude ,addrString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        qqMapDic[@"url"] = urlString;
+        
+        [maps addObject:qqMapDic];
+        
+    }
+    
+    //谷歌地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
+        
+        NSMutableDictionary *googleMapDic = [NSMutableDictionary dictionary];
+        
+        googleMapDic[@"title"] = @"谷歌地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"comgooglemaps://?saddr=&daddr=%@&directionsmode=walking",addrString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        googleMapDic[@"url"] = urlString;
+        
+        [maps addObject:googleMapDic];
+        
+    }
+    
+    return maps;
+    
+}
+
+-(void)showAlertViewWithData:(NSArray *)data andCoordinate:(CLLocationCoordinate2D)coordinate{
+    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"地图" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (int i = 0; i < data.count; i++) {
+        NSDictionary *dic = data[i];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[dic objectForKey:@"title"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            if ([action.title isEqualToString:@"百度地图"]) {
+                //    百度地图
+//                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",self.locationModela.latitude, self.locationModela.longitude,self.locationModela.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:urlString]];
+                
+                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin=latlng:%f,%f|name=%@&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",_currentLocation.latitude,_currentLocation.longitude,@"李家沱",self.locationModela.latitude, self.locationModela.longitude,self.locationModela.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:urlString]];
+            }else if ([action.title isEqualToString:@"高德地图"]){
+                //高德地图
+                NSString *urlsting =[[NSString stringWithFormat:@"iosamap://navi?sourceApplication= &slat=%lf&slon=%lf&sname=我的位置&backScheme= &lat=%f&lon=%f&dev=0&style=2",_currentLocation.latitude,_currentLocation.longitude,coordinate.latitude,coordinate.longitude]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                
+//                NSString *urlsting = [[NSString stringWithFormat:@"iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=%lf&slon=%lf&sname=我的位置&did=BGVIS2&dlat=%@&dlon=%@&dname=%@&dev=0&m=0&t=%@",_currentLocation.latitude,_currentLocation.longitude, self.locationModela,self.locationModela,@"李家沱",@"0"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication  sharedApplication]openURL:[NSURL URLWithString:urlsting]];
+            }else if ([action.title isEqualToString:@"谷歌地图"]){
+                //谷歌地图
+                NSString *urlString = [[NSString stringWithFormat:@"comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving",@"好梦学车",@"",coordinate.latitude, coordinate.longitude] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+            }else{
+                //苹果自带地图
+                MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
+                MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil]];
+                
+                [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
+                               launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                               MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
+            }
+            NSLog(@"%@",action.title);
+        }];
+        
+        [v addAction:action];
+    }
+    UIAlertAction *active1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [v addAction:active1];
+    [self presentViewController:v animated:YES completion:^{
+        
+    }];
+}
+
 
 
 

@@ -904,9 +904,17 @@
 		29A74A751EB9E5940089E080 /* go_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29A74A6F1EB9E5940089E080 /* go_gray@2x.png */; };
 		29A74A761EB9E5940089E080 /* go_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 29A74A701EB9E5940089E080 /* go_white.png */; };
 		29A74A771EB9E5940089E080 /* go_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29A74A711EB9E5940089E080 /* go_white@2x.png */; };
+		29A90CDC1F9DF1CD005ACD34 /* testServerStation.png in Resources */ = {isa = PBXBuildFile; fileRef = 29A90CDB1F9DF1CD005ACD34 /* testServerStation.png */; };
 		29AED02B1F9727BC000C2517 /* start1.png in Resources */ = {isa = PBXBuildFile; fileRef = 29AED02A1F9727BC000C2517 /* start1.png */; };
 		29AED02D1F9727CE000C2517 /* welcome031.png in Resources */ = {isa = PBXBuildFile; fileRef = 29AED02C1F9727CE000C2517 /* welcome031.png */; };
 		29B276601EB862A000C1E1F7 /* FirstTopTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B2765F1EB862A000C1E1F7 /* FirstTopTableViewCell.xib */; };
+		29B4CA851F9D7D2F005073E3 /* ManuallyLocateViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B4CA831F9D7D2F005073E3 /* ManuallyLocateViewController2.m */; };
+		29B4CA861F9D7D2F005073E3 /* ManuallyLocateViewController2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B4CA841F9D7D2F005073E3 /* ManuallyLocateViewController2.xib */; };
+		29B4CA891F9D93E0005073E3 /* icon_service_go@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B4CA871F9D93E0005073E3 /* icon_service_go@2x.png */; };
+		29B4CA8A1F9D93E0005073E3 /* icon_service_go@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B4CA881F9D93E0005073E3 /* icon_service_go@3x.png */; };
+		29B4CA8D1F9D951E005073E3 /* btn_choose_selectbox_click@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B4CA8B1F9D951E005073E3 /* btn_choose_selectbox_click@2x.png */; };
+		29B4CA8E1F9D951E005073E3 /* btn_choose_selectbox_click@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B4CA8C1F9D951E005073E3 /* btn_choose_selectbox_click@3x.png */; };
+		29B4CA911F9D9764005073E3 /* NavigationBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B4CA901F9D9764005073E3 /* NavigationBtn.m */; };
 		29B6842F1F136D0000B04456 /* btn_ruji_position.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B6842C1F136D0000B04456 /* btn_ruji_position.png */; };
 		29B684301F136D0000B04456 /* btn_ruji_position@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B6842D1F136D0000B04456 /* btn_ruji_position@2x.png */; };
 		29B684311F136D0000B04456 /* btn_ruji_position@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29B6842E1F136D0000B04456 /* btn_ruji_position@3x.png */; };
@@ -2253,9 +2261,19 @@
 		29A74A6F1EB9E5940089E080 /* go_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "go_gray@2x.png"; sourceTree = "<group>"; };
 		29A74A701EB9E5940089E080 /* go_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = go_white.png; sourceTree = "<group>"; };
 		29A74A711EB9E5940089E080 /* go_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "go_white@2x.png"; sourceTree = "<group>"; };
+		29A90CDB1F9DF1CD005ACD34 /* testServerStation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testServerStation.png; sourceTree = "<group>"; };
 		29AED02A1F9727BC000C2517 /* start1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start1.png; sourceTree = "<group>"; };
 		29AED02C1F9727CE000C2517 /* welcome031.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcome031.png; sourceTree = "<group>"; };
 		29B2765F1EB862A000C1E1F7 /* FirstTopTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstTopTableViewCell.xib; sourceTree = "<group>"; };
+		29B4CA821F9D7D2F005073E3 /* ManuallyLocateViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManuallyLocateViewController2.h; sourceTree = "<group>"; };
+		29B4CA831F9D7D2F005073E3 /* ManuallyLocateViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManuallyLocateViewController2.m; sourceTree = "<group>"; };
+		29B4CA841F9D7D2F005073E3 /* ManuallyLocateViewController2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManuallyLocateViewController2.xib; sourceTree = "<group>"; };
+		29B4CA871F9D93E0005073E3 /* icon_service_go@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_service_go@2x.png"; sourceTree = "<group>"; };
+		29B4CA881F9D93E0005073E3 /* icon_service_go@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_service_go@3x.png"; sourceTree = "<group>"; };
+		29B4CA8B1F9D951E005073E3 /* btn_choose_selectbox_click@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_choose_selectbox_click@2x.png"; sourceTree = "<group>"; };
+		29B4CA8C1F9D951E005073E3 /* btn_choose_selectbox_click@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_choose_selectbox_click@3x.png"; sourceTree = "<group>"; };
+		29B4CA8F1F9D9764005073E3 /* NavigationBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationBtn.h; sourceTree = "<group>"; };
+		29B4CA901F9D9764005073E3 /* NavigationBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationBtn.m; sourceTree = "<group>"; };
 		29B6842C1F136D0000B04456 /* btn_ruji_position.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_ruji_position.png; sourceTree = "<group>"; };
 		29B6842D1F136D0000B04456 /* btn_ruji_position@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_ruji_position@2x.png"; sourceTree = "<group>"; };
 		29B6842E1F136D0000B04456 /* btn_ruji_position@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_ruji_position@3x.png"; sourceTree = "<group>"; };
@@ -3090,6 +3108,8 @@
 				293156931EB0773A00B2CEAC /* IPopUpWithPromptViewHeight.xib */,
 				29CA25961EB856CE00B531FF /* FirstTopBtn.h */,
 				29CA25971EB856CE00B531FF /* FirstTopBtn.m */,
+				29B4CA8F1F9D9764005073E3 /* NavigationBtn.h */,
+				29B4CA901F9D9764005073E3 /* NavigationBtn.m */,
 				29E70ED21EB8739C00DEA07C /* FirstServiceBtn.h */,
 				29E70ED31EB8739C00DEA07C /* FirstServiceBtn.m */,
 				293D76851EB97E2400122BF0 /* CatStyleApplyNowBtn.h */,
@@ -3124,6 +3144,7 @@
 		29489FF81EAD9EAC00F009C2 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				29A90CDB1F9DF1CD005ACD34 /* testServerStation.png */,
 				2960104D1F2077A6004ED1FE /* homepage_click.svg */,
 				2960104E1F2077A6004ED1FE /* homepage.svg */,
 				2960104F1F2077A6004ED1FE /* people_click.svg */,
@@ -3191,6 +3212,10 @@
 				2945F7541EFB58FA006FA42B /* pic03.png */,
 				2945F7551EFB58FA006FA42B /* pic04.png */,
 				2945F7561EFB58FA006FA42B /* pic05.png */,
+				29B4CA871F9D93E0005073E3 /* icon_service_go@2x.png */,
+				29B4CA881F9D93E0005073E3 /* icon_service_go@3x.png */,
+				29B4CA8B1F9D951E005073E3 /* btn_choose_selectbox_click@2x.png */,
+				29B4CA8C1F9D951E005073E3 /* btn_choose_selectbox_click@3x.png */,
 				291AD40A1F137D2B00B6431F /* 学车进程 */,
 				291AD3AC1F136FFE00B6431F /* 我的进度 */,
 				29B6842B1F136D0000B04456 /* 入籍 */,
@@ -3557,6 +3582,9 @@
 				29F77BBA1F7DF08100BDE3A0 /* ManuallyLocateViewController.h */,
 				29F77BBB1F7DF08100BDE3A0 /* ManuallyLocateViewController.m */,
 				29F77BBC1F7DF08100BDE3A0 /* ManuallyLocateViewController.xib */,
+				29B4CA821F9D7D2F005073E3 /* ManuallyLocateViewController2.h */,
+				29B4CA831F9D7D2F005073E3 /* ManuallyLocateViewController2.m */,
+				29B4CA841F9D7D2F005073E3 /* ManuallyLocateViewController2.xib */,
 				29F77BBF1F7DF98600BDE3A0 /* SearchModel.h */,
 				29F77BC01F7DF98600BDE3A0 /* SearchModel.m */,
 			);
@@ -5092,6 +5120,7 @@
 				2967CF621EC4563300FBB1BB /* 4@2x.png in Resources */,
 				29A048DA1EDE9DD9000C7640 /* choose@2x.png in Resources */,
 				295B64511EC6ECA700B85E8B /* top_bg_qualified.png in Resources */,
+				29B4CA8A1F9D93E0005073E3 /* icon_service_go@3x.png in Resources */,
 				290373C51F1CA3830037A6C2 /* tabbar_btn_study_selected_30.png in Resources */,
 				2986CF8A1F4A84AE00B5592E /* btn_people_sittinga@3x.png in Resources */,
 				295B644C1EC6ECA700B85E8B /* pic_70%@2x.png in Resources */,
@@ -5390,13 +5419,16 @@
 				2974C38E1EC3F9E100411EAD /* btn_arrow.png in Resources */,
 				290640F31EDFAD9B00F65AA4 /* ChangedNameViewController.xib in Resources */,
 				2967CF641EC4563300FBB1BB /* 5@2x.png in Resources */,
+				29B4CA8D1F9D951E005073E3 /* btn_choose_selectbox_click@2x.png in Resources */,
 				29A74A731EB9E5940089E080 /* go_blue@2x.png in Resources */,
 				29E7F9B51EB1DF21001FC2C0 /* btn_home_click@2x.png in Resources */,
 				294EACC51F29782400634F74 /* btn_homepage_signup.png in Resources */,
 				29E7F9B61EB1DF21001FC2C0 /* btn_home_normal.png in Resources */,
 				2925F10B1F09D962000375B4 /* ChangePasswordViewController.xib in Resources */,
 				29512A541EF8EFFD00DA1C84 /* 501.png in Resources */,
+				29B4CA861F9D7D2F005073E3 /* ManuallyLocateViewController2.xib in Resources */,
 				29E7F9B71EB1DF21001FC2C0 /* btn_home_normal@2x.png in Resources */,
+				29A90CDC1F9DF1CD005ACD34 /* testServerStation.png in Resources */,
 				2951A83B1EC93EF5001B02FE /* SubjectPractisePageViewController.xib in Resources */,
 				29E7F9F51EB1DF21001FC2C0 /* star_lit@2x.png in Resources */,
 				290373C21F1CA3830037A6C2 /* tabbar_btn_people_normal_30.png in Resources */,
@@ -5431,6 +5463,7 @@
 				2974C3941EC3F9E100411EAD /* btn_results.png in Resources */,
 				291AD3CA1F136FFE00B6431F /* icon_jindu_03@3x.png in Resources */,
 				295249F41ECEBE8C00B32B79 /* SubjectPractiseSureTableViewCell.xib in Resources */,
+				29B4CA891F9D93E0005073E3 /* icon_service_go@2x.png in Resources */,
 				29E7F9EF1EB1DF21001FC2C0 /* btn_possition@2x.png in Resources */,
 				29430E3D1ED7DC5300F3618B /* m06.png in Resources */,
 				2970D0B01F74AA6D00D4F23B /* icon_20x20@2x.png in Resources */,
@@ -5596,6 +5629,7 @@
 				29A048D31EDE9DD9000C7640 /* icon_star_normal.png in Resources */,
 				291AD4411F137D2B00B6431F /* icon_jindu_succes.png in Resources */,
 				293EFBA61EE676E800F3BA34 /* launch1.jpg in Resources */,
+				29B4CA8E1F9D951E005073E3 /* btn_choose_selectbox_click@3x.png in Resources */,
 				296CA25E1ED6BE6E00A38788 /* m4.png in Resources */,
 				29E7F9D21EB1DF21001FC2C0 /* icon_cost.png in Resources */,
 				296CA2551ED6BE6E00A38788 /* m20.png in Resources */,
@@ -5879,6 +5913,7 @@
 				294E3E591ED017C000FFF492 /* SubjectPopViewCollectionViewCell.m in Sources */,
 				296010601F208166004ED1FE /* ChoosePayTypeViewController.m in Sources */,
 				29A74A581EB9C9660089E080 /* NSData+ImageContentType.m in Sources */,
+				29B4CA911F9D9764005073E3 /* NavigationBtn.m in Sources */,
 				29A048F81EDEC875000C7640 /* SettingViewController.m in Sources */,
 				29420B2C1EC55D7300ABF4A9 /* MyExerciseSegementView.m in Sources */,
 				2948A01C1EAD9FE400F009C2 /* commonActiveHelper.m in Sources */,
@@ -5987,6 +6022,7 @@
 				2948A01F1EAD9FE400F009C2 /* TSZTabBar.m in Sources */,
 				29420B291EC55D5D00ABF4A9 /* MyExerciseScrollView.m in Sources */,
 				2952EE791EC7EC14008CFE27 /* SubjectRecordAndRankViewController.m in Sources */,
+				29B4CA851F9D7D2F005073E3 /* ManuallyLocateViewController2.m in Sources */,
 				294F97291F2EC4CA00CAD5BC /* MyLearningSegementView.m in Sources */,
 				2974C3CF1EC3FF9000411EAD /* SubjectOneCollectionViewCell.m in Sources */,
 				2931567C1EB06EA900B2CEAC /* MASLayoutConstraint.m in Sources */,

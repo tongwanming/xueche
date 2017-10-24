@@ -19,6 +19,8 @@ typedef void(^coordinate)(CLLocationCoordinate2D coordinate);
 
 - (void)firstLocationTableViewCellSubCellSelectActive:(NSIndexPath *)indexpath andData:(NSArray *)array;
 
+- (void)searchActive;
+
 @end
 
 @interface FirstLocationTableViewCell : FirstBasicTableViewCell

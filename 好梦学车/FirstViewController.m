@@ -307,7 +307,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *index = @"indexPath";
     UITableViewCell *cell = [_dataDic objectForKey:indexPath];
-    
+    cell.accessoryType = UITableViewCellAccessoryNone;
     if (indexPath.section == 0) {
         if (!cell) {
             cell = [FirstTobTableViewCellSc cellWithTableToDequeueReusable:tableView identifier:index nibName:@"FirstTobTableViewCellSc"];
@@ -365,6 +365,7 @@
              [_dataDic setObject:cell forKey:indexPath];
         }
         ((FirstOfflineTableViewCell *)cell).model = _offLineData[indexPath.row];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
     
     }else{

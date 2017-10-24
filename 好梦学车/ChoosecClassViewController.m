@@ -16,6 +16,8 @@
 #import "PersonIndentViewController.h"
 #import "PersonIndentViewControllerOther.h"
 #import "DefaultManager.h"
+#import "ChoosedTableViewCell.h"
+#import "ChoosedClassTableViewCell.h"
 
 #define HEAD_VIEW_HEIGHT 236
 
@@ -81,7 +83,12 @@
 
 - (void)getData{
     [CustomAlertView showAlertViewWithVC:self];
-    NSDictionary *dic =@{@"categoryCode":@""};
+    NSDictionary *dic =@{@"categoryCode":@"",
+                         @"city":@"重庆市",
+                         @"district":@"",
+                         @"projectTypeCode":@"",
+                         @"province":@"重庆市"
+                         };
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
@@ -154,6 +161,8 @@
                 model.descStr = [dic objectForKey:@"description"];
                 model.titleStr = [dic objectForKey:@"categoryName"];
                 model.categoryCode = [dic objectForKey:@"categoryCode"];
+                model.contentServers = [dic objectForKey:@"serviceDetails"];
+                model.detailPrice = [dic objectForKey:@"feeDetails"];
                 [_coachData addObject:model];
             }
             NSLog(@"_coachData:%@",_coachData);
@@ -167,7 +176,7 @@
             });
             
             dispatch_async(dispatch_get_main_queue(), ^{
-//                [_tableView reloadData];
+                [_tableView reloadData];
             });
         }else{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -225,11 +234,30 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 275;
+    if (indexPath.row == 0) {
+        if (_choosedModel.contentServers && _choosedModel.contentServers.length > 0) {
+            NSArray *arr = [self arrAddWidthStr:_choosedModel.contentServers];
+            
+            return arr.count * 40+30;
+        }else{
+            return 100;
+        }
+        
+    }else{
+        if (_choosedModel.detailPrice && _choosedModel.detailPrice.length > 0) {
+            NSArray *arr = [self arrAddWidthStr:_choosedModel.detailPrice];
+            return 70*arr.count+30;
+        }else{
+            
+            return 275;
+        }
+        
+    }
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -242,17 +270,42 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *index = @"index";
-    FirstServiceSystemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:index];
-    if (!cell) {
-        cell = [FirstServiceSystemTableViewCell cellWithTableToDequeueReusable:tableView identifier:index nibName:@"FirstServiceSystemTableViewCell"];
-        
-    }
-    cell.name = @"你将获得一下特权：";
-    cell.titleNameLabel.font = [UIFont boldSystemFontOfSize:16];
-    cell.backgroundColor = [UIColor whiteColor];
-    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
-    cell.selectedBackgroundView.backgroundColor = [UIColor clearColor];
+//    FirstServiceSystemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:index];
+//    if (!cell) {
+//        cell = [FirstServiceSystemTableViewCell cellWithTableToDequeueReusable:tableView identifier:index nibName:@"FirstServiceSystemTableViewCell"];
+//        
+//    }
+//    cell.name = @"你将获得一下特权：";
+//    cell.titleNameLabel.font = [UIFont boldSystemFontOfSize:16];
+//    cell.backgroundColor = [UIColor whiteColor];
+//    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+//    cell.selectedBackgroundView.backgroundColor = [UIColor clearColor];
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:index];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (indexPath.row == 0) {
+        if (!cell) {
+            cell = [[ChoosedTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:index];
+        }
+        if (_coachData.count >0 && _coachData.count > indexPath.row) {
+            
+            ((ChoosedTableViewCell *)cell).str = _choosedModel.contentServers;
+        }
+    }else if (indexPath.row == 1){
+        if (!cell) {
+            cell = [[ChoosedClassTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:index];
+        }
+        if (_coachData.count >0 && _coachData.count > indexPath.row) {
+            ((ChoosedClassTableViewCell *)cell).str = _choosedModel.detailPrice;
+        }
+        
+    }else{
+    
+    }
+    
+    
+    
     return cell;
 }
 
@@ -342,7 +395,7 @@
             _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
             _choosedClassModel.price2 = _choosedModel.C2Str;
         }
-        
+        [_tableView reloadData];
     });
 }
 
@@ -381,7 +434,7 @@
             _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
             _choosedClassModel.price2 = _choosedModel.C2Str;
         }
-        
+        [_tableView reloadData];
     });
 }
 
@@ -416,6 +469,18 @@
             
         }];
     });
+}
+
+//拆分字符串
+- (NSArray *)arrAddWidthStr:(NSString *)str{
+    
+    NSMutableString *mutStr = [NSMutableString stringWithString:str];
+    
+    NSMutableArray *mutArr = [mutStr componentsSeparatedByString:@"#"];
+    
+    NSArray *arr = [NSArray arrayWithArray:mutArr];
+    
+    return arr;
 }
 
 @end

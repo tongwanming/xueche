@@ -40,6 +40,7 @@
     [JPUSHService setTags:set alias:_userid fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
         NSLog(@"%@",iTags);
     }];
+    _titleName.font = [UIFont systemFontOfSize:36*TYPERATION];
     // Do any additional setup after loading the view from its nib.
 }
 

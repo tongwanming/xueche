@@ -31,4 +31,9 @@
 @property (nonatomic, strong) NSString *categoryCode;//版型代号
 
 @property (nonatomic, strong) NSString *projectTypeCode;//C1,C2代号
+
+@property (nonatomic, strong) NSString *contentServers;//服务类型
+
+@property (nonatomic, strong) NSString *detailPrice;//费用明细
+
 @end

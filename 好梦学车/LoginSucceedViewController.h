@@ -11,5 +11,6 @@
 @interface LoginSucceedViewController : BasicViewController
 
 @property (nonatomic, strong) NSString *userid;
+@property (weak, nonatomic) IBOutlet UILabel *titleName;
 
 @end

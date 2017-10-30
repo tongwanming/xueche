@@ -18,6 +18,8 @@
 #import "DefaultManager.h"
 #import "ChoosedTableViewCell.h"
 #import "ChoosedClassTableViewCell.h"
+#import "choosedCarTypeViewTap.h"
+
 
 #define HEAD_VIEW_HEIGHT 236
 
@@ -25,13 +27,19 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic, strong) UILabel *c1PriceLabel;
-
-@property (nonatomic, strong) UILabel *c2PriceLabel;
+//@property (nonatomic, strong) UILabel *c1PriceLabel;
+//
+//@property (nonatomic, strong) UILabel *c2PriceLabel;
 
 @property (nonatomic, strong) ChoosedClassModel *choosedModel;
 
 @property (nonatomic, strong) FirstCatStyleModel *choosedClassModel;
+
+@property (nonatomic, strong) choosedCarTypeViewTap *v1;
+
+@property (nonatomic, strong) choosedCarTypeViewTap *v2;
+
+@property (nonatomic, strong) choosedCarTypeViewTap *v3;
 
 @end
 
@@ -222,6 +230,18 @@
                 model.backGroundImageName = _choosedModel.imageStr;
                 model.categoryCode = _choosedModel.categoryCode;
                 model.projectTypeCode = @"001";
+                if (_v3.hidden) {
+                    if (_v1.isSelected) {
+                        //  c1
+                        v.appleType = @"C1手动挡";
+                    }else{
+                        //  c2
+                        v.appleType = @"C2自动挡";
+                    }
+                }else{
+                    // B
+                    v.appleType = @"B2大货车班";
+                }
                 v.model = model;
                 [self.navigationController pushViewController:v animated:YES];
             }
@@ -310,19 +330,22 @@
 }
 
 - (UIView *)createHenderView{
-    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, HEAD_VIEW_HEIGHT+75)];
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, HEAD_VIEW_HEIGHT+160*TYPERATION)];
         headView.backgroundColor = [UIColor whiteColor];
+    
+    _choosedModel = _coachData[_currentIndex];
     
     TopChoosedClassView *topSubView = [[TopChoosedClassView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, HEAD_VIEW_HEIGHT)];
     topSubView.backgroundColor = [UIColor whiteColor];
     topSubView.delegate = self;
     topSubView.dataArr = _coachData;
+    topSubView.currentIndex = _currentIndex;
     [headView addSubview:topSubView];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(topSubView.frame), CURRENT_BOUNDS.width-40, 16)];
     titleLabel.font = [UIFont boldSystemFontOfSize:16];
     titleLabel.textColor = TEXT_COLOR;
-    titleLabel.text = @"班型价格:";
+    titleLabel.text = @"选择类型:";
     titleLabel.textAlignment = NSTextAlignmentLeft;
     [headView addSubview:titleLabel];
     
@@ -332,30 +355,46 @@
     label1.textColor = UNMAIN_TEXT_COLOR;
     label1.text = @"C1手动挡:";
 //    label1.backgroundColor = [UIColor redColor];
-    [headView addSubview:label1];
+//    [headView addSubview:label1];
     
-    _c1PriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(label1.frame), CGRectGetMaxY(titleLabel.frame)+20-2.5, 80, 18)];
-    _c1PriceLabel.font = [UIFont boldSystemFontOfSize:18];
-    _c1PriceLabel.textColor = TEXT_COLOR;
-    _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[0]).C1Str];
-//    _c1PriceLabel.backgroundColor = [UIColor purpleColor];
-    [headView addSubview:_c1PriceLabel];
-    
-    label2 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_c1PriceLabel.frame)+5, CGRectGetMaxY(titleLabel.frame)+20, 63, 13)];
-    label2.font = [UIFont systemFontOfSize:13];
-    label2.textAlignment = NSTextAlignmentLeft;
-    label2.textColor = UNMAIN_TEXT_COLOR;
-    label2.text = @"C2自动挡:";
-//    label2.backgroundColor = [UIColor redColor];
-    [headView addSubview:label2];
-    
-    _c2PriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(label2.frame), CGRectGetMaxY(titleLabel.frame)+20-2.5, 80, 18)];
-    _c2PriceLabel.font = [UIFont boldSystemFontOfSize:18];
-    _c2PriceLabel.textColor = TEXT_COLOR;
-    _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[0]).C2Str];
-//    _c2PriceLabel.backgroundColor = [UIColor purpleColor];
-    [headView addSubview:_c2PriceLabel];
-    
+    if (((ChoosedClassModel *)_coachData[_currentIndex]).C1Str != nil && ((ChoosedClassModel *)_coachData[_currentIndex]).C2Str != nil) {
+        _v1 = [[choosedCarTypeViewTap alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(titleLabel.frame)+25, (CURRENT_BOUNDS.width-55)/2, (CURRENT_BOUNDS.width-55)/4) andTitleOne:((ChoosedClassModel *)_coachData[_currentIndex]).C1Str andTitleTwo:@"C1手动挡"];
+        _v1.isSelected = YES;
+        UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(v1TapSelectedActive:)];
+        [_v1 addGestureRecognizer:tap1];
+        [headView addSubview:_v1];
+        
+        _v2 = [[choosedCarTypeViewTap alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_v1.frame)+15, CGRectGetMaxY(titleLabel.frame)+25, (CURRENT_BOUNDS.width-55)/2, (CURRENT_BOUNDS.width-55)/4) andTitleOne:((ChoosedClassModel *)_coachData[_currentIndex]).C2Str andTitleTwo:@"C2自动挡"];
+        _v2.isSelected = NO;
+        UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(v2TapSelectedActive:)];
+        [_v2 addGestureRecognizer:tap2];
+        [headView addSubview:_v2];
+        
+        _v3 = [[choosedCarTypeViewTap alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(titleLabel.frame)+25, (CURRENT_BOUNDS.width-40), (CURRENT_BOUNDS.width-55)/4) andTitleOne:((ChoosedClassModel *)_coachData[_currentIndex]).C2Str andTitleTwo:@"B2大货车班"];
+        _v3.isSelected = YES;
+        _v3.hidden = YES;
+        [headView addSubview:_v3];
+    }else{
+        _v1 = [[choosedCarTypeViewTap alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(titleLabel.frame)+25, (CURRENT_BOUNDS.width-55)/2, (CURRENT_BOUNDS.width-55)/4) andTitleOne:((ChoosedClassModel *)_coachData[_currentIndex]).C1Str andTitleTwo:@"C1手动挡"];
+        _v1.isSelected = YES;
+        UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(v1TapSelectedActive:)];
+        [_v1 addGestureRecognizer:tap1];
+        _v1.hidden = YES;
+        [headView addSubview:_v1];
+        
+        _v2 = [[choosedCarTypeViewTap alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_v1.frame)+15, CGRectGetMaxY(titleLabel.frame)+25, (CURRENT_BOUNDS.width-55)/2, (CURRENT_BOUNDS.width-55)/4) andTitleOne:((ChoosedClassModel *)_coachData[_currentIndex]).C2Str andTitleTwo:@"C2自动挡"];
+        _v2.isSelected = NO;
+        UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(v2TapSelectedActive:)];
+        [_v2 addGestureRecognizer:tap2];
+        _v2.hidden = YES;
+        [headView addSubview:_v2];
+        
+        _v3 = [[choosedCarTypeViewTap alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(titleLabel.frame)+25, (CURRENT_BOUNDS.width-40), (CURRENT_BOUNDS.width-55)/4) andTitleOne:((ChoosedClassModel *)_coachData[_currentIndex]).C2Str andTitleTwo:@"B2大货车班"];
+        _v3.isSelected = YES;
+        _v3.hidden = NO;
+        [headView addSubview:_v3];
+    }
+ 
     return headView;
 }
 
@@ -372,23 +411,37 @@
         label2.hidden = NO;
         if (index.row >2) {
             if (((ChoosedClassModel *)_coachData[index.row]).C1Str) {
-                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C1Str];
-                _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
+                _v1.title1 = ((ChoosedClassModel *)_coachData[index.row]).C1Str;
+                _v2.title1 = ((ChoosedClassModel *)_coachData[index.row]).C2Str;
+                _v1.hidden = NO;
+                _v2.hidden = NO;
+                _v3.hidden = YES;
+//                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C1Str];
+//                _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
             }else{
-                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
-                _c2PriceLabel.text = @"";
+                _v3.hidden = NO;
+                _v1.hidden = YES;
+                _v2.hidden = YES;
+                _v3.title1 = ((ChoosedClassModel *)_coachData[index.row]).C2Str;
+//                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
+//                _c2PriceLabel.text = @"";
                 label2.hidden = YES;
             }
             
             
-            _choosedModel = _coachData[index.row-1];
+            _choosedModel = _coachData[index.row];
             _choosedClassModel.type = _choosedModel.titleStr;
             _choosedClassModel.price = _choosedModel.C1Str;
             _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
             _choosedClassModel.price2 = _choosedModel.C2Str;
         }else{
-            _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C1Str];
-            _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
+            _v1.title1 = ((ChoosedClassModel *)_coachData[index.row]).C1Str;
+            _v2.title1 = ((ChoosedClassModel *)_coachData[index.row]).C2Str;
+            _v2.hidden = NO;
+            _v1.hidden = NO;
+            _v3.hidden = YES;
+//            _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C1Str];
+//            _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
             _choosedModel = _coachData[index.row];
             _choosedClassModel.type = _choosedModel.titleStr;
             _choosedClassModel.price = _choosedModel.C1Str;
@@ -409,13 +462,23 @@
         label2.hidden = NO;
         if (index.row >2) {
             if (index.row == 5) {
-                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-2]).C2Str];
+                _v3.hidden = NO;
+                _v2.hidden = YES;
+                _v1.hidden = YES;
+                _v3.title1 = ((ChoosedClassModel *)_coachData[index.row-2]).C2Str;
+                
+//                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-2]).C2Str];
                 _choosedModel = _coachData[index.row-2];
-                _c2PriceLabel.text = @"";
+//                _c2PriceLabel.text = @"";
                 label2.hidden = YES;
             }else{
-                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-1]).C1Str];
-                _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-1]).C2Str];
+                _v1.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C1Str;
+                _v2.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C2Str;
+                _v1.hidden = NO;
+                _v2.hidden = NO;
+                _v3.hidden = YES;
+//                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-1]).C1Str];
+//                _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-1]).C2Str];
                 _choosedModel = _coachData[index.row-1];
             }
             
@@ -426,8 +489,13 @@
             _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
             _choosedClassModel.price2 = _choosedModel.C2Str;
         }else{
-            _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C1Str];
-            _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
+            _v1.title1 = ((ChoosedClassModel *)_coachData[index.row]).C1Str;
+            _v2.title1 = ((ChoosedClassModel *)_coachData[index.row]).C2Str;
+            _v1.hidden = NO;
+            _v2.hidden = NO;
+            _v3.hidden = YES;
+//            _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C1Str];
+//            _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row]).C2Str];
             _choosedModel = _coachData[index.row];
             _choosedClassModel.type = _choosedModel.titleStr;
             _choosedClassModel.price = _choosedModel.C1Str;
@@ -481,6 +549,17 @@
     NSArray *arr = [NSArray arrayWithArray:mutArr];
     
     return arr;
+}
+
+//点击方法
+- (void)v1TapSelectedActive:(UITapGestureRecognizer *)tap{
+    _v1.isSelected = YES;
+    _v2.isSelected = NO;
+}
+
+- (void)v2TapSelectedActive:(UITapGestureRecognizer *)tap{
+    _v1.isSelected = NO;
+    _v2.isSelected = YES;
 }
 
 @end

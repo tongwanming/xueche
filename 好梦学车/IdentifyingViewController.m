@@ -36,6 +36,10 @@
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Appear"];
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 - (void)viewDidLoad {
@@ -128,7 +132,8 @@
                     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                     NSString *dic = [jsonDict objectForKey:@"success"];
                     _message = [jsonDict objectForKey:@"message"];
-                    if (_message && [_message isEqualToString:@"用户名已经注册"]) {
+
+                    if (_message && [_message isEqualToString:@"用户名已经注册"] && ![_message isEqual:[NSNull null]]) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             UIAlertController *v = [UIAlertController alertControllerWithTitle:@"获取验证码失败" message:@"该电话号码已经注册，请直接登录！！" preferredStyle:UIAlertControllerStyleAlert];
                             UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -141,17 +146,31 @@
                                 
                             }];
                         });
+                    }else{
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:_message preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                                
+                            }];
+                            [v addAction:active];
+                            [self presentViewController:v animated:YES completion:^{
+                                
+                            }];
+                        });
                     }
                     
                 }else{
-                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                        
-                    }];
-                    [v addAction:active];
-                    [self presentViewController:v animated:YES completion:^{
-                        
-                    }];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    });
+                    
                 }
                 
                 if (_timer) {

@@ -385,6 +385,10 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
 
 }
 
+- (void)setCarClassData:(NSArray *)carClassData{
+    _carClassData = carClassData;
+}
+
 - (void)showHoverButtonHidden:(BOOL)hidden{
     if (hidden) {
          _btn.hidden = YES;

@@ -780,13 +780,14 @@
 //                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",self.locationModela.latitude, self.locationModela.longitude,self.locationModela.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 //                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:urlString]];
                 
-                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin=latlng:%f,%f|name=%@&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",_currentLocation.latitude,_currentLocation.longitude,@"李家沱",self.locationModela.latitude, self.locationModela.longitude,self.locationModela.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin=latlng:%f,%f|name=%@&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",_currentLocation.latitude,_currentLocation.longitude,@"起点",self.locationModela.latitude, self.locationModela.longitude,self.locationModela.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 [[UIApplication sharedApplication]openURL:[NSURL URLWithString:urlString]];
             }else if ([action.title isEqualToString:@"高德地图"]){
                 //高德地图
-                NSString *urlsting =[[NSString stringWithFormat:@"iosamap://navi?sourceApplication= &slat=%lf&slon=%lf&sname=我的位置&backScheme= &lat=%f&lon=%f&dev=0&style=2",_currentLocation.latitude,_currentLocation.longitude,coordinate.latitude,coordinate.longitude]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//                NSString *urlsting =[[NSString stringWithFormat:@"iosamap://navi?sourceApplication= &slat=%lf&slon=%lf&sname=我的位置&backScheme= &lat=%f&lon=%f&dev=0&style=2",_currentLocation.latitude,_currentLocation.longitude,coordinate.latitude,coordinate.longitude]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 
-//                NSString *urlsting = [[NSString stringWithFormat:@"iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=%lf&slon=%lf&sname=我的位置&did=BGVIS2&dlat=%@&dlon=%@&dname=%@&dev=0&m=0&t=%@",_currentLocation.latitude,_currentLocation.longitude, self.locationModela,self.locationModela,@"李家沱",@"0"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                
+                NSString *urlsting =[[NSString stringWithFormat:@"iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=%lf&slon=%lf&sname=起点&did=BGVIS2&dlat=%f&dlon=%f&dname=%@&dev=0&m=0&t=0",_currentLocation.latitude,_currentLocation.longitude,coordinate.latitude,coordinate.longitude,_locationModela.name]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 [[UIApplication  sharedApplication]openURL:[NSURL URLWithString:urlsting]];
             }else if ([action.title isEqualToString:@"谷歌地图"]){
                 //谷歌地图

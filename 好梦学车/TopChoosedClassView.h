@@ -23,4 +23,6 @@
 
 @property (nonatomic, strong) NSArray *dataArr;
 
+@property (nonatomic, assign) int currentIndex;
+
 @end

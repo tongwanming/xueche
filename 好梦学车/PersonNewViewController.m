@@ -24,6 +24,7 @@
 #import "SamailerImgBtn.h"
 #import "installment_ViewController.h"
 #import "UIImageView+WebCache.h"
+#import "AppDelegate.h"
 
 @interface settingCustomBtna : UIButton
 
@@ -472,6 +473,17 @@
         if (indexPath.row == 0) {
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
                 ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+                NSString *classStr = [dic objectForKey:@"myClass"];
+                NSArray *data = ((AppDelegate *)[[UIApplication sharedApplication]delegate]).carClassData;
+                int choosedIndex = 0;
+                for (int i = 0; i < data.count; i++) {
+                    ChoosedClassModel *model = data[i];
+                    if ([classStr isEqualToString:model.titleStr]) {
+                        choosedIndex = i;
+                    }
+                }
+                v.currentIndex = choosedIndex;
                 [v returnActiveWithBlock:^(ChoosedClassModel *model) {
                     NSLog(@"%@",model.C1Str);
                     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];

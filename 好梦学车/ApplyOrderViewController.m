@@ -62,7 +62,7 @@
     _firstDic = [[NSMutableDictionary alloc] init];
     _secondDic = [[NSMutableDictionary alloc] init];
     self.title = @"报名订单详情";
-    self.appleType = @"C1手动挡";
+//    self.appleType = @"C1手动挡";
     _coach = @"";
     _userName = @"";
     if (_location == nil) {
@@ -123,12 +123,15 @@
     if ([self.appleType isEqualToString:@"C2自动挡"]) {
         _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
         _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
-        _typeLabel.text = @"C2自动挡";
-    }else{
+       
+    }else if([self.appleType isEqualToString:@"C1手动挡"]){
         _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];
         _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];
-        _typeLabel.text = @"C1手动挡";
+    }else{
+        _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+        _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
     }
+    _typeLabel.text = self.appleType;
     _peopleNumberLabel.text = _model.type;
     NSLog(@"--:%@",_model.price);
     [_backGroundImageView sd_setImageWithURL:[NSURL URLWithString:_model.backGroundImageName] placeholderImage:[UIImage imageNamed:@""]];
@@ -302,8 +305,10 @@
                     ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"学车费用";
                     if ([self.appleType isEqualToString:@"C2自动挡"]) {
                         ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
-                    }else{
+                    }else if([self.appleType isEqualToString:@"C1手动挡"]){
                         ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price];
+                    }else{
+                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
                     }
                     
                     ((ApplyOrderTableViewCell *)cell).secondName.textColor = FF8400;
@@ -340,7 +345,7 @@
         _choosedPaidWay = indexPath.row;
         [_tableView reloadData];
         if (indexPath.row == 0) {
-            if ([self.appleType isEqualToString:@"C2自动档"]) {
+            if ([self.appleType isEqualToString:@"C2自动挡"]) {
                 _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
             }else{
                 _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];

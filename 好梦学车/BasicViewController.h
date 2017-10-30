@@ -10,4 +10,6 @@
 
 @interface BasicViewController : UIViewController
 
+@property (nonatomic, strong) NSArray *carClassData;
+
 @end

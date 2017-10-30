@@ -113,5 +113,8 @@
     
 }
 
+- (void)setCurrentIndex:(int)currentIndex{
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
 
 @end

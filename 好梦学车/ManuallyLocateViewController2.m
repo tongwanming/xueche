@@ -57,6 +57,7 @@
     
     NSMutableArray *_dataArray;
     
+    NSString *_oldText;
     
 }
 
@@ -65,7 +66,8 @@
     if (btn.tag == 1001) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }else if (btn.tag == 1002){
-        _inputAddTF.text = @"";
+       _inputAddTF.text = @"";
+        [self inputAddTFAction:_inputAddTF];
     }else{
         
     }
@@ -100,6 +102,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _oldText = @"";
     _locationCity = @"重庆";
     [self.inputAddTF addTarget:self action:@selector(inputAddTFAction:) forControlEvents:UIControlEventEditingChanged];
 //    self.inputAddTF.borderStyle =UITextBorderStyleNone;
@@ -187,11 +190,17 @@
 }
 
 -(void)inputAddTFAction:(UITextField *)textField
-
-
 {
-    //延时搜索
-    [self performSelector:@selector(delay) withObject:self afterDelay:0.5];
+    if (![_oldText isEqualToString:textField.text]) {
+        _oldText = textField.text;
+        [self performSelector:@selector(delay) withObject:self afterDelay:0];
+        if ([textField.text isEqualToString:@""] && self.addressArray.count > 0) {
+            [self.addressArray removeAllObjects];
+            [_displayTableView reloadData];
+        }
+    }
+
+
 }
 
 - (void)delay {

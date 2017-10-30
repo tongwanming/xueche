@@ -34,7 +34,7 @@
                             <constraint firstAttribute="height" constant="14" id="ys5-Ss-sVc"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <state key="normal" title="重新定位">
+                        <state key="normal" title="搜索">
                             <color key="titleColor" red="0.0" green="0.48627450980392156" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                         <connections>

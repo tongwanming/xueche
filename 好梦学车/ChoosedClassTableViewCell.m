@@ -42,7 +42,7 @@
     
     NSMutableString *mutStr = [NSMutableString stringWithString:str];
     
-    NSMutableArray *mutArr = [mutStr componentsSeparatedByString:@"{"];
+    NSMutableArray *mutArr = [mutStr componentsSeparatedByString:@"@"];
     
     NSArray *arr = [NSArray arrayWithArray:mutArr];
     

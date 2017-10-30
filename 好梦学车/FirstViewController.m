@@ -38,10 +38,12 @@
 #import <UMSocialCore/UMSocialCore.h>
 #import <UShareUI/UShareUI.h>
 #import "ManuallyLocateViewController2.h"
+#import "ChoosecClassViewController.h"
 
 //test
 #import "SinginViewController.h"
 #import "ApplyOrderViewController.h"
+#import "AppDelegate.h"
 
 @interface FirstNavRightBtn : UIButton
 
@@ -674,23 +676,37 @@
                     if (_coachData.count < 1) {
                         [self showMistake];
                     }else{
-                        ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
-                        FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
-                        ChoosedClassModel *choosedModel = _coachData[indexPath.row];
-                        model.type = choosedModel.titleStr;
-                        if (choosedModel.C1Str == nil) {
-                            model.price = choosedModel.priceStr;
-                        }else{
-                            model.price = choosedModel.C1Str;
-                        }
-                        model.price2 = choosedModel.C2Str;
-                        model.isInstalments = choosedModel.isInstalmentsC1;
-                        model.backGroundImageName = choosedModel.imageStr;
-                        model.categoryCode = choosedModel.categoryCode;
-                        model.projectTypeCode = choosedModel.projectTypeCode;
-                        v.model = model;
-                        v.data = _offLineData;
-                        v.locationData = _locationData;
+//                        ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
+//                        FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
+//                        ChoosedClassModel *choosedModel = _coachData[indexPath.row];
+//                        model.type = choosedModel.titleStr;
+//                        if (choosedModel.C1Str == nil) {
+//                            model.price = choosedModel.priceStr;
+//                        }else{
+//                            model.price = choosedModel.C1Str;
+//                        }
+//                        model.price2 = choosedModel.C2Str;
+//                        model.isInstalments = choosedModel.isInstalmentsC1;
+//                        model.backGroundImageName = choosedModel.imageStr;
+//                        model.categoryCode = choosedModel.categoryCode;
+//                        model.projectTypeCode = choosedModel.projectTypeCode;
+//                        v.model = model;
+//                        v.data = _offLineData;
+//                        v.locationData = _locationData;
+//                        [self.navigationController pushViewController:v animated:YES];
+                        
+                     
+                        ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
+                        v.currentIndex = (int)indexPath.row;
+                        [v returnActiveWithBlock:^(ChoosedClassModel *model) {
+                            NSLog(@"%@",model.C1Str);
+                            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+                            [dic setObject:model.titleStr forKey:@"myClass"];
+                            [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
+                            //                            dispatch_async(dispatch_get_main_queue(), ^{
+                            //                                [_tableView reloadData];
+                            //                            });
+                        }];
                         [self.navigationController pushViewController:v animated:YES];
                     }
                     
@@ -704,24 +720,37 @@
                     if (_coachData.count < 1) {
                         [self showMistake];
                     }else{
-                        ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
-                        FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
-                        ChoosedClassModel *choosedModel = _coachData[indexPath.row];
-                        model.type = choosedModel.titleStr;
-                        if (choosedModel.C1Str == nil) {
-                            model.price = choosedModel.priceStr;
-                        }else{
-                            model.price = choosedModel.C1Str;
-                        }
+//                        ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
+//                        FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
+//                        ChoosedClassModel *choosedModel = _coachData[indexPath.row];
+//                        model.type = choosedModel.titleStr;
+//                        if (choosedModel.C1Str == nil) {
+//                            model.price = choosedModel.priceStr;
+//                        }else{
+//                            model.price = choosedModel.C1Str;
+//                        }
+//                        
+//                        model.price2 = choosedModel.C2Str;
+//                        model.isInstalments = choosedModel.isInstalmentsC1;
+//                        model.backGroundImageName = choosedModel.imageStr;
+//                        model.categoryCode = choosedModel.categoryCode;
+//                        model.projectTypeCode = choosedModel.projectTypeCode;
+//                        v.model = model;
+//                        v.data = _offLineData;
+//                        v.locationData = _locationData;
+//                        [self.navigationController pushViewController:v animated:YES];
                         
-                        model.price2 = choosedModel.C2Str;
-                        model.isInstalments = choosedModel.isInstalmentsC1;
-                        model.backGroundImageName = choosedModel.imageStr;
-                        model.categoryCode = choosedModel.categoryCode;
-                        model.projectTypeCode = choosedModel.projectTypeCode;
-                        v.model = model;
-                        v.data = _offLineData;
-                        v.locationData = _locationData;
+                        ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
+                        v.currentIndex = (int)indexPath.row;
+                        [v returnActiveWithBlock:^(ChoosedClassModel *model) {
+                            NSLog(@"%@",model.C1Str);
+                            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+                            [dic setObject:model.titleStr forKey:@"myClass"];
+                            [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
+                            //                            dispatch_async(dispatch_get_main_queue(), ^{
+                            //                                [_tableView reloadData];
+                            //                            });
+                        }];
                         [self.navigationController pushViewController:v animated:YES];
                     }
                 }
@@ -936,6 +965,8 @@
                     
                     [_coachData addObject:model];
                 }
+                self.carClassData = _coachData;
+                ((AppDelegate *)[[UIApplication sharedApplication]delegate]).carClassData = _coachData;
                 [DefaultManager shareDefaultManager].carStyleData = _coachData;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_tableView reloadData];

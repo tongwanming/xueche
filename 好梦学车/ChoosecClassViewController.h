@@ -16,6 +16,8 @@ typedef void(^ChoosecClassReturnBlock)(ChoosedClassModel *model);
 @property (nonatomic,strong) ChoosecClassReturnBlock choosedBlock;
 @property (weak, nonatomic) IBOutlet UIButton *choosedBtn;
 
+@property (nonatomic, assign) int currentIndex;
+
 - (void)returnActiveWithBlock:(ChoosecClassReturnBlock)block;
 
 @end

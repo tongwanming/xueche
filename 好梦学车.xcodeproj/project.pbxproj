@@ -948,6 +948,7 @@
 		29CA25981EB856CE00B531FF /* FirstTopBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CA25971EB856CE00B531FF /* FirstTopBtn.m */; };
 		29D3C9761F9EEFDA007BB142 /* ChoosedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D3C9751F9EEFD9007BB142 /* ChoosedTableViewCell.m */; };
 		29D3C9791F9F1792007BB142 /* ChoosedClassTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D3C9781F9F1792007BB142 /* ChoosedClassTableViewCell.m */; };
+		29D3C97F1F9F3D47007BB142 /* choosedCarTypeViewTap.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D3C97E1F9F3D47007BB142 /* choosedCarTypeViewTap.m */; };
 		29DC59AD1EFB9C3C003C1623 /* OffLineServerStation.m in Sources */ = {isa = PBXBuildFile; fileRef = 29DC59AC1EFB9C3C003C1623 /* OffLineServerStation.m */; };
 		29E5653F1F271FCE00354C1B /* OrderValidityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 29E5653E1F271FCE00354C1B /* OrderValidityManager.m */; };
 		29E70ED11EB86B9400DEA07C /* FirstCatStyleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29E70ED01EB86B9400DEA07C /* FirstCatStyleTableViewCell.xib */; };
@@ -2319,6 +2320,8 @@
 		29D3C9751F9EEFD9007BB142 /* ChoosedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosedTableViewCell.m; sourceTree = "<group>"; };
 		29D3C9771F9F1792007BB142 /* ChoosedClassTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosedClassTableViewCell.h; sourceTree = "<group>"; };
 		29D3C9781F9F1792007BB142 /* ChoosedClassTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosedClassTableViewCell.m; sourceTree = "<group>"; };
+		29D3C97D1F9F3D47007BB142 /* choosedCarTypeViewTap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = choosedCarTypeViewTap.h; sourceTree = "<group>"; };
+		29D3C97E1F9F3D47007BB142 /* choosedCarTypeViewTap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = choosedCarTypeViewTap.m; sourceTree = "<group>"; };
 		29DC59AB1EFB9C3C003C1623 /* OffLineServerStation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OffLineServerStation.h; sourceTree = "<group>"; };
 		29DC59AC1EFB9C3C003C1623 /* OffLineServerStation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OffLineServerStation.m; sourceTree = "<group>"; };
 		29E5653D1F271FCE00354C1B /* OrderValidityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderValidityManager.h; sourceTree = "<group>"; };
@@ -3712,6 +3715,8 @@
 				29D3C9751F9EEFD9007BB142 /* ChoosedTableViewCell.m */,
 				29D3C9771F9F1792007BB142 /* ChoosedClassTableViewCell.h */,
 				29D3C9781F9F1792007BB142 /* ChoosedClassTableViewCell.m */,
+				29D3C97D1F9F3D47007BB142 /* choosedCarTypeViewTap.h */,
+				29D3C97E1F9F3D47007BB142 /* choosedCarTypeViewTap.m */,
 				29522CD11EBB25840093CF32 /* MySegementView.h */,
 				29522CD21EBB25840093CF32 /* MySegementView.m */,
 				29522CB91EBADB9A0093CF32 /* StartGradeView.h */,
@@ -5881,6 +5886,7 @@
 				2953C06F1F555383000D315C /* installment_ViewController.m in Sources */,
 				295C790B1ED961F700982D60 /* SqliteDateManager.m in Sources */,
 				2974C3D31EC4077200411EAD /* SubjectOneTopView.m in Sources */,
+				29D3C97F1F9F3D47007BB142 /* choosedCarTypeViewTap.m in Sources */,
 				2948A0551EADA14E00F009C2 /* MainViewController.m in Sources */,
 				2972B1D11EE5619A00B58DD7 /* PersonIndentViewControllerOther.m in Sources */,
 				29D3C9761F9EEFDA007BB142 /* ChoosedTableViewCell.m in Sources */,

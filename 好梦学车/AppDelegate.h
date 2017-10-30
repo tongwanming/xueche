@@ -18,6 +18,8 @@
 
 @property (nonatomic, assign) BOOL showHoverbutton;
 
+@property (nonatomic, strong) NSArray *carClassData;
+
 - (void)showHoverButtonHidden:(BOOL)hidden;
 
 - (void)setLocationDataWithData:(NSArray *)data;

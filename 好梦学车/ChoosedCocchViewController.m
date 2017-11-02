@@ -320,7 +320,7 @@
     
     NSDictionary *dic = @{@"trainplaceIds":placeID};
     
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7076/coach/query/all/remark"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7076/coach/query/all/remark",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];

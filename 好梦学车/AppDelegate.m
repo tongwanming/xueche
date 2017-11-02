@@ -25,6 +25,7 @@
 #import <AdSupport/ASIdentifierManager.h>
 #import <UserNotifications/UserNotifications.h>
 #import <UMSocialCore/UMSocialCore.h>
+#import "SubjectPractiseViewController.h"
 
 #define USHARE_DEMO_APPKEY @"59df13e68f4a9d266300000d"
 
@@ -136,8 +137,10 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
     
      [LaunchIntroductionView sharedWithImages:@[@"welcome01.jpg",@"welcome02.jpg",@"welcome031.png"] buttonImage:@"" buttonFrame:CGRectMake(kScreen_width/2 - 150/2, kScreen_height - 100, 150, 45)];
     
-//    [self loadDataOne];
-//    [self loadDataTwo];
+    [self loadDataOne];
+    [self loadDataTwo];
+    [self loadDataThree];
+    [self loadDataForth];
     [[UIApplication sharedApplication]registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
     
   //友盟
@@ -308,6 +311,8 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
             NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             NSArray *arr = [jsonDict objectForKey:@"body"];
             //       NSArray *dataArr = [NSArray arrayWithArray:arr];
+            NSLog(@"%@",@"下载成功！");
+            [[NSUserDefaults standardUserDefaults] setObject:arr forKey:[NSString stringWithFormat:@"%@%ld",@"order",PractiseViewControllerTypeOne]];
             for (NSDictionary *dic in arr) {
                 SubjectPractiseModel *model = [[SubjectPractiseModel alloc] init];
                 model.question = [dic objectForKey:@"question"];
@@ -329,10 +334,11 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
             });
-            
+           
         } andFailedBlock:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
+                
             });
             
         }];
@@ -347,14 +353,15 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
     }else{
         URLConnectionModel *model = [[URLConnectionModel alloc] init];
         model.serviceName = @"hm.question.bank.list.query";
-        model.course = @"4";
+        model.course = @"1";
         model.chapter = @"";
-        model.isRand = @"";
+        model.isRand = @"Y";
         [CustomAlertView showAlertViewWithVC:main];
         [[URLConnectionHelper shareDefaulte] getPostDataWithUrl:@"" andConnectModel:model andSuccessBlock:^(NSData *data) {
             NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             NSArray *arr = [jsonDict objectForKey:@"body"];
-            
+            [[NSUserDefaults standardUserDefaults] setObject:arr forKey:[NSString stringWithFormat:@"%@%ld",@"noOrder",PractiseViewControllerTypeOne]];
+            NSLog(@"下载完成two");
             for (NSDictionary *dic in arr) {
                 SubjectPractiseModel *model = [[SubjectPractiseModel alloc] init];
                 model.question = [dic objectForKey:@"question"];
@@ -383,6 +390,96 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
         }];
     }
 
+}
+
+- (void)loadDataThree{
+    if (((NSArray *)[[SqliteDateManager sharedManager] getAllDataWithType:@"normalf"]).count > 1) {
+        
+    }else{
+        URLConnectionModel *model = [[URLConnectionModel alloc] init];
+        model.serviceName = @"hm.question.bank.list.query";
+        model.course = @"4";
+        model.chapter = @"";
+        model.isRand = @"";
+        [CustomAlertView showAlertViewWithVC:main];
+        [[URLConnectionHelper shareDefaulte] getPostDataWithUrl:@"" andConnectModel:model andSuccessBlock:^(NSData *data) {
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSArray *arr = [jsonDict objectForKey:@"body"];
+            [[NSUserDefaults standardUserDefaults] setObject:arr forKey:[NSString stringWithFormat:@"%@%ld",@"order",PractiseViewControllerTypeForth]];
+            NSLog(@"下载完成three");
+            for (NSDictionary *dic in arr) {
+                SubjectPractiseModel *model = [[SubjectPractiseModel alloc] init];
+                model.question = [dic objectForKey:@"question"];
+                model.answer1 = [dic objectForKey:@"option1"];
+                model.answer2 = [dic objectForKey:@"option2"];
+                model.answer3 = [dic objectForKey:@"option3"];
+                model.answer4 = [dic objectForKey:@"option4"];
+                model.answer = [dic objectForKey:@"answer"];
+                model.explain = [dic objectForKey:@"explain"];
+                model.picUrl = [dic objectForKey:@"pic"];
+                model.type = [dic objectForKey:@"type"];
+                model.chapter = [dic objectForKey:@"chapter"];
+                model.questionID = [dic objectForKey:@"questionId"];
+                model.sqliteType = @"normalf";
+                [[SqliteDateManager sharedManager] addSubjectPractiseModel:model];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+            });
+        } andFailedBlock:^(NSError *error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+            });
+        }];
+    }
+    
+}
+
+- (void)loadDataForth{
+    if (((NSArray *)[[SqliteDateManager sharedManager] getAllDataWithType:@"normalf"]).count > 1) {
+        
+    }else{
+        URLConnectionModel *model = [[URLConnectionModel alloc] init];
+        model.serviceName = @"hm.question.bank.list.query";
+        model.course = @"4";
+        model.chapter = @"";
+        model.isRand = @"Y";
+        [CustomAlertView showAlertViewWithVC:main];
+        [[URLConnectionHelper shareDefaulte] getPostDataWithUrl:@"" andConnectModel:model andSuccessBlock:^(NSData *data) {
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSArray *arr = [jsonDict objectForKey:@"body"];
+            [[NSUserDefaults standardUserDefaults] setObject:arr forKey:[NSString stringWithFormat:@"%@%ld",@"noOrder",PractiseViewControllerTypeForth]];
+            NSLog(@"下载完成forth");
+            for (NSDictionary *dic in arr) {
+                SubjectPractiseModel *model = [[SubjectPractiseModel alloc] init];
+                model.question = [dic objectForKey:@"question"];
+                model.answer1 = [dic objectForKey:@"option1"];
+                model.answer2 = [dic objectForKey:@"option2"];
+                model.answer3 = [dic objectForKey:@"option3"];
+                model.answer4 = [dic objectForKey:@"option4"];
+                model.answer = [dic objectForKey:@"answer"];
+                model.explain = [dic objectForKey:@"explain"];
+                model.picUrl = [dic objectForKey:@"pic"];
+                model.type = [dic objectForKey:@"type"];
+                model.chapter = [dic objectForKey:@"chapter"];
+                model.questionID = [dic objectForKey:@"questionId"];
+                model.sqliteType = @"normalf";
+                [[SqliteDateManager sharedManager] addSubjectPractiseModel:model];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+            });
+        } andFailedBlock:^(NSError *error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+            });
+        }];
+    }
+    
 }
 
 - (void)setCarClassData:(NSArray *)carClassData{

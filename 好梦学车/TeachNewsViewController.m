@@ -200,7 +200,7 @@
     
     
     //    NSURL *url = [NSURL URLWithString:urlstr];http://101.37.29.125:7076/coach/query/student
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7071/api/common/push/queryPushInfoList"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/common/push/queryPushInfoList",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
@@ -344,7 +344,7 @@
     
     
     //    NSURL *url = [NSURL URLWithString:urlstr];http://101.37.29.125:7076/coach/query/student
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7076/coach/get"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7076/coach/get",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
@@ -431,7 +431,7 @@
     
     
     //    NSURL *url = [NSURL URLWithString:urlstr];http://101.37.29.125:7076/coach/query/student
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7076/student/study/remark/add"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7076/student/study/remark/add",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
@@ -511,7 +511,7 @@
     [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7071/api/common/push/markRead"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/common/push/markRead",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];

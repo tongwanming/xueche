@@ -195,7 +195,7 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/order-service/api/common/carouse/query"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/carouse/query",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
@@ -824,7 +824,8 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/manage-service/serviceStation/findServiceStation"];
+    NSString *str = [NSString stringWithFormat:@"http://%@:7072/manage-service/serviceStation/findServiceStation",PUBLIC_LOCATION];
+    NSURL *url = [NSURL URLWithString:str];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
@@ -903,7 +904,7 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/order-service/api/common/classType/query"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/classType/query",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];

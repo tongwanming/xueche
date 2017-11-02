@@ -263,7 +263,7 @@
     
     
     //    NSURL *url = [NSURL URLWithString:urlstr];http://101.37.29.125:7076/coach/query/student
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/order-service/api/common/push/queryPushNumInfoByTags"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/push/queryPushNumInfoByTags",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];

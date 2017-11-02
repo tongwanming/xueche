@@ -446,11 +446,14 @@
         return;
     }else{
         SubjectPractisePageViewController *initialViewController = [self viewControllerAtIndex:[index integerValue]+1];// 得到第一页
-        NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
-        [_pageViewController setViewControllers:viewControllers
-                                      direction:UIPageViewControllerNavigationDirectionForward
-                                       animated:YES
-                                     completion:nil];
+        if (initialViewController) {
+            NSArray *viewControllers = [NSArray arrayWithObject:initialViewController];
+            [_pageViewController setViewControllers:viewControllers
+                                          direction:UIPageViewControllerNavigationDirectionForward
+                                           animated:YES
+                                         completion:nil];
+        }
+        
         
     }
     NSLog(@"answer:%@",answer);

@@ -548,7 +548,7 @@
         NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
         NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
         
-        NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/order-service/api/order/handle/create"];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/order/handle/create",PUBLIC_LOCATION]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
         NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
         [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -652,7 +652,7 @@
         NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
         NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
         
-        NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/order-service/api/order/handle/create"];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/order/handle/create",PUBLIC_LOCATION]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
         NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
         [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -760,7 +760,7 @@
             NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
             
             //    NSURL *url = [NSURL URLWithString:urlstr];
-            NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/payment-service/api/pay/alipayAppPay/toPay"];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@7072/payment-service/api/pay/alipayAppPay/toPay",PUBLIC_LOCATION]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
             NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
             [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -823,7 +823,7 @@
             NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
             
             //    NSURL *url = [NSURL URLWithString:urlstr];
-            NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/payment-service/api/pay/weChatAppPay/toPay"];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/payment-service/api/pay/weChatAppPay/toPay",PUBLIC_LOCATION]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
             NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
             [request setValue:token forHTTPHeaderField:@"HMAuthorization"];

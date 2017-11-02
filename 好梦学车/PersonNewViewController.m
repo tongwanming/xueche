@@ -25,6 +25,7 @@
 #import "installment_ViewController.h"
 #import "UIImageView+WebCache.h"
 #import "AppDelegate.h"
+#import "SecuritiesViewController.h"
 
 @interface settingCustomBtna : UIButton
 
@@ -336,7 +337,7 @@
 - (NSMutableArray *)titleData{
     NSArray *arr1 = @[@"我的班型",@"训练场地",@"我的教练"];
     
-    NSArray *arr2 = @[@"学车流程",@"订单管理",@"设置中心"];
+    NSArray *arr2 = @[@"我的优惠卷",@"学车流程",@"订单管理",@"设置中心"];
     if (!_titleData) {
         _titleData = [[NSMutableArray alloc] init];
         [_titleData addObject:arr1];
@@ -348,7 +349,7 @@
 - (NSMutableArray *)imageData{
     NSArray *image1 = @[@"clas",@"place",@"coach"];
     
-    NSArray *image2 = @[@"btn_people_process",@"order",@"btn_people_sittinga"];
+    NSArray *image2 = @[@"icon_person_juan",@"btn_people_process",@"order",@"btn_people_sittinga"];
     if (!_imageData) {
         _imageData = [[NSMutableArray alloc] init];
         [_imageData addObject:image1];
@@ -365,7 +366,7 @@
     if (section == 0) {
         return 2;
     }else
-        return 3;
+        return 4;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -405,7 +406,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
+                SecuritiesViewController *v = [[SecuritiesViewController alloc] init];
+                [self.navigationController pushViewController:v animated:YES];
+            }else{
+                IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
+                [self.navigationController pushViewController:v animated:YES];
+            }
+        }else if (indexPath.row == 1){
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
                 //                PersonNewsViewController *v = [[PersonNewsViewController alloc] init];
                 //                [self.navigationController pushViewController:v animated:YES];
@@ -416,8 +424,7 @@
                 IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
                 [self.navigationController pushViewController:v animated:YES];
             }
-            
-        }else if (indexPath.row == 1){
+        }else if (indexPath.row == 2){
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
                 NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
                 NSString *choosedType = [userDic objectForKey:@"choosedPayType"];
@@ -446,13 +453,7 @@
                         PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
                         [self.navigationController pushViewController:v animated:YES];
                     }
-                    
-                    
                 }
-                
-                
-                
-                
             }else{
                 IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
                 [self.navigationController pushViewController:v animated:YES];
@@ -493,16 +494,16 @@
                         [_tableView reloadData];
                     });
                 }];
-//                [v returnSelectCocchWithBlock:^(NSString *name) {
+                //                [v returnSelectCocchWithBlock:^(NSString *name) {
                 
-//                }];
+                //                }];
                 [self.navigationController pushViewController:v animated:YES];
             }else{
                 IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
                 [self.navigationController pushViewController:v animated:YES];
             }
-        }else if (indexPath.row == 1){
             
+        }else if (indexPath.row == 1){
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
                 if (_locationData.count < 1) {
                     [self showMistake];
@@ -527,7 +528,6 @@
                 IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
                 [self.navigationController pushViewController:v animated:YES];
             }
-            
         }else{
             if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
                 

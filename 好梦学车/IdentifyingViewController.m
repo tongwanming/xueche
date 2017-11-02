@@ -119,7 +119,7 @@
             NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
             
             //    NSURL *url = [NSURL URLWithString:urlstr];
-            NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/message-service/sms/sendRegisterVerifyCode"];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/message-service/sms/sendRegisterVerifyCode",PUBLIC_LOCATION]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
             [request setHTTPBody:jsonData];
             [request setHTTPMethod:@"POST"];
@@ -224,7 +224,7 @@
             NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
             
             //    NSURL *url = [NSURL URLWithString:urlstr];
-            NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/message-service/sms/verifyRegisterCode"];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/message-service/sms/verifyRegisterCode",PUBLIC_LOCATION]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
             [request setHTTPBody:jsonData];
             [request setHTTPMethod:@"POST"];

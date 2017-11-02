@@ -291,19 +291,19 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:@"http://101.37.29.125:7072/manage-service/trainplace/listByCoords"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/manage-service/trainplace/listByCoords",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-    [CustomAlertView showAlertViewWithVC:self];
+//    [CustomAlertView showAlertViewWithVC:self];
     
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error == nil) {
             NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             NSString *str = [jsonDict objectForKey:@"success"];
-            [CustomAlertView hideAlertView];
+//            [CustomAlertView hideAlertView];
             if ([str boolValue]) {
                 
                 
@@ -357,7 +357,7 @@
                 
             }
         }else{
-            [CustomAlertView hideAlertView];
+//            [CustomAlertView hideAlertView];
         }
     }];
     [dataTask resume];

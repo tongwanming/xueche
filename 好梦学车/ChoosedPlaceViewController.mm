@@ -481,6 +481,16 @@
 }
 
 - (void)searchRouteWithFirstLocationModel:(FirstLocationModel *)model{
+    
+    BMKPointAnnotation* annotation = [[BMKPointAnnotation alloc]init];
+    CLLocationCoordinate2D coor;
+    coor.latitude = [model.latitude doubleValue];
+    coor.longitude = [model.longitude doubleValue];
+    annotation.coordinate = coor;
+    //    annotation.title = @"这里是北京";
+    [_mapView addAnnotation:annotation];
+    
+    return;
     //初始化检索对象
     if (!_routSearch) {
         _routSearch = [[BMKRouteSearch alloc]init];

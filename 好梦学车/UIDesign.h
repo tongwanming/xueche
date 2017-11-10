@@ -54,6 +54,17 @@
 #define F7F7F7 RGBAN(247,247,247,100)
 //F4F6F9
 #define F4F6F9 RGBAN(244,246,249,100)
+//eceff4
+#define ECEFF4 RGBAN(236,239,244,100)
+//e5f5ff
+#define E5F5FF RGBAN(229,245,255,100)
+//f4f4f4
+#define F4F4F4 RGBAN(244,244,244,100)
+//9AA6B7
+#define AA6b7 RGBAN(154,166,183,100)
+
+//地址前面部分
+#define PUBLIC_LOCATION @"101.37.29.125" //测试为101.37.161.13；正式为:101.37.29.125
 
 #define CURRENT_BOUNDS [UIScreen mainScreen].bounds.size
 
@@ -61,4 +72,5 @@
 #define TYPERATION [[UIScreen mainScreen] bounds].size.width/414
 
 #define TYPERATIONTWO [[UIScreen mainScreen] bounds].size.width/375
+
 #endif /* UIDesign_h */

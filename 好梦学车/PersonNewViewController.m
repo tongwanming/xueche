@@ -27,6 +27,11 @@
 #import "AppDelegate.h"
 #import "SecuritiesViewController.h"
 
+#import <AVFoundation/AVFoundation.h>
+#import "QRCodeGenerateVC.h"
+#import "SGQRCodeScanningVC.h"
+
+
 @interface settingCustomBtna : UIButton
 
 @end
@@ -264,6 +269,14 @@
         [settingBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         //    settingBtn.backgroundColor = [UIColor orangeColor];
         [view addSubview:settingBtn];
+        
+        UIButton *showQRCodelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        showQRCodelBtn.frame = CGRectMake(CURRENT_BOUNDS.width-16-100, CURRENT_BOUNDS.width*250/375-84, 100, 44);
+        showQRCodelBtn.tag = 1008;
+        [showQRCodelBtn setTitle:@"显示二维码" forState: UIControlStateNormal];
+        [showQRCodelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:showQRCodelBtn];
+        
     }else{
     
     }
@@ -329,7 +342,12 @@
     }else if (btn.tag == 1007){
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
         [self.navigationController pushViewController:v animated:YES];
-    }
+    }else if (btn.tag == 1008){
+        //生成二维码
+        QRCodeGenerateVC *VC = [[QRCodeGenerateVC alloc] init];
+        [self.navigationController pushViewController:VC animated:YES];
+        
+    }else{}
     NSLog(@"----%ld",(long)btn.tag);
 }
 

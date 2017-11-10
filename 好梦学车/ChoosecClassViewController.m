@@ -472,11 +472,20 @@
 //                _c2PriceLabel.text = @"";
                 label2.hidden = YES;
             }else{
-                _v1.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C1Str;
-                _v2.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C2Str;
-                _v1.hidden = NO;
-                _v2.hidden = NO;
-                _v3.hidden = YES;
+                NSString *str1 = ((ChoosedClassModel *)_coachData[index.row-1]).C1Str;
+                if (str1 == nil) {
+                    _v3.hidden = NO;
+                    _v2.hidden = YES;
+                    _v1.hidden = YES;
+                    _v3.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C2Str;
+                }else{
+                    _v1.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C1Str;
+                    _v2.title1 = ((ChoosedClassModel *)_coachData[index.row-1]).C2Str;
+                    _v1.hidden = NO;
+                    _v2.hidden = NO;
+                    _v3.hidden = YES;
+                }
+                
 //                _c1PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-1]).C1Str];
 //                _c2PriceLabel.text = [NSString stringWithFormat:@"¥:%@",((ChoosedClassModel *)_coachData[index.row-1]).C2Str];
                 _choosedModel = _coachData[index.row-1];

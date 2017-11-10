@@ -38,6 +38,7 @@
 
 #import "PersonIndentViewController.h"
 #import "OrderValidityManager.h"
+#import "ChoosedSecuritiesViewController.h"
 
 
 #define COLOR_WITH_HEX(hexValue) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16)) / 255.0 green:((float)((hexValue & 0xFF00) >> 8)) / 255.0 blue:((float)(hexValue & 0xFF)) / 255.0 alpha:1.0f]
@@ -184,7 +185,7 @@
     }else if (section == 1){
         return 2;
     }else if (section == 2){
-        return 1;
+        return 2;
     }else{
         return 2;
     }
@@ -301,6 +302,14 @@
 //                    ((ApplyOrderTableViewCell *)cell).secondName.text = @"请联系客服";
 //                    ((ApplyOrderTableViewCell *)cell).secondName.textColor = UNMAIN_TEXT_COLOR;
 //                    ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:15];
+                    ((ApplyOrderTableViewCell *)cell).accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"优惠卷";
+                    ((ApplyOrderTableViewCell *)cell).secondName.text = @"200元优惠卷";
+                    ((ApplyOrderTableViewCell *)cell).secondName.textColor = UNMAIN_TEXT_COLOR;
+                    ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:15];
+                    
+                    break;
+                case 1:
                     
                     ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"学车费用";
                     if ([self.appleType isEqualToString:@"C2自动挡"]) {
@@ -313,17 +322,15 @@
                     
                     ((ApplyOrderTableViewCell *)cell).secondName.textColor = FF8400;
                     ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:25];
-                    break;
-                case 1:
-                    ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"学车费用";
-                    if ([self.appleType isEqualToString:@"C2自动挡"]) {
-                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
-                    }else{
-                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price];
-                    }
-                    
-                    ((ApplyOrderTableViewCell *)cell).secondName.textColor = FF8400;
-                    ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:25];
+//                    ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"学车费用";
+//                    if ([self.appleType isEqualToString:@"C2自动挡"]) {
+//                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+//                    }else{
+//                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price];
+//                    }
+//
+//                    ((ApplyOrderTableViewCell *)cell).secondName.textColor = FF8400;
+//                    ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:25];
                     break;
                     
                 default:
@@ -474,11 +481,17 @@
     }
     if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-            return;
-            //发票信息
-            BillNewsViewController *billNewVC = [[BillNewsViewController alloc] init];
+           
+            //优惠卷
+            ChoosedSecuritiesViewController *billNewVC = [[ChoosedSecuritiesViewController alloc] init];
+            // billNewVC.data =  data;所有可以用的优惠卷
+            [billNewVC returnChoosedSecuritiesBlock:^(SecuritiesModel *model) {
+               //返回的优惠卷
+                
+            }];
             [self.navigationController pushViewController:billNewVC animated:YES];
         }else{
+             return;
             if ([self.appleType isEqualToString:@"C2自动挡"]) {
                 [IPricePopView createPopviewWithName:@"费用详情" andPrice:_model.price2 andExamPrice:@"390" andVC:self];
             }else{

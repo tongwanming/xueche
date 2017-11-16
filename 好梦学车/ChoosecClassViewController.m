@@ -147,10 +147,13 @@
                 if (arr.count > 1) {
                     
                     for (NSDictionary *subDic in arr) {
+                        
                         if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
                             model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                            model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
                         }else{
                             model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                            model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
                         }
                     }
                 }else{
@@ -158,8 +161,10 @@
                     for (NSDictionary *subDic in arr) {
                         if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
                             model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                            model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
                         }else{
                             model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                            model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
                         }
                     }
                 }
@@ -229,6 +234,8 @@
                 model.isInstalments = _choosedModel.isInstalmentsC1;
                 model.backGroundImageName = _choosedModel.imageStr;
                 model.categoryCode = _choosedModel.categoryCode;
+                model.productCode1 = _choosedModel.productCode1;
+                model.productCode2 = _choosedModel.productCode2;
                 model.projectTypeCode = @"001";
                 if (_v3.hidden) {
                     if (_v1.isSelected) {

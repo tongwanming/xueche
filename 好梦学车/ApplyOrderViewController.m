@@ -48,6 +48,8 @@
 
 @property (nonatomic, strong) NSString *payNum;
 
+@property (nonatomic, strong) SecuritiesModel *securitiesModel;
+
 @end
 
 @implementation ApplyOrderViewController{
@@ -56,12 +58,14 @@
     NSArray *_imageeData;
     NSMutableDictionary *_firstDic;
     NSMutableDictionary *_secondDic;
+    NSString *_choosedSecurities;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     _firstDic = [[NSMutableDictionary alloc] init];
     _secondDic = [[NSMutableDictionary alloc] init];
+    _choosedSecurities = @"选择";
     self.title = @"报名订单详情";
 //    self.appleType = @"C1手动挡";
     _coach = @"";
@@ -304,7 +308,7 @@
 //                    ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:15];
                     ((ApplyOrderTableViewCell *)cell).accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"优惠卷";
-                    ((ApplyOrderTableViewCell *)cell).secondName.text = @"200元优惠卷";
+                    ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"%@优惠卷",_choosedSecurities];
                     ((ApplyOrderTableViewCell *)cell).secondName.textColor = UNMAIN_TEXT_COLOR;
                     ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:15];
                     
@@ -485,9 +489,13 @@
             //优惠卷
             ChoosedSecuritiesViewController *billNewVC = [[ChoosedSecuritiesViewController alloc] init];
             // billNewVC.data =  data;所有可以用的优惠卷
+            billNewVC.categoryCode = _model.categoryCode;
+            billNewVC.price = _practicalpriceLabel.text;
             [billNewVC returnChoosedSecuritiesBlock:^(SecuritiesModel *model) {
                //返回的优惠卷
-                
+                _securitiesModel = model;
+                _choosedSecurities = model.couponPrice;
+                [self.tableView reloadData];
             }];
             [self.navigationController pushViewController:billNewVC animated:YES];
         }else{
@@ -522,6 +530,17 @@
 }
 - (IBAction)sureBtnClick:(id)sender {
     
+    NSString *productCode1;
+    if ([self.appleType isEqualToString:@"C1"]) {
+        productCode1 = _model.productCode1;
+    }else{
+        productCode1 = _model.productCode2;
+        
+    }
+    NSString *couponsCode = _securitiesModel.couponsCode;
+    if (!couponsCode) {
+        couponsCode = @"";
+    }
     if (_choosedPaidWay == 1) {
 //        [self showNotAllowIn];
 //        return;
@@ -659,7 +678,9 @@
                               @"studentUid": [personDic objectForKey:@"userId"],
                               @"trainPlaceId": @"",
                               @"coachName":_coach,
-                              @"trainPlaceName":_location
+                              @"trainPlaceName":_location,
+                              @"productCode":productCode1,
+                              @"couponCode":couponsCode
                               };
         NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
         NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];

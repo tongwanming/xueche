@@ -966,6 +966,8 @@
 		29C992AD1FB57305003CCFA3 /* PersonCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C992A71FB57305003CCFA3 /* PersonCenterViewController.xib */; };
 		29C992AE1FB57305003CCFA3 /* PersonNewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C992A81FB57305003CCFA3 /* PersonNewsViewController.m */; };
 		29C992AF1FB57305003CCFA3 /* PersonCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C992AA1FB57305003CCFA3 /* PersonCenterViewController.m */; };
+		29C992B21FB59242003CCFA3 /* icon_me_erweima@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29C992B01FB59242003CCFA3 /* icon_me_erweima@2x.png */; };
+		29C992B31FB59242003CCFA3 /* icon_me_erweima@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29C992B11FB59242003CCFA3 /* icon_me_erweima@3x.png */; };
 		29CA257B1EB84EB000B531FF /* FirstBasicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CA25791EB84EB000B531FF /* FirstBasicTableViewCell.m */; };
 		29CA257C1EB84EB100B531FF /* FirstBasicTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29CA257A1EB84EB000B531FF /* FirstBasicTableViewCell.xib */; };
 		29CA257F1EB84F2A00B531FF /* FirstTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CA257E1EB84F2A00B531FF /* FirstTopTableViewCell.m */; };
@@ -2374,6 +2376,8 @@
 		29C992A91FB57305003CCFA3 /* PersonCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonCenterViewController.h; sourceTree = "<group>"; };
 		29C992AA1FB57305003CCFA3 /* PersonCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonCenterViewController.m; sourceTree = "<group>"; };
 		29C992AB1FB57305003CCFA3 /* PersonNewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonNewsViewController.h; sourceTree = "<group>"; };
+		29C992B01FB59242003CCFA3 /* icon_me_erweima@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_me_erweima@2x.png"; sourceTree = "<group>"; };
+		29C992B11FB59242003CCFA3 /* icon_me_erweima@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_me_erweima@3x.png"; sourceTree = "<group>"; };
 		29CA25781EB84EB000B531FF /* FirstBasicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstBasicTableViewCell.h; sourceTree = "<group>"; };
 		29CA25791EB84EB000B531FF /* FirstBasicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstBasicTableViewCell.m; sourceTree = "<group>"; };
 		29CA257A1EB84EB000B531FF /* FirstBasicTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FirstBasicTableViewCell.xib; sourceTree = "<group>"; };
@@ -3227,6 +3231,8 @@
 		29489FF81EAD9EAC00F009C2 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				29C992B01FB59242003CCFA3 /* icon_me_erweima@2x.png */,
+				29C992B11FB59242003CCFA3 /* icon_me_erweima@3x.png */,
 				2960104D1F2077A6004ED1FE /* homepage_click.svg */,
 				2960104E1F2077A6004ED1FE /* homepage.svg */,
 				2960104F1F2077A6004ED1FE /* people_click.svg */,
@@ -5461,6 +5467,7 @@
 				2952EEC51EC83135008CFE27 /* btn_save_normal@2x.png in Resources */,
 				296CA23F1ED6BE6E00A38788 /* m10.png in Resources */,
 				294E3E6A1ED0202100FFF492 /* pop_btn_delete@2x.png in Resources */,
+				29C992B31FB59242003CCFA3 /* icon_me_erweima@3x.png in Resources */,
 				294F143A1ED66C5800AC3F76 /* SubjectMyMistakesViewController.xib in Resources */,
 				29506B201ED5168D00D9A6B4 /* 2.5.png in Resources */,
 				2974C4211EC4330D00411EAD /* 30%green.png in Resources */,
@@ -5770,6 +5777,7 @@
 				29C992AD1FB57305003CCFA3 /* PersonCenterViewController.xib in Resources */,
 				294EACCC1F29921E00634F74 /* bg_loginin_defaultavatar.png in Resources */,
 				29E70ED71EB87AD600DEA07C /* icon_time20%.png in Resources */,
+				29C992B21FB59242003CCFA3 /* icon_me_erweima@2x.png in Resources */,
 				29E70ED81EB87AD600DEA07C /* icon_time20%@2x.png in Resources */,
 				29E7F9C71EB1DF21001FC2C0 /* btn_message@2x.png in Resources */,
 				291AD3F91F13781A00B6431F /* LearningProgressOneViewController.xib in Resources */,

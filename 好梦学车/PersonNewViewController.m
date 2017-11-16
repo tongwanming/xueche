@@ -271,9 +271,9 @@
         [view addSubview:settingBtn];
         
         UIButton *showQRCodelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        showQRCodelBtn.frame = CGRectMake(CURRENT_BOUNDS.width-16-100, CURRENT_BOUNDS.width*250/375-84, 100, 44);
+        showQRCodelBtn.frame = CGRectMake(CURRENT_BOUNDS.width-16-44-44, 20, 44, 44);
         showQRCodelBtn.tag = 1008;
-        [showQRCodelBtn setTitle:@"显示二维码" forState: UIControlStateNormal];
+        [showQRCodelBtn setImage:[UIImage imageNamed:@"icon_me_erweima"] forState:UIControlStateNormal];
         [showQRCodelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:showQRCodelBtn];
         

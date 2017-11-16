@@ -10,4 +10,6 @@
 
 @interface QRCodeGenerateVC : UIViewController
 
+
+
 @end

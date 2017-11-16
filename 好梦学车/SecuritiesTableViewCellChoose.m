@@ -16,6 +16,15 @@
     // Initialization code
 }
 
+- (void)setModel:(SecuritiesModel *)model{
+    _model = model;
+    _securityLabel.text = model.couponName;
+    _titleLabel.text = model.descriptiona;
+    _priceLabel.text = model.couponPrice;
+    _priceType.text = model.useCondition;
+    _userTimeLabel.text = [NSString stringWithFormat:@"%@-%@",model.startTime,model.endTime];
+}
+
 - (void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
     if (isSelected) {

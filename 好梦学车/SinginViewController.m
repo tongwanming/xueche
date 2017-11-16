@@ -173,7 +173,7 @@
                     
                     [userDic setValue:[self choosedObjectWithKey:@"district" andDic:userInfoDic] forKey:@"address"];
                     [userDic setValue:[self choosedObjectWithKey:@"userId" andDic:userInfoDic] forKey:@"userId"];
-                   
+                   [userDic setValue:[self choosedObjectWithKey:@"phone" andDic:userInfoDic] forKey:@"phone"];
                     
                     
                     [[NSUserDefaults standardUserDefaults] setObject:userDic forKey:@"personNews"];

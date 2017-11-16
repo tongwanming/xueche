@@ -146,6 +146,7 @@
                 <outlet property="priceLabel" destination="tFW-aF-nr9" id="UMg-9H-HHW"/>
                 <outlet property="priceType" destination="MEU-BR-kIg" id="Cbf-AE-DW1"/>
                 <outlet property="ruleLabel" destination="ztR-Zx-e9C" id="HkM-9Z-IeE"/>
+                <outlet property="securityLabel" destination="FZj-LZ-rOf" id="F3N-VM-DNj"/>
                 <outlet property="titleLabel" destination="7Qm-Xa-zKR" id="yUW-Zf-wFI"/>
                 <outlet property="userTimeLabel" destination="reF-wt-xC4" id="pnb-Dl-7Oz"/>
             </connections>

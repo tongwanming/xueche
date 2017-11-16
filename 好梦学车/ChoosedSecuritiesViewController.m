@@ -1,63 +1,68 @@
 //
-//  SecuritiesViewController.m
+//  ChoosedSecuritiesViewController.m
 //  好梦学车
 //
-//  Created by haomeng on 2017/11/1.
+//  Created by haomeng on 2017/11/2.
 //  Copyright © 2017年 haomeng. All rights reserved.
 //
 
-#import "SecuritiesViewController.h"
-#import "SecuritiesTableViewCellEnabled.h"
-#import "ChoosecClassViewController.h"
-#import "AppDelegate.h"
-#import "IdentifyingViewController.h"
+#import "ChoosedSecuritiesViewController.h"
+#import "SecuritiesTableViewCellChoose.h"
 #import "CustomAlertView.h"
-#import "SecuritiesModel.h"
 
-@interface SecuritiesViewController ()<UITableViewDelegate,UITableViewDataSource,SecuritiesTableViewCellEnabledDelegate>
+@interface ChoosedSecuritiesViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *sureBtn;
 @property (nonatomic, strong) NSMutableArray *data;
 
 @end
 
-@implementation SecuritiesViewController
-- (IBAction)btnclick:(id)sender {
+@implementation ChoosedSecuritiesViewController{
+    NSInteger _currentChoosedIndex;
+}
+
+- (IBAction)btnClick:(id)sender {
     UIButton *btn = sender;
     if (btn.tag == 1001) {
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }else if (btn.tag == 1002){
+        if (self.securitiesBlock) {
+            self.securitiesBlock(_data[_currentChoosedIndex]);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+    }else{
         
     }
-    else{
-        
-        
-    }
-//    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:YES];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
-    
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:YES];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Appear"];
+- (void)returnChoosedSecuritiesBlock:(choosedSecuritiesBlock)block{
+    _securitiesBlock = block;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _data = [[NSMutableArray alloc] init];
+    _currentChoosedIndex = 0;
+    self.title = @"选择优惠卷";
+    
+    _sureBtn.layer.masksToBounds = YES;
+    _sureBtn.layer.cornerRadius = 39/2;
+    
+    UIButton *letBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [letBtn setImage:[UIImage imageNamed:@"btn_back_gray"] forState:UIControlStateNormal];
+    letBtn.contentMode = UIViewContentModeScaleAspectFit;
+    //    letBtn.backgroundColor = [UIColor redColor];
+    letBtn.tag = 1001;
+    [letBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    letBtn.frame = CGRectMake(0, 0, 40, 40);
+    [letBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 20)];
+    UIBarButtonItem *leftBtn = [[UIBarButtonItem alloc] initWithCustomView:letBtn];
+    
+    self.navigationItem.leftBarButtonItem = leftBtn;
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = F4F4F4;
-    _sureBtn.layer.masksToBounds = YES;
-    _sureBtn.layer.cornerRadius = 49/2;
-    _data = [[NSMutableArray alloc] init];
     [self getData];
     // Do any additional setup after loading the view from its nib.
 }
@@ -66,13 +71,17 @@
     [CustomAlertView showAlertViewWithVC:self];
     NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
     NSString *phone = [userDic objectForKey:@"phone"];
-    NSDictionary *dic =@{@"limit":@0,
-                         @"page":@0,
-                         @"paged":@true,
-                         @"phone":phone,
-                         @"status":@"",
-                         @"userId":@"",
-                         @"limitInstalments":@false
+    int w = [self changeIntegerTypeWithStr:_price];
+    NSDictionary *dic =@{ @"classTypeCode":_categoryCode,
+                         @"limit": @0,
+                         @"limitInstalments": @false,
+                          @"limitPrice":@(w),
+                         @"page": @0,
+                         @"paged": @false,
+                         @"phone": phone,
+                         @"status": @"0",
+                         @"type": @"0",
+                         @"userId": @""
                          };
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
@@ -139,7 +148,7 @@
             });
         }else{
             dispatch_async(dispatch_get_main_queue(), ^{
-              
+                
             });
         }
     }];
@@ -148,6 +157,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
     return 1;
 }
 
@@ -162,60 +172,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *index = @"index";
-    SecuritiesTableViewCellEnabled *cell = [tableView dequeueReusableCellWithIdentifier:index];
+    SecuritiesTableViewCellChoose *cell = [tableView dequeueReusableCellWithIdentifier:index];
     if (!cell) {
-        cell = [SecuritiesTableViewCellEnabled cellWithTableToDequeueReusable:tableView identifier:index nibName:@"SecuritiesTableViewCellEnabled"];
+        cell = [SecuritiesTableViewCellChoose cellWithTableToDequeueReusable:tableView identifier:index nibName:@"SecuritiesTableViewCellChoose"];
         
     }
-    cell.delegate = self;
-    SecuritiesModel *model = _data[indexPath.row];
-    if ([model.couponStatus isEqualToString:@"0"]) {
-        cell.canBeUsed = YES;
+    if (indexPath.row == _currentChoosedIndex) {
+        cell.isSelected = YES;
     }else{
-        cell.canBeUsed = NO;
+        cell.isSelected = NO;
     }
-    cell.model = model;
+    cell.model = _data[indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    _currentChoosedIndex = indexPath.row;
+    [_tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - SecuritiesTableViewCellEnabledDelegate
-- (void)SecuritiesTableViewCellEnabledClickWithModel:(SecuritiesModel *)model{
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
-        ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
-        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
-        NSString *classStr = [dic objectForKey:@"myClass"];
-        NSArray *data = ((AppDelegate *)[[UIApplication sharedApplication]delegate]).carClassData;
-        int choosedIndex = 0;
-        for (int i = 0; i < data.count; i++) {
-            ChoosedClassModel *model = data[i];
-            if ([classStr isEqualToString:model.titleStr]) {
-                choosedIndex = i;
-            }
-        }
-        v.currentIndex = choosedIndex;
-        [v returnActiveWithBlock:^(ChoosedClassModel *model) {
-            NSLog(@"%@",model.C1Str);
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
-            [dic setObject:model.titleStr forKey:@"myClass"];
-            [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_tableView reloadData];
-            });
-        }];
-        //                [v returnSelectCocchWithBlock:^(NSString *name) {
-        
-        //                }];
-        [self.navigationController pushViewController:v animated:YES];
-    }else{
-        IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
-        [self.navigationController pushViewController:v animated:YES];
-    }
 }
 
 - (NSString *)choosedNormalDateWithStr:(NSString *)str{
@@ -236,11 +216,19 @@
     
     NSMutableString *mutStr = [NSMutableString stringWithString:newStr];
     
-    
     NSString *resultStr = [NSString stringWithString:mutStr];
     
     return resultStr;
     
+}
+- (int)changeIntegerTypeWithStr:(NSString *)str{
+    
+    NSMutableString *mutStr = [NSMutableString stringWithString:str];
+    [mutStr deleteCharactersInRange:NSMakeRange(1, 1)];
+    int n = [mutStr intValue];
+    int n2 =n*100;
+    
+    return n2;
 }
 
 @end

@@ -10,4 +10,15 @@
 
 @interface SecuritiesModel : NSObject
 
+@property(nonatomic, strong) NSString *couponsCode;
+@property(nonatomic, strong) NSString *couponStatus;
+@property(nonatomic, strong) NSString *Sid;
+@property(nonatomic, strong) NSString *endTime;
+@property(nonatomic, strong) NSString *couponName;
+@property(nonatomic, strong) NSString *couponType;
+@property(nonatomic, strong) NSString *descriptiona;
+@property(nonatomic, strong) NSString *couponPrice;
+@property(nonatomic, strong) NSString *startTime;
+@property(nonatomic, strong) NSString *useCondition;
+
 @end

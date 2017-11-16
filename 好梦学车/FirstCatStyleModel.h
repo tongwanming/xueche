@@ -23,5 +23,7 @@
 @property (nonatomic, strong) NSString *categoryCode;//版型代号
 
 @property (nonatomic, strong) NSString *projectTypeCode;//C1,C2代号
+@property (nonatomic, strong) NSString *productCode1;//对应C1、C2的编码
+@property (nonatomic, strong) NSString *productCode2;//对应C1、C2的编码
 
 @end

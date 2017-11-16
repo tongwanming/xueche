@@ -325,8 +325,9 @@
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
+     [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
     [request setHTTPBody:data1];
-    [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
+   
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
     

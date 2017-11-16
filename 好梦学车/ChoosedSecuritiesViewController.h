@@ -13,11 +13,14 @@ typedef void(^choosedSecuritiesBlock)(SecuritiesModel *model);
 
 @interface ChoosedSecuritiesViewController : BasicViewController
 
-@property (nonatomic, strong) NSArray *data;
+
 
 @property (nonatomic, copy) choosedSecuritiesBlock securitiesBlock;
 
 - (void)returnChoosedSecuritiesBlock:(choosedSecuritiesBlock)block;
 
+@property (nonatomic, strong) NSString *categoryCode;
+
+@property (nonatomic, strong) NSString *price;
 
 @end

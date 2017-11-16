@@ -30,7 +30,13 @@
 }
 
 - (void)setModel:(SecuritiesModel *)model{
+   
     _model = model;
+    _securityLabel.text = model.couponName;
+    _titleLabel.text = model.descriptiona;
+    _priceLabel.text = model.couponPrice;
+    _priceType.text = model.useCondition;
+    _userTimeLabel.text = [NSString stringWithFormat:@"%@-%@",model.startTime,model.endTime];
 }
 
 - (void)setCanBeUsed:(BOOL)canBeUsed{
@@ -42,6 +48,7 @@
         _userBtn.layer.borderColor = BLUE_BACKGROUND_COLOR.CGColor;
         _userBtn.userInteractionEnabled = YES;
         _securityLabel.backgroundColor = BLUE_BACKGROUND_COLOR;
+        [_userBtn setTitle:@"立即使用" forState:UIControlStateNormal];
     }else{
         _imageViewa.image = [UIImage imageNamed:@"bg_card_fail"];
         _titleLabel.textColor = AA6b7;
@@ -49,6 +56,7 @@
         _userBtn.layer.borderColor = AA6b7.CGColor;
         _userBtn.userInteractionEnabled = NO;
         _securityLabel.backgroundColor = AA6b7;
+        [_userBtn setTitle:@"不能使用" forState:UIControlStateNormal];
     }
 }
 

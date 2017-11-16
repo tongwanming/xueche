@@ -19,6 +19,8 @@
 #import "OrderValidityManager.h"
 #import "ApplyOrderViewController.h"
 
+#import "CustomAlertView.h"
+
 @interface PersonIndentViewController ()<UITableViewDelegate,UITableViewDataSource,QuitAlertViewBtnClickedDelegate>
 
 @property (nonatomic, strong) NSArray *nameData;
@@ -319,13 +321,76 @@
     if (btn.tag == 1001) {
         NSLog(@"再看看");
     }else if (btn.tag == 1002){
-        [[OrderValidityManager defaultManager] destroyOrderValidity];
-        [self.navigationController popViewControllerAnimated:YES];
+        [self getData];
         NSLog(@"离开");
     }else{
         
     }
 }
+
+- (void)getData{
+    [CustomAlertView showAlertViewWithVC:self];
+ 
+    NSDictionary *dic =@{@"orderNo":_model.indentNum,
+                         
+                         };
+    
+    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
+    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
+    
+    NSRange range = {0,jsonStr.length};
+    
+    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
+    
+    NSRange range2 = {0,mutStr.length};
+    
+    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
+    NSRange range3 = {0,mutStr.length};
+    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
+    
+    
+    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //    NSURL *url = [NSURL URLWithString:urlstr];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/order/handle/orderCancel",PUBLIC_LOCATION]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
+    [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
+    [request setHTTPBody:jsonData];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            _tableView.hidden = NO;
+        });
+        if (error == nil) {
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSString *message = [jsonDict objectForKey:@"message"];
+            if ([message isEqualToString:@"订单取消成功"]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[OrderValidityManager defaultManager] destroyOrderValidity];
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            }else{
+                
+            }
+           
+            
+        }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+        }
+    }];
+    [dataTask resume];
+    
+}
+
 
 - (NSString *)changeMinToDayAndHourWithTime:(NSInteger)timr{
     NSString *str;

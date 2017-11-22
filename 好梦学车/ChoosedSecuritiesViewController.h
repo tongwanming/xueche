@@ -23,4 +23,5 @@ typedef void(^choosedSecuritiesBlock)(SecuritiesModel *model);
 
 @property (nonatomic, strong) NSString *price;
 
+
 @end

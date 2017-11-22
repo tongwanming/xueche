@@ -20,6 +20,7 @@
 #import "ApplyOrderViewController.h"
 
 #import "CustomAlertView.h"
+#import "loadServerPayLisyNewsActive.h"
 
 @interface PersonIndentViewController ()<UITableViewDelegate,UITableViewDataSource,QuitAlertViewBtnClickedDelegate>
 
@@ -59,14 +60,27 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Appear"];
 }
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
     if ([[OrderValidityManager defaultManager] orderValidity]) {
-        _model = [[OrderValidityManager defaultManager] getPersonIndentModel];
+        [CustomAlertView showAlertViewWithVC:self];
+        [[loadServerPayLisyNewsActive defalutManager] loadSecuWithVC:self withBlokc:^(PersonIndentModel *modle) {
+            _model = modle;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+                [_tableView reloadData];
+            });
+            
+        }];
+        
     }else{
+       
+       
         _tableView.hidden = YES;
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 30)];
         _titleLabel.center = CGPointMake(CURRENT_BOUNDS.width/2, [[UIScreen mainScreen] bounds].size.height/2-30);
@@ -140,7 +154,7 @@
     priceLabel.textColor = [UIColor whiteColor];
     priceLabel.textAlignment = NSTextAlignmentRight;
     priceLabel.font = [UIFont systemFontOfSize:24];
-    priceLabel.text = [NSString stringWithFormat:@"%@",_model.price];
+    priceLabel.text = [NSString stringWithFormat:@"%@",_model.origialPrice];
     [topImageView addSubview:priceLabel];
     
     UILabel *bigLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(topImageView.frame)+40, CURRENT_BOUNDS.width, 23)];
@@ -165,7 +179,14 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 163)];
+    
+    int n = 0;
+    int m = 0;
+    if ([_model.isUseCoupon isEqualToString:@"Y"]) {
+        n = 30;
+        m = 20;
+    }
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 163+n)];
     v.backgroundColor = [UIColor whiteColor];
     
     UILabel *indetNum = [[UILabel alloc] initWithFrame:CGRectMake(16, 30, CURRENT_BOUNDS.width-32, 13)];
@@ -180,7 +201,15 @@
     createLabel.text = [NSString stringWithFormat:@"创建日期   %@",_model.createTimeStr];;
     [v addSubview:createLabel];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 97, CURRENT_BOUNDS.width, 0.5)];
+    if (n > 0) {
+        UILabel *couponPriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, CGRectGetMaxY(createLabel.frame)+15, CURRENT_BOUNDS.width-32, 13)];
+        couponPriceLabel.textColor = UNMAIN_TEXT_COLOR;
+        couponPriceLabel.font = [UIFont systemFontOfSize:13];
+        couponPriceLabel.text = [NSString stringWithFormat:@"使用代金劵   抵扣金额:¥%@",_model.couponPrice];
+        [v addSubview:couponPriceLabel];
+    }
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 97+m, CURRENT_BOUNDS.width, 0.5)];
     lineView.backgroundColor = UNMAIN_TEXT_COLOR;
     [v addSubview:lineView];
     
@@ -193,9 +222,11 @@
     
     UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nameLabel.frame), CGRectGetMaxY(lineView.frame)+20, 100, 25)];
     priceLabel.text = [NSString stringWithFormat:@"%@",_model.price];
+    
     priceLabel.textColor = FF8400;
     priceLabel.font = [UIFont systemFontOfSize:25];
     [v addSubview:priceLabel];
+    
     
     
     return v;
@@ -206,7 +237,11 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 163;
+    int n = 0;
+    if ([_model.isUseCoupon isEqualToString:@"Y"]) {
+        n = 30;
+    }
+    return 163+n;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -305,7 +340,12 @@
     }else if (btn.tag == 1003){
         ChoosePayTypeViewController *v = [[ChoosePayTypeViewController alloc] init];
         v.payNum = _model.indentNum;
-        v.priceStr = _model.price;
+        if (_isUsedSer) {
+            v.priceStr = _youShouldPay;
+        }else{
+            v.priceStr = _model.price;
+        }
+        
         [self.navigationController pushViewController:v animated:YES];
     }else if (btn.tag == 1004){
     //取消订单
@@ -329,8 +369,13 @@
 }
 
 - (void)getData{
+    if (_model.indentNum == nil) {
+        [[OrderValidityManager defaultManager] destroyOrderValidity];
+         [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
     [CustomAlertView showAlertViewWithVC:self];
- 
+  
     NSDictionary *dic =@{@"orderNo":_model.indentNum,
                          
                          };

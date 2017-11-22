@@ -39,6 +39,7 @@
 #import <MapKit/MapKit.h>
 
 #import "NavigationBtn.h"
+#import "ImageLeftBtn.h"
 
 /** 路线的标注*/
 @interface RouteAnnotation : BMKPointAnnotation
@@ -139,6 +140,7 @@
 @property (nonatomic, strong) FirstCatStyleModel *model;
 @property (nonatomic, strong) BMKGeoCodeSearch *geocodesearch;
 @property (nonatomic, strong)NSArray *oldData;//存放最初自己定位周围的场地信息
+@property (nonatomic, copy)BMKMapView *mapView;
 
 @property (nonatomic, strong)FirstLocationModel *locationModela;
 
@@ -146,7 +148,7 @@
 @end
 
 @implementation ChoosedPlaceViewController{
-    BMKMapView *_mapView;
+    
     BMKLocationService *_locServer;
 //    CLLocationCoordinate2D _currentLocation;
     BMKUserLocation *_userLocationState;
@@ -225,6 +227,15 @@
     [super viewDidLoad];
     self.title = @"预选场地";
     
+    ImageLeftBtn *left_Button = [[ImageLeftBtn alloc] init];
+    [left_Button setImage:[UIImage imageNamed:@"btn_back_gray"]forState:UIControlStateNormal];
+    [left_Button setTitleColor:[UIColor colorWithRed: 21/ 255.0f green: 126/ 255.0f blue: 251/ 255.0f alpha:1.0] forState:(UIControlStateNormal)];
+    left_Button.frame = CGRectMake(0, 0, 80, 44);
+//    left_Button.backgroundColor = [UIColor redColor];
+    [left_Button addTarget:self action:@selector(leftBtnClickActive:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *left_BarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:left_Button];
+    self.navigationItem.leftBarButtonItem = left_BarButtonItem;
+    
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"搜索" style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAcrive)];
     if (!_isHasSearch) {
         [self.navigationItem setRightBarButtonItem:rightItem];
@@ -235,8 +246,11 @@
     _oldData = [NSArray arrayWithArray:self.allExerciseLocationData];
     _geocodesearch = [[BMKGeoCodeSearch alloc] init];
     _geocodesearch.delegate = self;
+   
     _mapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, ([UIScreen mainScreen].bounds.size.height-300))];
+    
     _mapView.mapType = BMKMapTypeStandard;
+    
     _mapView.delegate = self;
     //    [_mapView setTrafficEnabled:YES];
     [_mapView setZoomLevel:6.0];
@@ -283,6 +297,10 @@
 
    
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)leftBtnClickActive:(UIButton *)btn{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)refreshLocationActive:(UIButton *)btn{
@@ -452,11 +470,9 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
-    [_mapView viewWillAppear];
-    _mapView.delegate = self;
-    _locServer.delegate = self;
+   
     
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     });
@@ -464,8 +480,15 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:YES];
-   
+    [_mapView viewWillAppear];
+    _mapView.delegate = self;
+    _locServer.delegate = self;
     
+}
+
+- (void)dealloc{
+    NSLog(@"清空");
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -473,6 +496,7 @@
     [_mapView viewWillDisappear];
     _mapView.delegate = nil;
     _locServer.delegate = nil;
+  
     if (_choosedExerciseBlock) {
         _choosedExerciseBlock(_allExerciseLocationData[_choosedIndex]);
     }
@@ -490,7 +514,6 @@
     //    annotation.title = @"这里是北京";
     [_mapView addAnnotation:annotation];
     
-    return;
     //初始化检索对象
     if (!_routSearch) {
         _routSearch = [[BMKRouteSearch alloc]init];

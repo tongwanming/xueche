@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *sureBtn;
 @property (nonatomic, strong) NSMutableArray *data;
+@property (nonatomic, strong) UILabel *titleLable;
 
 @end
 
@@ -51,6 +52,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 20)];
+    _titleLable.textAlignment = NSTextAlignmentCenter;
+    _titleLable.font = [UIFont systemFontOfSize:18];
+    _titleLable.text = @"暂无可用的优惠卷";
+    _titleLable.center = CGPointMake(CURRENT_BOUNDS.width/2, CURRENT_BOUNDS.height/2);
+    _titleLable.textColor = TEXT_COLOR;
+    [self.view addSubview:_titleLable];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.backgroundColor = [UIColor clearColor];
@@ -93,7 +102,8 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://101.37.161.13:10002/couponRecord/listCouponRecords"]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:10002/couponRecord/listCouponRecords",PUBLIC_LOCATION]];
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
     [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -118,6 +128,9 @@
             if (arrData == nil || arrData.count < 1) {
                 
             }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                   _titleLable.hidden = YES;
+                });
                 for (NSDictionary *dic in arrData) {
                     SecuritiesModel *modle = [[SecuritiesModel alloc] init];
                     modle.couponsCode = [dic objectForKeyWithNoNsnull:@"couponsCode"];
@@ -135,6 +148,7 @@
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^{
+                
                 [_tableView reloadData];
             });
         }else{

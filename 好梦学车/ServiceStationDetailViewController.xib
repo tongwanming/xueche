@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -96,8 +97,9 @@
                                     <color key="textColor" red="0.27058823529999998" green="0.29803921570000003" blue="0.33333333329999998" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WHW-DD-Fxz">
-                                    <rect key="frame" x="298" y="0.0" width="50" height="45"/>
+                                <button opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WHW-DD-Fxz">
+                                    <rect key="frame" x="0.0" y="0.0" width="348" height="45"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
                                     <state key="normal" image="icon_service_go.png"/>
                                     <connections>
                                         <action selector="btnClick:" destination="-1" eventType="touchUpInside" id="dh2-Hv-Vkf"/>
@@ -108,12 +110,12 @@
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="Wug-iJ-Vho" secondAttribute="bottom" id="D2h-Sv-tnw"/>
                                 <constraint firstItem="WHW-DD-Fxz" firstAttribute="top" secondItem="PLp-jK-O2G" secondAttribute="top" id="GaI-wz-T84"/>
-                                <constraint firstItem="WHW-DD-Fxz" firstAttribute="leading" secondItem="Wug-iJ-Vho" secondAttribute="trailing" id="HvM-Y5-Yvh"/>
                                 <constraint firstAttribute="height" constant="45" id="P84-4i-nTM"/>
                                 <constraint firstAttribute="trailing" secondItem="Wug-iJ-Vho" secondAttribute="trailing" constant="50" id="QEz-Cf-g45"/>
                                 <constraint firstAttribute="trailing" secondItem="WHW-DD-Fxz" secondAttribute="trailing" id="RVe-1i-bra"/>
                                 <constraint firstAttribute="bottom" secondItem="WHW-DD-Fxz" secondAttribute="bottom" id="YxY-VW-Pf6"/>
                                 <constraint firstItem="Wug-iJ-Vho" firstAttribute="leading" secondItem="PLp-jK-O2G" secondAttribute="leading" constant="8" id="qRL-hV-Lg0"/>
+                                <constraint firstItem="WHW-DD-Fxz" firstAttribute="leading" secondItem="PLp-jK-O2G" secondAttribute="leading" id="w0x-tj-Jo6"/>
                                 <constraint firstItem="Wug-iJ-Vho" firstAttribute="top" secondItem="PLp-jK-O2G" secondAttribute="top" id="w7z-Ee-hGY"/>
                             </constraints>
                         </view>

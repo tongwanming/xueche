@@ -14,7 +14,13 @@
 
 @property (nonatomic, strong) NSString *type;
 
-@property (nonatomic, strong) NSString *price;
+@property (nonatomic, strong) NSString *price;//实付金额
+
+@property (nonatomic, strong) NSString *origialPrice;//原始价格
+
+@property (nonatomic, strong) NSString *isUseCoupon;//是否用了优惠卷；Y为用了优惠卷
+
+@property (nonatomic, strong) NSString *couponPrice;//优惠卷的金额
 
 @property (nonatomic, strong) NSString *urlName;
 

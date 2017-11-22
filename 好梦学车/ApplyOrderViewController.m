@@ -50,6 +50,10 @@
 
 @property (nonatomic, strong) SecuritiesModel *securitiesModel;
 
+@property (nonatomic, assign) BOOL isUsedSer;
+
+@property (nonatomic, strong) NSString *shouldPayPrice;
+
 @end
 
 @implementation ApplyOrderViewController{
@@ -63,6 +67,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _isUsedSer = NO;
     _firstDic = [[NSMutableDictionary alloc] init];
     _secondDic = [[NSMutableDictionary alloc] init];
     _choosedSecurities = @"选择";
@@ -125,17 +130,24 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
-    if ([self.appleType isEqualToString:@"C2自动挡"]) {
-        _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
-        _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+    if (_isUsedSer) {
+        _practicalpriceLabel.text = _shouldPayPrice;
        
-    }else if([self.appleType isEqualToString:@"C1手动挡"]){
-        _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];
-        _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];
     }else{
-        _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
-        _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+        if ([self.appleType isEqualToString:@"C2自动挡"]) {
+            _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+            _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+            
+        }else if([self.appleType isEqualToString:@"C1手动挡"]){
+            _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];
+            _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price];
+        }else{
+            _priceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+            _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+        }
     }
+    
+    
     _typeLabel.text = self.appleType;
     _peopleNumberLabel.text = _model.type;
     NSLog(@"--:%@",_model.price);
@@ -316,13 +328,18 @@
                 case 1:
                     
                     ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"学车费用";
-                    if ([self.appleType isEqualToString:@"C2自动挡"]) {
-                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
-                    }else if([self.appleType isEqualToString:@"C1手动挡"]){
-                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price];
+                    if (_isUsedSer) {
+                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"%@",_shouldPayPrice];
                     }else{
-                        ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+                        if ([self.appleType isEqualToString:@"C2自动挡"]) {
+                            ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+                        }else if([self.appleType isEqualToString:@"C1手动挡"]){
+                            ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price];
+                        }else{
+                            ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"¥%@",_model.price2];
+                        }
                     }
+                    
                     
                     ((ApplyOrderTableViewCell *)cell).secondName.textColor = FF8400;
                     ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:25];
@@ -354,6 +371,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 3) {
         _choosedPaidWay = indexPath.row;
+        if (_choosedPaidWay == 1) {
+            _securitiesModel = nil;
+            _choosedSecurities = @"分期不可使用";
+            _isUsedSer = NO;
+        }else{
+            _choosedSecurities = @"选择";
+        }
         [_tableView reloadData];
         if (indexPath.row == 0) {
             if ([self.appleType isEqualToString:@"C2自动挡"]) {
@@ -368,10 +392,7 @@
             _orderLabel.hidden = YES;
             _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",@"940"];
             [_sureBtn setTitle:@"确定下单" forState:UIControlStateNormal];
-//            NSArray *arr = _data;
-//            [IPopView createPopUpBackGroundViewWithRect:self.view.bounds andAddView:self andTitleNameArray:arr andStyle:IPopUpWithPromptViewStyleNormal completion:^(IPopUpWithPromptView *popView_) {
-//                popView_.delegate = self;
-//            }];
+
         }
     }
     if (indexPath.section == 1) {
@@ -485,17 +506,33 @@
     }
     if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-           
+            if ([_choosedSecurities isEqualToString:@"分期不可使用"]) {
+                return;
+            }
             //优惠卷
             ChoosedSecuritiesViewController *billNewVC = [[ChoosedSecuritiesViewController alloc] init];
             // billNewVC.data =  data;所有可以用的优惠卷
             billNewVC.categoryCode = _model.categoryCode;
             billNewVC.price = _practicalpriceLabel.text;
             [billNewVC returnChoosedSecuritiesBlock:^(SecuritiesModel *model) {
+                if (model) {
+                    _isUsedSer = YES;
+                }
                //返回的优惠卷
                 _securitiesModel = model;
                 _choosedSecurities = model.couponPrice;
+            
+               
                 [self.tableView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *str = [self resetNewPriceWithOldPrice:_priceLabel.text andSalePrice:model.couponPrice];
+                    _shouldPayPrice = [NSString stringWithFormat:@"¥%@",str];
+                    _practicalpriceLabel.text = [NSString stringWithFormat:@"¥%@",str];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [_tableView reloadData];
+                    });
+                    
+                });
             }];
             [self.navigationController pushViewController:billNewVC animated:YES];
         }else{
@@ -531,7 +568,7 @@
 - (IBAction)sureBtnClick:(id)sender {
     
     NSString *productCode1;
-    if ([self.appleType isEqualToString:@"C1"]) {
+    if ([self.appleType isEqualToString:@"C1手动挡"]) {
         productCode1 = _model.productCode1;
     }else{
         productCode1 = _model.productCode2;
@@ -729,6 +766,7 @@
                     
                     PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
                     PersonIndentModel *model = [[PersonIndentModel alloc] init];
+                    v.isUsedSer = _isUsedSer;
 //                    v.model = model;
                     model.name = _typeLabel.text;
                     model.type = _peopleNumberLabel.text;
@@ -904,6 +942,16 @@
     [self presentViewController:v animated:YES completion:^{
         
     }];
+}
+
+- (NSString *)resetNewPriceWithOldPrice:(NSString *)oldPrice andSalePrice:(NSString *)salePrice{
+    NSMutableString *str = [NSMutableString stringWithString:oldPrice];
+    [str deleteCharactersInRange:NSMakeRange(0, 1)];
+   [str deleteCharactersInRange:NSMakeRange(1, 1)];
+    int n =  [str intValue] - [salePrice intValue];
+    
+    return [NSString stringWithFormat:@"%d",n];
+    
 }
 
 @end

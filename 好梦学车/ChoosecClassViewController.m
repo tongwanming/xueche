@@ -151,9 +151,13 @@
                         if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
                             model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
                             model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                            model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
                         }else{
                             model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
                             model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                            model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
                         }
                     }
                 }else{
@@ -162,9 +166,13 @@
                         if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
                             model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
                             model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                            model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
                         }else{
                             model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
                             model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                            model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
                         }
                     }
                 }
@@ -236,18 +244,21 @@
                 model.categoryCode = _choosedModel.categoryCode;
                 model.productCode1 = _choosedModel.productCode1;
                 model.productCode2 = _choosedModel.productCode2;
-                model.projectTypeCode = @"001";
+                model.projectTypeCode = _choosedModel.projectTypeCode;
                 if (_v3.hidden) {
                     if (_v1.isSelected) {
                         //  c1
                         v.appleType = @"C1手动挡";
+                        model.projectTypeCode = @"001";
                     }else{
                         //  c2
                         v.appleType = @"C2自动挡";
+                        model.projectTypeCode = @"002";
                     }
                 }else{
                     // B
                     v.appleType = @"B2大货车班";
+                    model.projectTypeCode = @"003";
                 }
                 v.model = model;
                 [self.navigationController pushViewController:v animated:YES];

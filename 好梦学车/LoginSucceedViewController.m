@@ -12,6 +12,7 @@
 #import "PersonIndentModel.h"
 #import "OrderValidityManager.h"
 #import "NSDictionary+objectForKeyWitnNoNsnull.h"
+#import "loadServerPayLisyNewsActive.h"
 
 @interface LoginSucceedViewController ()
 
@@ -35,7 +36,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self reloadPayNumWithUserId:_userid];
+//    [self reloadPayNumWithUserId:_userid];
+    [self loadActive];
     NSSet *set = [[NSSet alloc] initWithObjects:_userid, nil];
     [JPUSHService setTags:set alias:_userid fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
         NSLog(@"%@",iTags);
@@ -52,6 +54,10 @@
     NSLog(@"立即进入按钮！");
     [[NSUserDefaults standardUserDefaults] setObject:@"login" forKey:@"isLogin"];
     [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (void)loadActive{
+    [[loadServerPayLisyNewsActive defalutManager] loadSecuritiesWithVC:self];
 }
 
 - (void)reloadPayNumWithUserId:(NSString *)userid{
@@ -108,7 +114,7 @@
                     model.name = [NSString stringWithFormat:@"%@手动挡",[dic objectForKeyWithNoNsnull:@"projectTypeName"]];
                 }
                 model.type = [dic objectForKeyWithNoNsnull:@"productName"];
-                model.price = [self changeTypeWithStr:[dic objectForKeyWithNoNsnull:@"originalPrice"]];
+                model.price = [self changeTypeWithStr:[dic objectForKeyWithNoNsnull:@"price"]];
                 model.indentNum = [dic objectForKeyWithNoNsnull:@"orderNo"];
                 model.data = @[[dic objectForKeyWithNoNsnull:@"buyerName"],[dic objectForKeyWithNoNsnull:@"trainplaceName"],model.type,[dic objectForKeyWithNoNsnull:@"coachName"]];
                 model.createTimeStr = [dic objectForKeyWithNoNsnull:@"createTime"];
@@ -150,31 +156,10 @@
                 
             }else{
                 //登录失败
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    //验证码输入错误
-//                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"获取订单信息失败" message:@"你还没有订单信息" preferredStyle:UIAlertControllerStyleAlert];
-//                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//                        
-//                    }];
-//                    [v addAction:active];
-//                    [self presentViewController:v animated:YES completion:^{
-//                        
-//                    }];
-//                });
+
             }
         }else{
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                
-//                [CustomAlertView hideAlertView];
-//                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"更新数据失败" message:@"没有成功获取账号信息" preferredStyle:UIAlertControllerStyleAlert];
-//                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//                    
-//                }];
-//                [v addAction:active];
-//                [self presentViewController:v animated:YES completion:^{
-//                    
-//                }];
-//            });
+
         }
     }];
     [dataTask resume];

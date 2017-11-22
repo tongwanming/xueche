@@ -137,10 +137,10 @@ static NSString *appKey = @"d5e9231fa78e0f963eda40c1";
     
      [LaunchIntroductionView sharedWithImages:@[@"welcome01.jpg",@"welcome02.jpg",@"welcome031.png"] buttonImage:@"" buttonFrame:CGRectMake(kScreen_width/2 - 150/2, kScreen_height - 100, 150, 45)];
     
-    [self loadDataOne];
-    [self loadDataTwo];
-    [self loadDataThree];
-    [self loadDataForth];
+//    [self loadDataOne];
+//    [self loadDataTwo];
+//    [self loadDataThree];
+//    [self loadDataForth];
     [[UIApplication sharedApplication]registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
     
   //友盟

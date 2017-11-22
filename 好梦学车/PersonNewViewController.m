@@ -343,9 +343,15 @@
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
         [self.navigationController pushViewController:v animated:YES];
     }else if (btn.tag == 1008){
-        //生成二维码
-        QRCodeGenerateVC *VC = [[QRCodeGenerateVC alloc] init];
-        [self.navigationController pushViewController:VC animated:YES];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
+            //生成二维码
+            QRCodeGenerateVC *VC = [[QRCodeGenerateVC alloc] init];
+            [self.navigationController pushViewController:VC animated:YES];
+        }else{
+            IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
+            [self.navigationController pushViewController:v animated:YES];
+        }
+        
         
     }else{}
     NSLog(@"----%ld",(long)btn.tag);

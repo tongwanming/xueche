@@ -18,5 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *contentBtn;
 @property (weak, nonatomic) IBOutlet UIButton *payBtn;
 @property (weak, nonatomic) IBOutlet UIView *lineView;
+@property (nonatomic, assign) BOOL isUsedSer;
+@property (nonatomic, strong) NSString *youShouldPay;
 
 @end

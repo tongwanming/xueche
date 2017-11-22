@@ -661,9 +661,6 @@
                 v.payNum = payNum;
                 [self.navigationController pushViewController:v animated:YES];
             }
-            
-            
-            
         }else{
             BOOL isCreateOrder = [[OrderValidityManager defaultManager] orderValidity];
             
@@ -676,26 +673,6 @@
                     if (_coachData.count < 1) {
                         [self showMistake];
                     }else{
-//                        ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
-//                        FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
-//                        ChoosedClassModel *choosedModel = _coachData[indexPath.row];
-//                        model.type = choosedModel.titleStr;
-//                        if (choosedModel.C1Str == nil) {
-//                            model.price = choosedModel.priceStr;
-//                        }else{
-//                            model.price = choosedModel.C1Str;
-//                        }
-//                        model.price2 = choosedModel.C2Str;
-//                        model.isInstalments = choosedModel.isInstalmentsC1;
-//                        model.backGroundImageName = choosedModel.imageStr;
-//                        model.categoryCode = choosedModel.categoryCode;
-//                        model.projectTypeCode = choosedModel.projectTypeCode;
-//                        v.model = model;
-//                        v.data = _offLineData;
-//                        v.locationData = _locationData;
-//                        [self.navigationController pushViewController:v animated:YES];
-                        
-                     
                         ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
                         v.currentIndex = (int)indexPath.row;
                         [v returnActiveWithBlock:^(ChoosedClassModel *model) {
@@ -703,9 +680,6 @@
                             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
                             [dic setObject:model.titleStr forKey:@"myClass"];
                             [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
-                            //                            dispatch_async(dispatch_get_main_queue(), ^{
-                            //                                [_tableView reloadData];
-                            //                            });
                         }];
                         [self.navigationController pushViewController:v animated:YES];
                     }
@@ -720,26 +694,6 @@
                     if (_coachData.count < 1) {
                         [self showMistake];
                     }else{
-//                        ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
-//                        FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
-//                        ChoosedClassModel *choosedModel = _coachData[indexPath.row];
-//                        model.type = choosedModel.titleStr;
-//                        if (choosedModel.C1Str == nil) {
-//                            model.price = choosedModel.priceStr;
-//                        }else{
-//                            model.price = choosedModel.C1Str;
-//                        }
-//                        
-//                        model.price2 = choosedModel.C2Str;
-//                        model.isInstalments = choosedModel.isInstalmentsC1;
-//                        model.backGroundImageName = choosedModel.imageStr;
-//                        model.categoryCode = choosedModel.categoryCode;
-//                        model.projectTypeCode = choosedModel.projectTypeCode;
-//                        v.model = model;
-//                        v.data = _offLineData;
-//                        v.locationData = _locationData;
-//                        [self.navigationController pushViewController:v animated:YES];
-                        
                         ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
                         v.currentIndex = (int)indexPath.row;
                         [v returnActiveWithBlock:^(ChoosedClassModel *model) {
@@ -747,9 +701,7 @@
                             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
                             [dic setObject:model.titleStr forKey:@"myClass"];
                             [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
-                            //                            dispatch_async(dispatch_get_main_queue(), ^{
-                            //                                [_tableView reloadData];
-                            //                            });
+                            
                         }];
                         [self.navigationController pushViewController:v animated:YES];
                     }

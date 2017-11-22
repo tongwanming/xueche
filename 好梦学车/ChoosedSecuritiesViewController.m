@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *sureBtn;
 @property (nonatomic, strong) NSMutableArray *data;
+@property (nonatomic, strong) UILabel *titleLable;
 
 @end
 
@@ -26,6 +27,10 @@
     if (btn.tag == 1001) {
         [self.navigationController popViewControllerAnimated:YES];
     }else if (btn.tag == 1002){
+        if (_data.count < 1) {
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
         if (self.securitiesBlock) {
             self.securitiesBlock(_data[_currentChoosedIndex]);
         }
@@ -41,6 +46,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     _data = [[NSMutableArray alloc] init];
     _currentChoosedIndex = 0;
     self.title = @"选择优惠卷";
@@ -59,7 +65,13 @@
     UIBarButtonItem *leftBtn = [[UIBarButtonItem alloc] initWithCustomView:letBtn];
     
     self.navigationItem.leftBarButtonItem = leftBtn;
-    
+    _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 20)];
+    _titleLable.textAlignment = NSTextAlignmentCenter;
+    _titleLable.font = [UIFont systemFontOfSize:18];
+    _titleLable.text = @"暂无可用的优惠卷";
+    _titleLable.center = CGPointMake(CURRENT_BOUNDS.width/2, CURRENT_BOUNDS.height/2);
+    _titleLable.textColor = TEXT_COLOR;
+    [self.view addSubview:_titleLable];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     self.view.backgroundColor = F4F4F4;
@@ -102,7 +114,7 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://101.37.161.13:10002/couponRecord/listCouponRecords"]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:10002/couponRecord/listCouponRecords",PUBLIC_LOCATION]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
     [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -125,8 +137,12 @@
                 return ;
             }
             if (arrData == nil || arrData.count < 1) {
-                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _sureBtn.alpha = 0.5;
+                    _sureBtn.userInteractionEnabled = NO;
+                });
             }else{
+                _titleLable.hidden = YES;
                 for (NSDictionary *dic in arrData) {
                     SecuritiesModel *modle = [[SecuritiesModel alloc] init];
                     modle.couponsCode = [dic objectForKeyWithNoNsnull:@"couponsCode"];

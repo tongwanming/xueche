@@ -666,7 +666,6 @@
             
             if ([choosedType isEqualToString:@"ONLINE"]) {
                 if (isCreateOrder) {
-                    
                     PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
                     [self.navigationController pushViewController:v animated:YES];
                 }else{
@@ -683,7 +682,6 @@
                         }];
                         [self.navigationController pushViewController:v animated:YES];
                     }
-                    
                 }
             }else{
                 if (choosedType && choosedType.length > 0) {
@@ -701,15 +699,12 @@
                             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
                             [dic setObject:model.titleStr forKey:@"myClass"];
                             [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
-                            
                         }];
                         [self.navigationController pushViewController:v animated:YES];
                     }
                 }
             }
-
         }
-        
     }else{
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
         [self.navigationController pushViewController:v animated:YES];
@@ -728,20 +723,63 @@
 }
 
 - (void)firstLocationTableViewCellSubCellSelectActive:(NSIndexPath *)indexpath andData:(NSArray *)array{
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *choosedType = [userDic objectForKey:@"choosedPayType"];
+    NSString *payNum = [userDic objectForKey:@"payNum"];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
-        if (array.count < 1) {
-            [self showMistake];
-        }else{
-            //预选场地
-            ChoosedPlaceViewController *typeVc = [[ChoosedPlaceViewController alloc] init];
-            typeVc.allExerciseLocationData = array;
-            typeVc.isByPersonVC = YES;
-            [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
-                [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
-            }];
-            [self.navigationController pushViewController:typeVc animated:YES];
-        }
         
+        if ([[[OrderValidityManager defaultManager] getCurrentOrderStyle] isEqualToString:@"订单已完成"]) {
+            //已经完成订单支付
+            if ([choosedType isEqualToString:@"ONLINE"]) {
+                PersonIndentViewControllerOther*v = [[PersonIndentViewControllerOther alloc] init];
+                [self.navigationController pushViewController:v animated:YES];
+            }else{
+                installment_ViewController *v = [[installment_ViewController alloc] init];
+                v.payNum = payNum;
+                [self.navigationController pushViewController:v animated:YES];
+            }
+        }else{
+            BOOL isCreateOrder = [[OrderValidityManager defaultManager] orderValidity];
+            
+            if ([choosedType isEqualToString:@"ONLINE"]) {
+                if (isCreateOrder) {
+                    PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
+                    [self.navigationController pushViewController:v animated:YES];
+                }else{
+                    if (array.count < 1) {
+                        [self showMistake];
+                    }else{
+                        //预选场地
+                        ChoosedPlaceViewController *typeVc = [[ChoosedPlaceViewController alloc] init];
+                        typeVc.allExerciseLocationData = array;
+                        typeVc.isByPersonVC = YES;
+                        [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
+                            [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
+                        }];
+                        [self.navigationController pushViewController:typeVc animated:YES];
+                    }
+                }
+            }else{
+                if (choosedType && choosedType.length > 0) {
+                    installment_ViewController *v = [[installment_ViewController alloc] init];
+                    v.payNum = payNum;
+                    [self.navigationController pushViewController:v animated:YES];
+                }else{
+                    if (array.count < 1) {
+                        [self showMistake];
+                    }else{
+                        //预选场地
+                        ChoosedPlaceViewController *typeVc = [[ChoosedPlaceViewController alloc] init];
+                        typeVc.allExerciseLocationData = array;
+                        typeVc.isByPersonVC = YES;
+                        [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
+                            [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
+                        }];
+                        [self.navigationController pushViewController:typeVc animated:YES];
+                    }
+                }
+            }
+        }
     }else{
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
         [self.navigationController pushViewController:v animated:YES];

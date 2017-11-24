@@ -476,6 +476,7 @@
                     }else{
                         PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
                         [self.navigationController pushViewController:v animated:YES];
+                        
                     }
                 }
             }else{
@@ -518,9 +519,7 @@
                         [_tableView reloadData];
                     });
                 }];
-                //                [v returnSelectCocchWithBlock:^(NSString *name) {
-                
-                //                }];
+              
                 [self.navigationController pushViewController:v animated:YES];
             }else{
                 IdentifyingViewController *v = [[IdentifyingViewController alloc] init];

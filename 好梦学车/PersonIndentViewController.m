@@ -21,6 +21,8 @@
 
 #import "CustomAlertView.h"
 #import "loadServerPayLisyNewsActive.h"
+#import "ChoosecClassViewController.h"
+#import "AppDelegate.h"
 
 @interface PersonIndentViewController ()<UITableViewDelegate,UITableViewDataSource,QuitAlertViewBtnClickedDelegate>
 
@@ -113,18 +115,42 @@
 }
 
 - (void)gobtnClick:(UIButton *)btn{
-    ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
-    FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
-    ChoosedClassModel *choosedModel = [DefaultManager shareDefaultManager].carStyleData[1];
-    model.type = choosedModel.titleStr;
-    model.price = choosedModel.C1Str;
-    model.price2 = choosedModel.C2Str;
-    model.backGroundImageName = choosedModel.imageStr;
-    model.isInstalments = choosedModel.isInstalmentsC1;
-    model.backGroundImageName = choosedModel.imageStr;
-    model.categoryCode = choosedModel.categoryCode;
-    model.projectTypeCode = choosedModel.projectTypeCode;
-    v.model = model;
+//    ApplyOrderViewController *v = [[ApplyOrderViewController alloc] init];
+//    FirstCatStyleModel *model = [[FirstCatStyleModel alloc] init];
+//    ChoosedClassModel *choosedModel = [DefaultManager shareDefaultManager].carStyleData[1];
+//    model.type = choosedModel.titleStr;
+//    model.price = choosedModel.C1Str;
+//    model.price2 = choosedModel.C2Str;
+//    model.backGroundImageName = choosedModel.imageStr;
+//    model.isInstalments = choosedModel.isInstalmentsC1;
+//    model.backGroundImageName = choosedModel.imageStr;
+//    model.categoryCode = choosedModel.categoryCode;
+//    model.projectTypeCode = choosedModel.projectTypeCode;
+//    v.model = model;
+//    [self.navigationController pushViewController:v animated:YES];
+    
+    ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *classStr = [dic objectForKey:@"myClass"];
+    NSArray *data = ((AppDelegate *)[[UIApplication sharedApplication]delegate]).carClassData;
+    int choosedIndex = 0;
+    for (int i = 0; i < data.count; i++) {
+        ChoosedClassModel *model = data[i];
+        if ([classStr isEqualToString:model.titleStr]) {
+            choosedIndex = i;
+        }
+    }
+    v.currentIndex = choosedIndex;
+    [v returnActiveWithBlock:^(ChoosedClassModel *model) {
+        NSLog(@"%@",model.C1Str);
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+        [dic setObject:model.titleStr forKey:@"myClass"];
+        [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+        });
+    }];
+    
     [self.navigationController pushViewController:v animated:YES];
 }
 

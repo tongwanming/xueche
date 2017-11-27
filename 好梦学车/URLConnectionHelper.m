@@ -72,4 +72,119 @@
     [dataTask resume];
 }
 
+- (void)loadTokenPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void (^)(NSArray *))successBlock andFiledBlock:(void (^)(NSError *))failedBlock{
+    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
+    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
+    
+    NSRange range = {0,jsonStr.length};
+    
+    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
+    
+    NSRange range2 = {0,mutStr.length};
+    
+    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
+    NSRange range3 = {0,mutStr.length};
+    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
+    
+    
+    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
+    
+    
+    NSURL *url = [NSURL URLWithString:urlStr];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
+    [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
+    [request setHTTPBody:jsonData];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        if (error == nil) {
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSArray *arrData = [jsonDict objectForKey:@"data"];
+            NSLog(@"--:%@",arrData);
+            if ([arrData isEqual:[NSNull new]]) {
+                return ;
+            }
+            if (arrData == nil || arrData.count < 1) {
+                
+            }else{
+                
+            }
+            if (successBlock) {
+                successBlock(arrData);
+            }
+            
+        }else{
+            if (failedBlock) {
+                failedBlock(error);
+            }
+        }
+    }];
+    [dataTask resume];
+    
+}
+
+- (void)loadPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andFiledBlock:(void(^)(NSError *error))failedBlock{
+    
+    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
+    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
+    
+    NSRange range = {0,jsonStr.length};
+    
+    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
+    
+    NSRange range2 = {0,mutStr.length};
+    
+    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
+    NSRange range3 = {0,mutStr.length};
+    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
+    
+    
+    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
+    
+ 
+    NSURL *url = [NSURL URLWithString:urlStr];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+    
+    [request setHTTPBody:jsonData];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        if (error == nil) {
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSArray *arrData = [jsonDict objectForKey:@"data"];
+            NSLog(@"--:%@",arrData);
+            if ([arrData isEqual:[NSNull new]]) {
+                return ;
+            }
+            if (arrData == nil || arrData.count < 1) {
+                
+            }else{
+                
+            }
+            if (successBlock) {
+                successBlock(arrData);
+            }
+            
+        }else{
+            if (failedBlock) {
+                failedBlock(error);
+            }
+        }
+    }];
+    [dataTask resume];
+}
+
 @end

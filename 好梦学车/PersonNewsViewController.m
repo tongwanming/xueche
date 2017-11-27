@@ -271,14 +271,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _nameLabel.hidden = NO;
 //                    //验证码输入错误
-//                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"提示" message:@"数据为空！" preferredStyle:UIAlertControllerStyleAlert];
-//                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//
-//                    }];
-//                    [v addAction:active];
-//                    [self presentViewController:v animated:YES completion:^{
-//
-//                    }];
+
                 });
             }
         }else{

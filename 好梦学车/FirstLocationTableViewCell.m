@@ -31,7 +31,7 @@
 
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>//引入计算工具所有的头文件
 #import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
-
+#import "URLConnectionHelper.h"
 
 @interface FirstLocationTableViewCell ()<BMKMapViewDelegate,BMKLocationServiceDelegate,UICollectionViewDelegate,UICollectionViewDataSource,BMKGeoCodeSearchDelegate>
 
@@ -290,89 +290,48 @@
         _dataArray = [[NSMutableArray alloc] init];
     }
     
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-    
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/manage-service/trainplace/listByCoords",PUBLIC_LOCATION]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSString *str = [jsonDict objectForKey:@"success"];
-            if ([str boolValue]) {
-                
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSArray *_success = [jsonDict objectForKey:@"data"];
-                    if (_dataArray.count > 1) {
-                        [_dataArray removeAllObjects];
-                    }
-                    for (NSDictionary *dic in _success) {
-                        FirstLocationModel *model = [[FirstLocationModel alloc] init];
-                        model.currentId = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"id"]];
-                        model.descrip = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
-                        
-                        model.trainDrivingLicense = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"trainDrivingLicense"]];
-                        model.contactPersonPhone = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonPhone"]];
-                        model.trainSubjects = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"trainSubjects"]];
-                        model.contactPersonName = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonName"]];
-                        model.province = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"province"]];
-                        model.longitude = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"longitude"]];
-                        model.latitude =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"latitude"]];
-                        model.pictures = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"pictures"]];
-                        model.belongSchool =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"belongSchool"]];
-                        model.address = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
-                        model.city = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"city"]];
-                        model.addTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"addTime"]];
-                        model.district = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"district"]];
-                        model.distance = [NSString stringWithFormat:@"距你%.2lfkm",[[dic objectForKey:@"distance"] floatValue]];
-                        model.name = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"name"]];
-                        model.updateTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"updateTime"]];
-                        [_dataArray addObject:model];
-                    }
-                    _collectionView.hidden = NO;
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [_collectionView reloadData];
-                    });
-                    
-                    if (_block) {
-                        _block(_dataArray);
-                    }
-                });
-                
-                
-                
-            }else{
-  
-                
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:[NSString stringWithFormat:@"http://%@:7072/manage-service/trainplace/listByCoords",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (_dataArray.count > 1) {
+                [_dataArray removeAllObjects];
             }
+            for (NSDictionary *dic in data) {
+                FirstLocationModel *model = [[FirstLocationModel alloc] init];
+                model.currentId = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"id"]];
+                model.descrip = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
+                
+                model.trainDrivingLicense = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"trainDrivingLicense"]];
+                model.contactPersonPhone = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonPhone"]];
+                model.trainSubjects = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"trainSubjects"]];
+                model.contactPersonName = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonName"]];
+                model.province = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"province"]];
+                model.longitude = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"longitude"]];
+                model.latitude =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"latitude"]];
+                model.pictures = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"pictures"]];
+                model.belongSchool =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"belongSchool"]];
+                model.address = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
+                model.city = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"city"]];
+                model.addTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"addTime"]];
+                model.district = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"district"]];
+                model.distance = [NSString stringWithFormat:@"距你%.2lfkm",[[dic objectForKey:@"distance"] floatValue]];
+                model.name = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"name"]];
+                model.updateTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"updateTime"]];
+                [_dataArray addObject:model];
+            }
+            _collectionView.hidden = NO;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_collectionView reloadData];
+            });
+            
+            if (_block) {
+                _block(_dataArray);
+            }
+        });
+    } andFiledBlock:^(NSError *error) {
+        if (_block) {
+            _block(nil);
         }
     }];
-    [dataTask resume];
 }
-
-
-
-
-
 @end

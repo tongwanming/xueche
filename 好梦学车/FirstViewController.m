@@ -44,6 +44,7 @@
 #import "SinginViewController.h"
 #import "ApplyOrderViewController.h"
 #import "AppDelegate.h"
+#import "URLConnectionHelper.h"
 
 @interface FirstNavRightBtn : UIButton
 
@@ -178,65 +179,30 @@
     }
     NSDictionary *dic =@{@"imageType":@"STU_APP_INDEX",@"city":province};
     
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
     
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/carouse/query",PUBLIC_LOCATION]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSString *str = [jsonDict objectForKey:@"success"];
-            if ([str boolValue]) {
-                
-                NSArray *arr = [jsonDict objectForKey:@"data"];
-                [_imageUrlData removeAllObjects];
-                [_htmlUrlData removeAllObjects];
-                for (NSDictionary *dic in arr) {
-                    NSString *str = [dic objectForKey:@"imageUrl"];
-                    [_imageUrlData addObject:str];
-                    [_htmlUrlData addObject:[dic objectForKey:@"imageLinks"]];
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_tableView reloadData];
-                });
-                
-            }else{
-                
-                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    
-                }];
-                [v addAction:active];
-                [self presentViewController:v animated:YES completion:^{
-                    
-                }];
-            }
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/carouse/query",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
+        
+        [_imageUrlData removeAllObjects];
+        [_htmlUrlData removeAllObjects];
+        for (NSDictionary *dic in data) {
+            NSString *str = [dic objectForKey:@"imageUrl"];
+            [_imageUrlData addObject:str];
+            [_htmlUrlData addObject:[dic objectForKey:@"imageLinks"]];
         }
-
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+        });
+    } andFiledBlock:^(NSError *error) {
+        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [v addAction:active];
+        [self presentViewController:v animated:YES completion:^{
+            
+        }];
     }];
-    [dataTask resume];
 }
 
 - (void)leftBtnActive:(UIButton *)btn{
@@ -796,190 +762,122 @@
                           @"province":@"重庆"
                           };
     
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    
-    
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSString *str = [NSString stringWithFormat:@"http://%@:7072/manage-service/serviceStation/findServiceStation",PUBLIC_LOCATION];
-    NSURL *url = [NSURL URLWithString:str];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSString *str  = [jsonDict objectForKey:@"success"];
-            if ([str boolValue]) {
-                [_offLineData removeAllObjects];
-                
-                NSDictionary *allDic = [jsonDict objectForKey:@"data"];
-//                NSLog(@"%@",jsonDict);
-                for (NSDictionary *dic in allDic) {
-                    OffLineServerStation *model = [[OffLineServerStation alloc] init];
-                    model.address = [dic objectForKey:@"address"];
-                    model.city = [dic objectForKey:@"city"];
-                    model.district = [dic objectForKey:@"district"];
-                    model.offLineServerId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
-                    model.latitude = [dic objectForKey:@"latitude"];
-                    model.longitude = [dic objectForKey:@"longitude"];
-                    model.name = [dic objectForKey:@"name"];
-                    model.phone = [dic objectForKey:@"phone"];
-                    model.province = [dic objectForKey:@"province"];
-                    model.imageUrl = [dic objectForKey:@"imageUrl"];
-                    
-                    model.mapImageUrl = [dic objectForKey:@"mapImageUrl"];
-                    model.lightRailDes = [dic objectForKey:@"lightRailDes"];
-                    model.publicBusName = [dic objectForKey:@"publicBusName"];
-                    model.publicBusDes = [dic objectForKey:@"publicBusDes"];
-                    [_offLineData addObject:model];
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_tableView reloadData];
-                });
-                
-            }else{
-                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    
-                }];
-                [v addAction:active];
-                [self presentViewController:v animated:YES completion:^{
-                    
-                }];
-            }
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:[NSString stringWithFormat:@"http://%@:7072/manage-service/serviceStation/findServiceStation",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
+        [_offLineData removeAllObjects];
+        
+      
+        //                NSLog(@"%@",jsonDict);
+        for (NSDictionary *dic in data) {
+            OffLineServerStation *model = [[OffLineServerStation alloc] init];
+            model.address = [dic objectForKey:@"address"];
+            model.city = [dic objectForKey:@"city"];
+            model.district = [dic objectForKey:@"district"];
+            model.offLineServerId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+            model.latitude = [dic objectForKey:@"latitude"];
+            model.longitude = [dic objectForKey:@"longitude"];
+            model.name = [dic objectForKey:@"name"];
+            model.phone = [dic objectForKey:@"phone"];
+            model.province = [dic objectForKey:@"province"];
+            model.imageUrl = [dic objectForKey:@"imageUrl"];
+            
+            model.mapImageUrl = [dic objectForKey:@"mapImageUrl"];
+            model.lightRailDes = [dic objectForKey:@"lightRailDes"];
+            model.publicBusName = [dic objectForKey:@"publicBusName"];
+            model.publicBusDes = [dic objectForKey:@"publicBusDes"];
+            [_offLineData addObject:model];
         }
         
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+        });
+    } andFiledBlock:^(NSError *error) {
+        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [v addAction:active];
+        [self presentViewController:v animated:YES completion:^{
+            
+        }];
     }];
-    [dataTask resume];
+    
+    
+    
 }
 
 - (void)loadCarTypeData{
     [CustomAlertView showAlertViewWithVC:self];
     NSDictionary *dic =@{@"categoryCode":@"",@"city":@"重庆市"};
-    
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    
-    
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/classType/query",PUBLIC_LOCATION]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSString *str = [jsonDict objectForKey:@"success"];
-            if ([str boolValue]) {
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/classType/query",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
+        if (_coachData.count > 0 ) {
+            [_coachData removeAllObjects];
+        }
+        for (NSDictionary *dic in data) {
+            ChoosedClassModel *model = [[ChoosedClassModel alloc] init];
+            
+            NSArray * arr = [dic objectForKey:@"productList"];
+            
+            if (arr.count > 1) {
                 
-                NSArray *arrData = [jsonDict objectForKey:@"data"];
-//                NSLog(@"--:%@",arrData);
-                if (_coachData.count > 0 ) {
-                    [_coachData removeAllObjects];
-                }
-                for (NSDictionary *dic in arrData) {
-                    ChoosedClassModel *model = [[ChoosedClassModel alloc] init];
-                    
-                    NSArray * arr = [dic objectForKey:@"productList"];
-                    
-                    if (arr.count > 1) {
-                        
-                        for (NSDictionary *subDic in arr) {
-                            NSLog(@"%@--%@",[subDic objectForKey:@"price"],[subDic objectForKey:@"isInstalments"]);
-                            if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
-                                model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                                model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                                model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                            }else{
-                                model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                                model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-//                                model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                            }
-                            
-                        }
+                for (NSDictionary *subDic in arr) {
+                    NSLog(@"%@--%@",[subDic objectForKey:@"price"],[subDic objectForKey:@"isInstalments"]);
+                    if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
+                        model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
                     }else{
-                        
-                        for (NSDictionary *subDic in arr) {
-                            if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
-                                model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                                model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                                model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                            }else{
-                                model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                                model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                                model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                            }
-                        }
+                        model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        //                                model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
                     }
                     
-                    model.categoryCode = [dic objectForKey:@"categoryCode"];
-                    model.imageStr = [dic objectForKey:@"imageUrl"];
-                    model.priceStr = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[dic objectForKey:@"price"]]];
-                    model.descStr = [dic objectForKey:@"description"];
-                    model.titleStr = [dic objectForKey:@"categoryName"];
-                    
-                    [_coachData addObject:model];
                 }
-                self.carClassData = _coachData;
-                ((AppDelegate *)[[UIApplication sharedApplication]delegate]).carClassData = _coachData;
-                [DefaultManager shareDefaultManager].carStyleData = _coachData;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_tableView reloadData];
-                });
             }else{
-                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    
-                }];
-                [v addAction:active];
-                [self presentViewController:v animated:YES completion:^{
-                    
-                }];
+                
+                for (NSDictionary *subDic in arr) {
+                    if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
+                        model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
+                    }else{
+                        model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
+                    }
+                }
             }
+            
+            model.categoryCode = [dic objectForKey:@"categoryCode"];
+            model.imageStr = [dic objectForKey:@"imageUrl"];
+            model.priceStr = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[dic objectForKey:@"price"]]];
+            model.descStr = [dic objectForKey:@"description"];
+            model.titleStr = [dic objectForKey:@"categoryName"];
+            
+            [_coachData addObject:model];
         }
+        self.carClassData = _coachData;
+        ((AppDelegate *)[[UIApplication sharedApplication]delegate]).carClassData = _coachData;
+        [DefaultManager shareDefaultManager].carStyleData = _coachData;
         dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
             [CustomAlertView hideAlertView];
             _tableView.hidden = NO;
         });
         
+    } andFiledBlock:^(NSError *error) {
+        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [v addAction:active];
+        [self presentViewController:v animated:YES completion:^{
+            
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            _tableView.hidden = NO;
+        });
     }];
-    [dataTask resume];
 }
 
 

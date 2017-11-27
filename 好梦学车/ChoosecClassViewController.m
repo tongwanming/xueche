@@ -19,7 +19,7 @@
 #import "ChoosedTableViewCell.h"
 #import "ChoosedClassTableViewCell.h"
 #import "choosedCarTypeViewTap.h"
-
+#import "URLConnectionHelper.h"
 
 #define HEAD_VIEW_HEIGHT 236
 
@@ -98,114 +98,84 @@
                          @"province":@"重庆市"
                          };
     
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    
-    
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/classType/query",PUBLIC_LOCATION]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:[NSString stringWithFormat:@"http://%@:7072/order-service/api/common/classType/query",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
             _tableView.hidden = NO;
         });
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSArray *arrData = [jsonDict objectForKey:@"data"];
-            NSLog(@"--:%@",arrData);
-            if (arrData == nil || arrData.count < 1) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self showMistake];
-                });
-                return;
-            }
-            for (NSDictionary *dic in arrData) {
-                ChoosedClassModel *model = [[ChoosedClassModel alloc] init];
-                
-                NSArray * arr = [dic objectForKey:@"productList"];
-                
-                if (arr.count > 1) {
-                    
-                    for (NSDictionary *subDic in arr) {
-                        
-                        if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
-                            model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                            model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
-                            model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                        }else{
-                            model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                            model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
-                            model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                        }
-                    }
-                }else{
-                    
-                    for (NSDictionary *subDic in arr) {
-                        if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
-                            model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                            model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
-                            model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                        }else{
-                            model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
-                            model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
-                            model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
-                            model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
-                        }
-                    }
-                }
-               
-                model.imageStr = [dic objectForKey:@"imageUrl"];
-                model.priceStr = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[dic objectForKey:@"price"]]];
-                model.descStr = [dic objectForKey:@"description"];
-                model.titleStr = [dic objectForKey:@"categoryName"];
-                model.categoryCode = [dic objectForKey:@"categoryCode"];
-                model.contentServers = [dic objectForKey:@"serviceDetails"];
-                model.detailPrice = [dic objectForKey:@"feeDetails"];
-                [_coachData addObject:model];
-            }
-            NSLog(@"_coachData:%@",_coachData);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _choosedModel = _coachData[0];//默认选中第一个版型
-                _choosedClassModel.type = _choosedModel.titleStr;
-                _choosedClassModel.price = _choosedModel.C1Str;
-                _choosedClassModel.price2 = _choosedModel.C2Str;
-                _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
-                _tableView.tableHeaderView = [self createHenderView];
-            });
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_tableView reloadData];
-            });
-        }else{
+        if (data == nil || data.count < 1) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self showMistake];
             });
+            return;
         }
+        for (NSDictionary *dic in data) {
+            ChoosedClassModel *model = [[ChoosedClassModel alloc] init];
+            
+            NSArray * arr = [dic objectForKey:@"productList"];
+            
+            if (arr.count > 1) {
+                
+                for (NSDictionary *subDic in arr) {
+                    
+                    if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
+                        model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                        model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
+                    }else{
+                        model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                        model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
+                    }
+                }
+            }else{
+                
+                for (NSDictionary *subDic in arr) {
+                    if ([[subDic objectForKey:@"projectTypeName"] isEqualToString:@"C1"]) {
+                        model.C1Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.productCode1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                        model.isInstalmentsC1 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
+                    }else{
+                        model.C2Str = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[subDic objectForKey:@"price"]]];
+                        model.productCode2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"productCode"]];
+                        model.isInstalmentsC2 = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"isInstalments"]];
+                        model.projectTypeCode = [NSString stringWithFormat:@"%@",[subDic objectForKey:@"projectTypeCode"]];
+                    }
+                }
+            }
+            
+            model.imageStr = [dic objectForKey:@"imageUrl"];
+            model.priceStr = [self changeTypeWithStr:[NSString stringWithFormat:@"%@",[dic objectForKey:@"price"]]];
+            model.descStr = [dic objectForKey:@"description"];
+            model.titleStr = [dic objectForKey:@"categoryName"];
+            model.categoryCode = [dic objectForKey:@"categoryCode"];
+            model.contentServers = [dic objectForKey:@"serviceDetails"];
+            model.detailPrice = [dic objectForKey:@"feeDetails"];
+            [_coachData addObject:model];
+        }
+        NSLog(@"_coachData:%@",_coachData);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _choosedModel = _coachData[0];//默认选中第一个版型
+            _choosedClassModel.type = _choosedModel.titleStr;
+            _choosedClassModel.price = _choosedModel.C1Str;
+            _choosedClassModel.price2 = _choosedModel.C2Str;
+            _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
+            _tableView.tableHeaderView = [self createHenderView];
+        });
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+        });
+    } andFiledBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            _tableView.hidden = NO;
+             [self showMistake];
+        });
     }];
-    [dataTask resume];
 }
 
 - (IBAction)btnClick:(id)sender {

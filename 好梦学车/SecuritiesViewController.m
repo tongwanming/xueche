@@ -13,6 +13,7 @@
 #import "IdentifyingViewController.h"
 #import "CustomAlertView.h"
 #import "SecuritiesModel.h"
+#import "URLConnectionHelper.h"
 
 @interface SecuritiesViewController ()<UITableViewDelegate,UITableViewDataSource,SecuritiesTableViewCellEnabledDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -83,81 +84,45 @@
                          @"userId":@"",
                          @"limitInstalments":@false
                          };
-    
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    
-    
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:10002/couponRecord/listCouponRecords",PUBLIC_LOCATION]];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
-    [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[URLConnectionHelper shareDefaulte] loadTokenPostDataWithUrl:[NSString stringWithFormat:@"http://%@:10002/couponRecord/listCouponRecords",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
             _tableView.hidden = NO;
         });
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSArray *arrData = [jsonDict objectForKey:@"data"];
-            NSLog(@"--:%@",arrData);
-            if ([arrData isEqual:[NSNull new]]) {
-                return ;
-            }
-            if (arrData == nil || arrData.count < 1) {
-                
-            }else{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                   _titleLable.hidden = YES;
-                });
-                for (NSDictionary *dic in arrData) {
-                    SecuritiesModel *modle = [[SecuritiesModel alloc] init];
-                    modle.couponsCode = [dic objectForKeyWithNoNsnull:@"couponsCode"];
-                    modle.couponStatus = [dic objectForKeyWithNoNsnull:@"couponStatus"];
-                    modle.Sid = [dic objectForKeyWithNoNsnull:@"id"];
-                    modle.startTime = [self choosedNormalDateWithStr:[dic objectForKeyWithNoNsnull:@"startTime"]];
-                    modle.endTime = [self choosedNormalDateWithStr:[dic objectForKeyWithNoNsnull:@"endTime"]];
-                    modle.couponName = [dic objectForKeyWithNoNsnull:@"couponName"];
-                    modle.couponType = [dic objectForKeyWithNoNsnull:@"couponType"];
-                    modle.descriptiona = [dic objectForKeyWithNoNsnull:@"description"];
-                    modle.couponPrice = [self changeTypeWithStr:[dic objectForKey:@"couponPrice"]];
-                    modle.useCondition = [dic objectForKeyWithNoNsnull:@"useCondition"];
-                    
-                    [_data addObject:modle];
-                }
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [_tableView reloadData];
-            });
+        
+        if (data == nil || data.count < 1) {
+            
         }else{
             dispatch_async(dispatch_get_main_queue(), ^{
-              
+                _titleLable.hidden = YES;
             });
+            for (NSDictionary *dic in data) {
+                SecuritiesModel *modle = [[SecuritiesModel alloc] init];
+                modle.couponsCode = [dic objectForKeyWithNoNsnull:@"couponsCode"];
+                modle.couponStatus = [dic objectForKeyWithNoNsnull:@"couponStatus"];
+                modle.Sid = [dic objectForKeyWithNoNsnull:@"id"];
+                modle.startTime = [self choosedNormalDateWithStr:[dic objectForKeyWithNoNsnull:@"startTime"]];
+                modle.endTime = [self choosedNormalDateWithStr:[dic objectForKeyWithNoNsnull:@"endTime"]];
+                modle.couponName = [dic objectForKeyWithNoNsnull:@"couponName"];
+                modle.couponType = [dic objectForKeyWithNoNsnull:@"couponType"];
+                modle.descriptiona = [dic objectForKeyWithNoNsnull:@"description"];
+                modle.couponPrice = [self changeTypeWithStr:[dic objectForKey:@"couponPrice"]];
+                modle.useCondition = [dic objectForKeyWithNoNsnull:@"useCondition"];
+                
+                [_data addObject:modle];
+            }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [_tableView reloadData];
+        });
+        
+    } andFiledBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            _tableView.hidden = NO;
+        });
     }];
-    [dataTask resume];
     
 }
 

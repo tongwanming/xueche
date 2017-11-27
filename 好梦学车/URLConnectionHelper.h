@@ -17,4 +17,9 @@
 
 - (void)getPostDataWithUrl:(NSString *)urlstr andConnectModel:(URLConnectionModel *)model andSuccessBlock:(void(^)(NSData *data))successedBlock andFailedBlock:(void(^)(NSError *error))failedBlock;
 
+//添加Token的post请求
+- (void)loadTokenPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andFiledBlock:(void(^)(NSError *error))failedBlock;
+//不添加Token的post请求
+- (void)loadPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andFiledBlock:(void(^)(NSError *error))failedBlock;
+
 @end

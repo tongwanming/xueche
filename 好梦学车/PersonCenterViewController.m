@@ -13,6 +13,7 @@
 #import "TeachNewsViewController.h"
 #import "ExameNewsViewController.h"
 #import "CustomAlertView.h"
+#import "URLConnectionHelper.h"
 
 @interface PersonCenterTableViewCell : UITableViewCell
 
@@ -242,7 +243,6 @@
     }else{
         dic =@{@"msgType":@"",@"platform":@"",@"pushClient":@"STUDENT",@"pushStatus":@"",@"tags":@""};//0->未开始学习，1->学习中，2->暂停学习，3->申请考试，4->考试通过，5->补考中, 6->考爆
     }
-    
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];

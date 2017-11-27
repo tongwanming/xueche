@@ -11,6 +11,7 @@
 #import "UIImageView+WebCache.h"
 #import "SubjectTwoPopWebViewController.h"
 #import "CustomAlertView.h"
+#import "URLConnectionHelper.h"
 
 @interface EventNotictionViewTableViewCell : UITableViewCell
 @property (nonatomic, strong) UILabel *timeLabel;
@@ -180,93 +181,39 @@
     }else{
         dic =@{@"msgType":@"PROMOTION",@"platform":@"",@"pushClient":@"STUDENT",@"pushStatus":@"",@"tags":@""};//0->未开始学习，1->学习中，2->暂停学习，3->申请考试，4->考试通过，5->补考中, 6->考爆
     }
-    
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
-    
-    
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
-    
-    NSRange range = {0,jsonStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
-    NSRange range3 = {0,mutStr.length};
-    [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
-    NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
-    
-    
-    //    NSURL *url = [NSURL URLWithString:urlstr];http://101.37.29.125:7076/coach/query/student
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/common/push/queryPushInfoList",PUBLIC_LOCATION]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    [request setHTTPBody:jsonData];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    NSURLSession *session = [NSURLSession sharedSession];
     [CustomAlertView showAlertViewWithVC:self];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error == nil) {
-            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSString *success = [NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"success"]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [CustomAlertView hideAlertView];
-            });
-            if (success.boolValue) {
-                NSArray *arr = [jsonDict objectForKey:@"data"];
-                if (_data.count > 0) {
-                    [_data removeAllObjects];
-                }
-                for (NSDictionary *dic in arr) {
-                    SettingPersonNewsModel *model = [[SettingPersonNewsModel alloc] init];
-                    model.timeStr = [dic objectForKeyWithNoNsnull:@"pushTime"];
-                    model.titleStr = [dic objectForKeyWithNoNsnull:@"title"];
-                    model.describeStr = [dic objectForKeyWithNoNsnull:@"msgContent"];
-                    model.imageUrl = [dic objectForKeyWithNoNsnull:@"msgPicPath"];
-                    model.htmlUrl = [dic objectForKeyWithNoNsnull:@"nextLinkUrl"];
-                    [_data addObject:model];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_tableView reloadData];
-                });
-                
-            }else{
-                //登录失败
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _nameLabel.hidden = NO;
-//                    //验证码输入错误
-//                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"获取数据失败，请稍后再试" preferredStyle:UIAlertControllerStyleAlert];
-//                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//                        
-//                    }];
-//                    [v addAction:active];
-//                    [self presentViewController:v animated:YES completion:^{
-//                        
-//                    }];
-                });
-            }
-        }else{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [CustomAlertView hideAlertView];
-                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"获取数据失败，请稍后再试" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    
-                }];
-                [v addAction:active];
-                [self presentViewController:v animated:YES completion:^{
-                    
-                }];
-            });
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:[NSString stringWithFormat:@"http://%@:7071/api/common/push/queryPushInfoList",PUBLIC_LOCATION] andDic:dic andSuccessBlock:^(NSArray *data) {
+        
+        if (_data.count > 0) {
+            [_data removeAllObjects];
         }
+        for (NSDictionary *dic in data) {
+            SettingPersonNewsModel *model = [[SettingPersonNewsModel alloc] init];
+            model.timeStr = [dic objectForKeyWithNoNsnull:@"pushTime"];
+            model.titleStr = [dic objectForKeyWithNoNsnull:@"title"];
+            model.describeStr = [dic objectForKeyWithNoNsnull:@"msgContent"];
+            model.imageUrl = [dic objectForKeyWithNoNsnull:@"msgPicPath"];
+            model.htmlUrl = [dic objectForKeyWithNoNsnull:@"nextLinkUrl"];
+            [_data addObject:model];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            [_tableView reloadData];
+        });
+    } andFiledBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [CustomAlertView hideAlertView];
+            UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"获取数据失败，请稍后再试" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [v addAction:active];
+            [self presentViewController:v animated:YES completion:^{
+                
+            }];
+        });
     }];
-    [dataTask resume];
-    
 }
 
 

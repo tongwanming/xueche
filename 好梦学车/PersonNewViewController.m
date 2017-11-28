@@ -203,12 +203,10 @@
         NSData *image = [dic objectForKey:@"userLogoImage"];
         _imageBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
         if (image && [image isKindOfClass:[NSData class]]) {
-//            [_imageBtn setBackgroundImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
             [_imageBtn setImage:[UIImage imageWithData:image] forState:UIControlStateNormal];
             logoImageView.image = [UIImage imageWithData:image];
             
         }else{
-//             [_imageBtn setImage:[UIImage imageNamed:@"bg_personal_defaultavatar"] forState:UIControlStateNormal];
             [logoImageView sd_setImageWithURL:[NSURL URLWithString:(NSString *)image] placeholderImage:[UIImage imageNamed:@"bg_personal_defaultavatar"]];
         }
         _imageBtn.center = CGPointMake(CURRENT_BOUNDS.width/2, 97*TYPERATIONTWO);

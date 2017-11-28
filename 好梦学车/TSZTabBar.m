@@ -39,7 +39,7 @@
 //    self.plusBtn.centerY = self.height*0.5;
     
     // 2.设置其他tabbarButton的frame
-    CGFloat tabBarButtonW = CURRENT_BOUNDS.width / 4;
+    CGFloat tabBarButtonW = CURRENT_BOUNDS.width / 3;
     CGFloat tabBarButtonIndex = 0;
     for (UIView *child in self.subviews) {
         Class class = NSClassFromString(@"UITabBarButton");

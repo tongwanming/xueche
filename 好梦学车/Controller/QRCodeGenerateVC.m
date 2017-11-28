@@ -7,6 +7,7 @@
 //
 
 #import "QRCodeGenerateVC.h"
+#import "UIImageView+WebCache.h"
 #import "SGQRCode.h"
 
 @interface QRCodeGenerateVC ()
@@ -99,6 +100,8 @@
 
 #pragma mark - - - 中间带有图标二维码生成
 - (void)setupGenerate_Icon_QRCode {
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *userId = [userDic objectForKey:@"userId"];
     
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width-50, CURRENT_BOUNDS.height-155-32)];
     bgView.backgroundColor = [UIColor whiteColor];
@@ -111,18 +114,26 @@
     logoImageView.image = [UIImage imageNamed:@"bg_personal_defaultavatar"];
     logoImageView.layer.masksToBounds = YES;
     logoImageView.layer.cornerRadius = 45/2;
+    NSData *image = [userDic objectForKey:@"userLogoImage"];
+    if (image && [image isKindOfClass:[NSData class]]) {
+       
+        logoImageView.image = [UIImage imageWithData:image];
+        
+    }else{
+        [logoImageView sd_setImageWithURL:[NSURL URLWithString:(NSString *)image] placeholderImage:[UIImage imageNamed:@"bg_personal_defaultavatar"]];
+    }
     [bgView addSubview:logoImageView];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoImageView.frame)+25/2, 16, bgView.frame.size.width-100, 17)];
     nameLabel.textColor = TEXT_COLOR;
-    nameLabel.text = @"张晓晗";
+    nameLabel.text = [userDic objectForKey:@"userName"];
     nameLabel.font = [UIFont systemFontOfSize:17];
     [bgView addSubview:nameLabel];
     
     UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoImageView.frame)+25/2, CGRectGetMaxY(nameLabel.frame)+6, nameLabel.frame.size.width, 13)];
     locationLabel.textColor = UNMAIN_TEXT_COLOR;
     locationLabel.font = [UIFont systemFontOfSize:13];
-    locationLabel.text = @"重庆市渝北区";
+    locationLabel.text = [userDic objectForKey:@"address"];
     [bgView addSubview:locationLabel];
     
     // 1、借助UIImageView显示二维码
@@ -137,8 +148,7 @@
     
     CGFloat scale = 0.2;
     
-    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
-    NSString *userId = [userDic objectForKey:@"userId"];
+    
     // 2、将最终合得的图片显示在UIImageView上
     imageView.image = [SGQRCodeGenerateManager generateWithLogoQRCodeData:userId logoImageName:@"" logoScaleToSuperView:scale];
     

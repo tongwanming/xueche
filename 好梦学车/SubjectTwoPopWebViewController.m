@@ -73,7 +73,7 @@
     _url = url;
     
     _webView = [[UIWebView alloc] init];
-    _webView.frame = CGRectMake(0, 64, CURRENT_BOUNDS.width, CURRENT_BOUNDS.height-64);
+    _webView.frame = CGRectMake(0, 64, CURRENT_BOUNDS.width, CURRENT_BOUNDS.height);
     _webView.delegate = self;
     _webView.mediaPlaybackRequiresUserAction = NO;
 //    _webView.hidden = YES;

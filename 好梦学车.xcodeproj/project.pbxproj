@@ -1109,6 +1109,10 @@
 		29F1126E1F2AD7AF00061B08 /* NSDictionary+objectForKeyWitnNoNsnull.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F1126D1F2AD7AF00061B08 /* NSDictionary+objectForKeyWitnNoNsnull.m */; };
 		29F112701F2AEB5E00061B08 /* ic_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 29F1126F1F2AEB5E00061B08 /* ic_arrow.png */; };
 		29F112721F2B0F5100061B08 /* icon_choosecoach_triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 29F112711F2B0F5100061B08 /* icon_choosecoach_triangle.png */; };
+		29F35D951FCBDC3000BA6FD5 /* SuperFirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F35D931FCBDC2F00BA6FD5 /* SuperFirstViewController.m */; };
+		29F35D961FCBDC3000BA6FD5 /* SuperFirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29F35D941FCBDC2F00BA6FD5 /* SuperFirstViewController.xib */; };
+		29F35D9A1FCBDD9700BA6FD5 /* ProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F35D981FCBDD9700BA6FD5 /* ProgressViewController.m */; };
+		29F35D9B1FCBDD9700BA6FD5 /* ProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29F35D991FCBDD9700BA6FD5 /* ProgressViewController.xib */; };
 		29F77BBD1F7DF08100BDE3A0 /* ManuallyLocateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F77BBB1F7DF08100BDE3A0 /* ManuallyLocateViewController.m */; };
 		29F77BBE1F7DF08100BDE3A0 /* ManuallyLocateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29F77BBC1F7DF08100BDE3A0 /* ManuallyLocateViewController.xib */; };
 		29F77BC11F7DF98600BDE3A0 /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F77BC01F7DF98600BDE3A0 /* SearchModel.m */; };
@@ -2537,6 +2541,12 @@
 		29F1126D1F2AD7AF00061B08 /* NSDictionary+objectForKeyWitnNoNsnull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+objectForKeyWitnNoNsnull.m"; sourceTree = "<group>"; };
 		29F1126F1F2AEB5E00061B08 /* ic_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_arrow.png; sourceTree = "<group>"; };
 		29F112711F2B0F5100061B08 /* icon_choosecoach_triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_choosecoach_triangle.png; sourceTree = "<group>"; };
+		29F35D921FCBDC2F00BA6FD5 /* SuperFirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SuperFirstViewController.h; sourceTree = "<group>"; };
+		29F35D931FCBDC2F00BA6FD5 /* SuperFirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SuperFirstViewController.m; sourceTree = "<group>"; };
+		29F35D941FCBDC2F00BA6FD5 /* SuperFirstViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SuperFirstViewController.xib; sourceTree = "<group>"; };
+		29F35D971FCBDD9700BA6FD5 /* ProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProgressViewController.h; sourceTree = "<group>"; };
+		29F35D981FCBDD9700BA6FD5 /* ProgressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProgressViewController.m; sourceTree = "<group>"; };
+		29F35D991FCBDD9700BA6FD5 /* ProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgressViewController.xib; sourceTree = "<group>"; };
 		29F77BBA1F7DF08100BDE3A0 /* ManuallyLocateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManuallyLocateViewController.h; sourceTree = "<group>"; };
 		29F77BBB1F7DF08100BDE3A0 /* ManuallyLocateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManuallyLocateViewController.m; sourceTree = "<group>"; };
 		29F77BBC1F7DF08100BDE3A0 /* ManuallyLocateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManuallyLocateViewController.xib; sourceTree = "<group>"; };
@@ -3577,6 +3587,12 @@
 				2948A03E1EADA03900F009C2 /* FirstViewController.h */,
 				2948A03F1EADA03900F009C2 /* FirstViewController.m */,
 				2948A0401EADA03900F009C2 /* FirstViewController.xib */,
+				29F35D921FCBDC2F00BA6FD5 /* SuperFirstViewController.h */,
+				29F35D931FCBDC2F00BA6FD5 /* SuperFirstViewController.m */,
+				29F35D941FCBDC2F00BA6FD5 /* SuperFirstViewController.xib */,
+				29F35D971FCBDD9700BA6FD5 /* ProgressViewController.h */,
+				29F35D981FCBDD9700BA6FD5 /* ProgressViewController.m */,
+				29F35D991FCBDD9700BA6FD5 /* ProgressViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5122,6 +5138,7 @@
 				29420B3C1EC59BB400ABF4A9 /* SubjectOneExamViewController.xib in Resources */,
 				298D542A1FAAFEFD005DF66A /* selextbox_choosepage_click@3x.png in Resources */,
 				29430E3A1ED7DC5300F3618B /* m04@2x.png in Resources */,
+				29F35D9B1FCBDD9700BA6FD5 /* ProgressViewController.xib in Resources */,
 				291AD3CB1F136FFE00B6431F /* icon_jindu_faild.png in Resources */,
 				291AD3C81F136FFE00B6431F /* icon_jindu_03.png in Resources */,
 				29E7F9E71EB1DF21001FC2C0 /* btn_eyes_close@2x.png in Resources */,
@@ -5720,6 +5737,7 @@
 				29420B411EC59BEE00ABF4A9 /* SubjectOneSpecialProjectViewController.xib in Resources */,
 				295B64531EC6ECA700B85E8B /* top_bg_Unqualifiedaa.png in Resources */,
 				29F00A881ECD89EE0061FCFE /* blue.png in Resources */,
+				29F35D961FCBDC3000BA6FD5 /* SuperFirstViewController.xib in Resources */,
 				2948DB461F288BEE007F4223 /* btn_message_black.png in Resources */,
 				295B63F51EC69C3B00B85E8B /* icon_duoxuan@2x.png in Resources */,
 				2974C3B01EC3F9E100411EAD /* icon_fault.png in Resources */,
@@ -6160,6 +6178,7 @@
 				2944F41A1EBC5E9900A1836D /* EvaluateModel.m in Sources */,
 				29522CC81EBB0E2A0093CF32 /* ChoosedCocchModel.m in Sources */,
 				29420B5E1EC59CF700ABF4A9 /* SubjectOneTrafficSignViewController.m in Sources */,
+				29F35D951FCBDC3000BA6FD5 /* SuperFirstViewController.m in Sources */,
 				2957335C1F0CC8F100D1991A /* DefaultManager.m in Sources */,
 				29F79A2C1EAF451F00E1466F /* ResetPasswordViewController.m in Sources */,
 				294E3E4B1ECFD41900FFF492 /* SubjectTwoPopWebViewController.m in Sources */,
@@ -6256,6 +6275,7 @@
 				2931567C1EB06EA900B2CEAC /* MASLayoutConstraint.m in Sources */,
 				29ED553F1F3D92480064883B /* CheatsModel.m in Sources */,
 				295AE4DB1F4D689900B0991C /* EventCoachView.m in Sources */,
+				29F35D9A1FCBDD9700BA6FD5 /* ProgressViewController.m in Sources */,
 				294E3E4F1ECFDDBB00FFF492 /* SubjectPractiseTabPanelPopView.m in Sources */,
 				294B4EE61FB2A11B00D47458 /* SGQRCodeHelperTool.m in Sources */,
 				29420B311EC59A7500ABF4A9 /* SubjectOneBasicViewController.m in Sources */,

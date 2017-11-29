@@ -10,7 +10,7 @@
 #import "FirstViewController.h"
 #import "ProgressViewController.h"
 
-@interface SuperFirstViewController ()
+@interface SuperFirstViewController ()<FirstViewControllerDelegate>
 
 @end
 
@@ -22,9 +22,19 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
     
+    if (_firstV == nil) {
+        _firstV = [[FirstViewController alloc] init];
+        _firstV.delegate = self;
+    }
+    _firstV.view.frame = self.view.bounds;
+    [_firstV didMoveToParentViewController:self];
+    [self.view addSubview:_firstV.view];
+    return;
+    
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
         if (_firstV == nil) {
             _firstV = [[FirstViewController alloc] init];
+            _firstV.delegate = self;
         }
         _firstV.view.frame = self.view.bounds;
         [_firstV didMoveToParentViewController:self];
@@ -45,6 +55,43 @@
     
     
     // Do any additional setup after loading the view from its nib.
+}
+
+#pragma mark - FirstViewControllerDelegateActive
+
+- (void)FirstViewControllerDelegateWithActiveVC:(BasicViewController *)v andTag:(NSString *)tag{
+    
+    switch ([tag intValue]) {
+        case 1:{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController pushViewController:v animated:YES];
+            });}
+            break;
+        case 2:{
+            dispatch_async(dispatch_get_main_queue(), ^{
+               
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:v];
+                
+                [self presentViewController:nav animated:YES completion:^{
+                    
+                }];
+
+            });
+        }
+            
+            break;
+        case 3:{
+            
+        }
+            
+            break;
+        case 4:
+            
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

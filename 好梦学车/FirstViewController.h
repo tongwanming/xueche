@@ -8,7 +8,13 @@
 
 #import "BasicViewController.h"
 
+@protocol FirstViewControllerDelegate <NSObject>
+
+- (void)FirstViewControllerDelegateWithActiveVC:(BasicViewController *)v andTag:(NSString *)tag;
+@end
+
 @interface FirstViewController : BasicViewController
 
+@property (nonatomic, assign)id<FirstViewControllerDelegate>delegate;
 
 @end

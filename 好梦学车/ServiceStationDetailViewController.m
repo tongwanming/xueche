@@ -54,6 +54,11 @@
     [self refreshData];
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Appear"];
+}
+
 - (void)refreshData{
     [_imageView sd_setImageWithURL:[NSURL URLWithString:_model.mapImageUrl] placeholderImage:[UIImage imageNamed:@""]];
     _titleLabel.text = _model.name;

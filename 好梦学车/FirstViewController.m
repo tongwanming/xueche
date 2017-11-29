@@ -221,7 +221,10 @@
     SubjectTwoPopWebViewController *v = [[SubjectTwoPopWebViewController alloc] init];
     v.url = @"https://eco-api.meiqia.com/dist/standalone.html?eid=10708";
     v.titleStr = @"在线咨询";
-    [self.navigationController pushViewController:v animated:YES];
+    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+    }
+//    [self.navigationController pushViewController:v animated:YES];
 }
 
 - (UIImage *) imageWithFrame:(CGRect)frame alphe:(CGFloat)alphe {
@@ -288,7 +291,10 @@
             SubjectTwoPopWebViewController *v = [[SubjectTwoPopWebViewController alloc] init];
             v.url = url;
             v.titleStr = @"详情界面";
-            [self.navigationController pushViewController:v animated:YES];
+            if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+            }
+//            [self.navigationController pushViewController:v animated:YES];
         }];
     }else if (indexPath.section == 1){
         if (!cell) {
@@ -358,7 +364,10 @@
 //        v.latitude = [NSString stringWithFormat:@"%f",self.coordinate.latitude];
 //        v.longitude = [NSString stringWithFormat:@"%f",self.coordinate.longitude];
         v.address = self.address;
-        [self.navigationController pushViewController:v animated:YES];
+        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+        }
+//        [self.navigationController pushViewController:v animated:YES];
         NSLog(@"点击线下服务站");
     }
 }
@@ -498,11 +507,17 @@
             //已经完成订单支付
             if ([choosedType isEqualToString:@"ONLINE"]) {
                 PersonIndentViewControllerOther*v = [[PersonIndentViewControllerOther alloc] init];
-                [self.navigationController pushViewController:v animated:YES];
+                if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+//                [self.navigationController pushViewController:v animated:YES];
             }else{
                 installment_ViewController *v = [[installment_ViewController alloc] init];
                 v.payNum = payNum;
-                [self.navigationController pushViewController:v animated:YES];
+                if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+//                [self.navigationController pushViewController:v animated:YES];
             }
             
             
@@ -514,7 +529,10 @@
                 if (isCreateOrder) {
                     
                     PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
-                    [self.navigationController pushViewController:v animated:YES];
+                    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                    }
+//                    [self.navigationController pushViewController:v animated:YES];
                 }else{
                     if (_coachData.count < 1) {
                         [self showMistake];
@@ -532,7 +550,10 @@
                         v.model = model;
                         v.data = _offLineData;
                         v.locationData = _locationData;
-                        [self.navigationController pushViewController:v animated:YES];
+                        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                        }
+//                        [self.navigationController pushViewController:v animated:YES];
                     }
                     
                 }
@@ -540,7 +561,10 @@
                 if (choosedType && choosedType.length > 0) {
                     installment_ViewController *v = [[installment_ViewController alloc] init];
                     v.payNum = payNum;
-                    [self.navigationController pushViewController:v animated:YES];
+                    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                    }
+//                    [self.navigationController pushViewController:v animated:YES];
                 }else{
                     if (_coachData.count < 1) {
                         [self showMistake];
@@ -558,7 +582,10 @@
                         v.model = model;
                         v.data = _offLineData;
                         v.locationData = _locationData;
-                        [self.navigationController pushViewController:v animated:YES];
+                        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                        }
+//                        [self.navigationController pushViewController:v animated:YES];
                     }
                 }
             }
@@ -567,7 +594,10 @@
         
     }else{
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
-        [self.navigationController pushViewController:v animated:YES];
+        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+        }
+//        [self.navigationController pushViewController:v animated:YES];
     }
 }
 
@@ -621,11 +651,17 @@
             //已经完成订单支付
             if ([choosedType isEqualToString:@"ONLINE"]) {
                 PersonIndentViewControllerOther*v = [[PersonIndentViewControllerOther alloc] init];
-                [self.navigationController pushViewController:v animated:YES];
+                if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+//                [self.navigationController pushViewController:v animated:YES];
             }else{
                 installment_ViewController *v = [[installment_ViewController alloc] init];
                 v.payNum = payNum;
-                [self.navigationController pushViewController:v animated:YES];
+                if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+//                [self.navigationController pushViewController:v animated:YES];
             }
         }else{
             BOOL isCreateOrder = [[OrderValidityManager defaultManager] orderValidity];
@@ -633,7 +669,10 @@
             if ([choosedType isEqualToString:@"ONLINE"]) {
                 if (isCreateOrder) {
                     PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
-                    [self.navigationController pushViewController:v animated:YES];
+                    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                    }
+//                    [self.navigationController pushViewController:v animated:YES];
                 }else{
                     if (_coachData.count < 1) {
                         [self showMistake];
@@ -646,7 +685,10 @@
                             [dic setObject:model.titleStr forKey:@"myClass"];
                             [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
                         }];
-                        [self.navigationController pushViewController:v animated:YES];
+                        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                        }
+//                        [self.navigationController pushViewController:v animated:YES];
                     }
                 }
             }else{
@@ -660,20 +702,27 @@
                     }else{
                         ChoosecClassViewController *v = [[ChoosecClassViewController alloc] init];
                         v.currentIndex = (int)indexPath.row;
-                        [v returnActiveWithBlock:^(ChoosedClassModel *model) {
-                            NSLog(@"%@",model.C1Str);
-                            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
-                            [dic setObject:model.titleStr forKey:@"myClass"];
-                            [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
-                        }];
-                        [self.navigationController pushViewController:v animated:YES];
+                        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                        }
+//                        [v returnActiveWithBlock:^(ChoosedClassModel *model) {
+//                            NSLog(@"%@",model.C1Str);
+//                            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+//                            [dic setObject:model.titleStr forKey:@"myClass"];
+//                            [[NSUserDefaults standardUserDefaults] setObject:dic forKey:@"personNews"];
+//                        }];
+//                        [self.navigationController pushViewController:v animated:YES];
                     }
                 }
             }
         }
     }else{
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
-        [self.navigationController pushViewController:v animated:YES];
+        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+        }
+//        IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
+//        [self.navigationController pushViewController:v animated:YES];
     }
 }
 
@@ -681,11 +730,14 @@
 
 -(void)searchActive{
     ManuallyLocateViewController2 *v = [[ManuallyLocateViewController2 alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:v];
-
-    [self presentViewController:nav animated:YES completion:^{
-        
-    }];
+    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
+    }
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:v];
+//
+//    [self presentViewController:nav animated:YES completion:^{
+//        
+//    }];
 }
 
 - (void)firstLocationTableViewCellSubCellSelectActive:(NSIndexPath *)indexpath andData:(NSArray *)array{
@@ -698,11 +750,17 @@
             //已经完成订单支付
             if ([choosedType isEqualToString:@"ONLINE"]) {
                 PersonIndentViewControllerOther*v = [[PersonIndentViewControllerOther alloc] init];
-                [self.navigationController pushViewController:v animated:YES];
+                if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+//                [self.navigationController pushViewController:v animated:YES];
             }else{
                 installment_ViewController *v = [[installment_ViewController alloc] init];
                 v.payNum = payNum;
-                [self.navigationController pushViewController:v animated:YES];
+                if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+//                [self.navigationController pushViewController:v animated:YES];
             }
         }else{
             BOOL isCreateOrder = [[OrderValidityManager defaultManager] orderValidity];
@@ -710,7 +768,10 @@
             if ([choosedType isEqualToString:@"ONLINE"]) {
                 if (isCreateOrder) {
                     PersonIndentViewController *v = [[PersonIndentViewController alloc] init];
-                    [self.navigationController pushViewController:v animated:YES];
+                    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                    }
+//                    [self.navigationController pushViewController:v animated:YES];
                 }else{
                     if (array.count < 1) {
                         [self showMistake];
@@ -722,14 +783,20 @@
                         [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
                             [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
                         }];
-                        [self.navigationController pushViewController:typeVc animated:YES];
+                        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:typeVc withObject:@"1"];
+                        }
+//                        [self.navigationController pushViewController:typeVc animated:YES];
                     }
                 }
             }else{
                 if (choosedType && choosedType.length > 0) {
                     installment_ViewController *v = [[installment_ViewController alloc] init];
                     v.payNum = payNum;
-                    [self.navigationController pushViewController:v animated:YES];
+                    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                    }
+//                    [self.navigationController pushViewController:v animated:YES];
                 }else{
                     if (array.count < 1) {
                         [self showMistake];
@@ -741,14 +808,20 @@
                         [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
                             [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
                         }];
-                        [self.navigationController pushViewController:typeVc animated:YES];
+                        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:typeVc withObject:@"1"];
+                        }
+//                        [self.navigationController pushViewController:typeVc animated:YES];
                     }
                 }
             }
         }
     }else{
         IdentifyingViewController *v = [[IdentifyingViewController alloc] init];
-        [self.navigationController pushViewController:v animated:YES];
+        if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+            [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+        }
+//        [self.navigationController pushViewController:v animated:YES];
     }
 }
 

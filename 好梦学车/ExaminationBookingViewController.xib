@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExaminationBookingViewController">
+            <connections>
+                <outlet property="tableView" destination="vEh-4x-Ik0" id="DYE-OP-US0"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hQ0-rW-3p2">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Jp-cf-Pkd">
+                            <rect key="frame" x="16" y="20" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="FJq-We-fYE"/>
+                                <constraint firstAttribute="width" constant="44" id="IUQ-Zt-bna"/>
+                            </constraints>
+                            <state key="normal" image="btn_back_white.png"/>
+                            <connections>
+                                <action selector="btnClick:" destination="-1" eventType="touchUpInside" id="3Ve-mP-jOK"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="考试预约" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7OS-ew-2On">
+                            <rect key="frame" x="112" y="20" width="150" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="150" id="CHe-rr-Lm6"/>
+                                <constraint firstAttribute="height" constant="44" id="V9z-sM-uBN"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.62745098040000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="2Jp-cf-Pkd" secondAttribute="bottom" id="2x2-Gf-YR9"/>
+                        <constraint firstItem="7OS-ew-2On" firstAttribute="centerX" secondItem="hQ0-rW-3p2" secondAttribute="centerX" id="4Vg-wK-gWy"/>
+                        <constraint firstItem="2Jp-cf-Pkd" firstAttribute="leading" secondItem="hQ0-rW-3p2" secondAttribute="leading" constant="16" id="CXD-NI-w3P"/>
+                        <constraint firstAttribute="height" constant="64" id="ETu-Ki-Gbf"/>
+                        <constraint firstAttribute="bottom" secondItem="7OS-ew-2On" secondAttribute="bottom" id="nBy-bF-3Ba"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请核对您的个人信息，如有问题，请联系客服：400000000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-qt-9Gb">
+                    <rect key="frame" x="0.0" y="64" width="375" height="40"/>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="t2t-yJ-X8K"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.60392156860000001" green="0.65098039220000004" blue="0.71764705880000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vEh-4x-Ik0">
+                    <rect key="frame" x="0.0" y="104" width="375" height="563"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="hQ0-rW-3p2" secondAttribute="trailing" id="7I4-ao-iOe"/>
+                <constraint firstItem="hQ0-rW-3p2" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="8Ll-w4-Wc5"/>
+                <constraint firstItem="vEh-4x-Ik0" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="BRC-L8-3Os"/>
+                <constraint firstItem="gaD-qt-9Gb" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="BRe-nk-WKR"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="vEh-4x-Ik0" secondAttribute="trailing" id="Yg8-L3-sY9"/>
+                <constraint firstItem="vEh-4x-Ik0" firstAttribute="top" secondItem="gaD-qt-9Gb" secondAttribute="bottom" id="fuA-U8-jnS"/>
+                <constraint firstItem="gaD-qt-9Gb" firstAttribute="top" secondItem="hQ0-rW-3p2" secondAttribute="bottom" id="gxD-u3-ABV"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="gaD-qt-9Gb" secondAttribute="trailing" id="ik5-1z-PBK"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="vEh-4x-Ik0" secondAttribute="bottom" id="sD4-mN-mXu"/>
+                <constraint firstItem="hQ0-rW-3p2" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="y2M-NA-mAQ"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="btn_back_white.png" width="14" height="24"/>
+    </resources>
+</document>

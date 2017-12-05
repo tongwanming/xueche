@@ -22,6 +22,8 @@
 #import "CustonNavViewController.h"
 #import "SuperFirstViewController.h"
 
+#import "SubjectOneCurrentViewController.h"
+
 // RGB颜色
 #define RGBColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
 
@@ -35,8 +37,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self addChildVc:[[SubjectOneCurrentViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
     
-    [self addChildVc:[[SuperFirstViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
+//    [self addChildVc:[[SuperFirstViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
 //    [self addChildVc:[[FirstViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
 //     [self addChildVc:[[ExerciseViewController alloc] init] title:@"题库" image:[self svgImageNamed:@"topic"] selectedImage:[self svgImageNamed:@"topic_click"] andHasNav:YES withFrame:CGRectMake(CURRENT_BOUNDS.width/4, 0, CURRENT_BOUNDS.width/4, 44)];
     [self addChildVc:[[PersonCenterViewController alloc] init] title:@"消息" image:[self svgImageNamed:@"message"] selectedImage:[self svgImageNamed:@"message_click"] andHasNav:YES withFrame:CGRectMake(CURRENT_BOUNDS.width/2, 0, CURRENT_BOUNDS.width/4, 44)];

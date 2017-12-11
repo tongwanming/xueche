@@ -15,8 +15,13 @@ typedef NS_ENUM(NSInteger, createNormalCellStyle) {
     createNormalCellStyleUserDdfinedTwo,//确认按钮
     createNormalCellStyleUserDdfinedThere,//上部分的部分，可带水印或者不带水印
     createNormalCellStyleUserDdfinedForth,//白色背景，文字，需要传入文字内容，大小，颜色
-    createNormalCellStyleUserDdfinedFifth,
-    
+    createNormalCellStyleUserDdfinedFifth,//文字为多行，切宽度是屏幕的3/5宽
+    createNormalCellStyleUserDdfinedSix,//错题和立即练题部分
+    createNormalCellStyleUserDdfinedSeven,//底部，需要传入文字颜色和背景颜色和文字颜色
+    createNormalCellStyleUserDdfinedEight,//悬空的错题和立即练题部分
+    createNormalCellStyleUserDdfinedTen,//场地第一个
+    createNormalCellStyleUserDdfinedEleven,//场地第二个
+    createNormalCellStyleUserDdfinedThreeth,//场地第三个
     
 //------------------------------------------------------
     createNormalCellStyleNormal,//文字剧中，需要传入文字颜色大小,只有文字
@@ -24,6 +29,7 @@ typedef NS_ENUM(NSInteger, createNormalCellStyle) {
     createNormalCellStyleValue1,
     createNormalCellStyleValue2,
     createNormalCellStyleSubtitle,
+    createNormalCellStyleBang,//显示考试成绩，需要传入分数
     createNormalCellStyleOnlyImageCenter,//一个cell 上就一个image，默认中间，自适应
     createNormalCellStyleOnlyImageNormal   //一个cell 上就一个image，可以定义image的位置，默认在最左边
 };
@@ -39,6 +45,7 @@ typedef NS_ENUM(NSInteger, createNormalCellStyle) {
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, assign) float titleFont;
 @property (nonatomic, strong) UIColor *color;
+@property (nonatomic, strong) UIColor *bgColor;
 
 
 @property (nonatomic, strong) NSString *detailTitle;
@@ -48,11 +55,14 @@ typedef NS_ENUM(NSInteger, createNormalCellStyle) {
 
 @property (nonatomic, strong) NSString *imageViewStr;
 @property (nonatomic, assign) UIViewContentMode contenModel;//显示图片的位置
-@property (nonatomic, assign) BOOL hasFootViewLine;
+@property (nonatomic, assign) BOOL hasFootViewLine;//是否有一横线 yes 没有。默认有
+@property (nonatomic, assign) BOOL hasDefalut;//默认为0 为0 的时候有两个显示区，为1的时候只有中间一个按钮
 
 @property (nonatomic, assign) float orginalX;
 
-@property (nonatomic, assign) float he;
+@property (nonatomic, assign) float he;//当前的高度
+
+@property (nonatomic, assign) float grade;//考试成绩
 
 
 

@@ -8,6 +8,12 @@
 
 #import "BasicViewController.h"
 
+typedef void(^TestSiteChoosedViewControllerBlock)(int n);
+
 @interface TestSiteChoosedViewController : BasicViewController
+
+@property (nonatomic, copy)TestSiteChoosedViewControllerBlock block;
+
+- (void)TestSiteChoosedViewControllerActive:(TestSiteChoosedViewControllerBlock)block;
 
 @end

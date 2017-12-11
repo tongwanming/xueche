@@ -9,6 +9,7 @@
 #import "SubjectOneViewControllera.h"
 
 #import "ChoosePayTypeCell.h"
+#import "TestAppointmentViewController.h"
 
 @interface SubjectOneViewControllera ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -180,7 +181,8 @@
 }
 
 -(void)btnClickActive:(UIButton *)btn{
-    
+    TestAppointmentViewController *v = [[TestAppointmentViewController alloc] init];
+    [self.navigationController pushViewController:v animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

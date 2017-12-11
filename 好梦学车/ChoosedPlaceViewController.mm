@@ -483,7 +483,7 @@
     [_mapView viewWillAppear];
     _mapView.delegate = self;
     _locServer.delegate = self;
-    
+    [self searchRouteWithFirstLocationModel:nil];
 }
 
 - (void)dealloc{
@@ -505,20 +505,32 @@
 }
 
 - (void)searchRouteWithFirstLocationModel:(FirstLocationModel *)model{
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (FirstLocationModel *model in _allExerciseLocationData) {
+        BMKPointAnnotation* annotation = [[BMKPointAnnotation alloc]init];
+        CLLocationCoordinate2D coor;
+        coor.latitude = [model.latitude doubleValue];
+        coor.longitude = [model.longitude doubleValue];
+        annotation.coordinate = coor;
+        [arr addObject:annotation];
+    }
+//    BMKPointAnnotation* annotation = [[BMKPointAnnotation alloc]init];
+//    CLLocationCoordinate2D coor;
+//    coor.latitude = [model.latitude doubleValue];
+//    coor.longitude = [model.longitude doubleValue];
+//    annotation.coordinate = coor;
+//
+//    //    annotation.title = @"这里是北京";
+//    [_mapView addAnnotation:annotation];
+    [_mapView addAnnotations:arr];
     
-    BMKPointAnnotation* annotation = [[BMKPointAnnotation alloc]init];
-    CLLocationCoordinate2D coor;
-    coor.latitude = [model.latitude doubleValue];
-    coor.longitude = [model.longitude doubleValue];
-    annotation.coordinate = coor;
-    //    annotation.title = @"这里是北京";
-    [_mapView addAnnotation:annotation];
-    
+    return;
     //初始化检索对象
     if (!_routSearch) {
         _routSearch = [[BMKRouteSearch alloc]init];
         _routSearch.delegate = self;
     }
+    return;
     //发起检索
     BMKPlanNode* start = [[BMKPlanNode alloc]init];
     //    start.name = @"龙头寺";
@@ -673,6 +685,7 @@
  */
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation {
     
+
     //如果是注释点
     if ([annotation isKindOfClass:[BMKPointAnnotation class]]) {
         
@@ -691,11 +704,11 @@
         NSLog(@"%@---titlr:%@",annotation,annotation.title);
         //设置图片
         
-//        newAnnotation.image = [UIImage imageNamed:@"icon_position1"];
+        newAnnotation.image = [UIImage imageNamed:@"icon_position1"];
         
         newAnnotation.canShowCallout = YES;
         
-        newAnnotation.frame = CGRectMake(0, 0, 30, 30);
+        newAnnotation.frame = CGRectMake(0, 0, 50, 50);
         if (annotation.title && [annotation.title isEqualToString:@"起点"]) {
             newAnnotation.selected = YES;
         }else{
@@ -709,6 +722,9 @@
     return nil;
 }
 
+- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view{
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

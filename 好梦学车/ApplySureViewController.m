@@ -7,6 +7,7 @@
 //
 
 #import "ApplySureViewController.h"
+#import "SubjectOneViewControllera.h"
 
 @interface ApplySureViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *btnView;
@@ -28,7 +29,8 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         //[self.navigationController popViewControllerAnimated:YES];
     }else if (btn.tag == 1002){
-    
+        SubjectOneViewControllera *v = [[SubjectOneViewControllera alloc] init];
+        [self.navigationController pushViewController:v animated:YES];
     }
 }
 

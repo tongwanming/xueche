@@ -783,6 +783,7 @@
                         [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
                             [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
                         }];
+                        
                         if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
                             [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:typeVc withObject:@"1"];
                         }
@@ -808,6 +809,7 @@
                         [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
                             [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
                         }];
+                       
                         if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
                             [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:typeVc withObject:@"1"];
                         }

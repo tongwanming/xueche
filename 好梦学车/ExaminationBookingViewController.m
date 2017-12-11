@@ -7,6 +7,7 @@
 //
 
 #import "ExaminationBookingViewController.h"
+#import "SubscribeTestViewController.h"
 
 #define footViewHeight 400
 
@@ -77,17 +78,28 @@
 
 
 - (UIView *)createFootView{
+
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, footViewHeight)];
     view.backgroundColor = [UIColor whiteColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, CURRENT_BOUNDS.width, 25)];
+    
+    UIImageView *topImagve = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"content_img_information"]];
+    topImagve.frame = CGRectMake(0, 0, CURRENT_BOUNDS.width, 8);
+//    topImagve.contentMode = UIViewContentModeScaleAspectFit;
+    [view addSubview:topImagve];
+    
+    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(topImagve.frame), CURRENT_BOUNDS.width, 15)];
+    topView.backgroundColor = EEEEEE;
+    [view addSubview:topView];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(topView.frame)+31, CURRENT_BOUNDS.width, 15)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.text = @"122平台登陆";
     titleLabel.textColor = TEXT_COLOR;
-    titleLabel.font = [UIFont boldSystemFontOfSize:25];
+    titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [view addSubview:titleLabel];
     
-    UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic03"]];
-    logoView.frame = CGRectMake((CURRENT_BOUNDS.width-200)/2*TYPERATION, CGRectGetMaxY(titleLabel.frame)+20, 50, 50);
+    UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_icon_account"]];
+    logoView.frame = CGRectMake((CURRENT_BOUNDS.width-200)/2*TYPERATION, CGRectGetMaxY(titleLabel.frame)+26, 15, 15);
 //    logoView.backgroundColor = [UIColor redColor];
     [view addSubview:logoView];
     
@@ -95,16 +107,16 @@
     lineView.backgroundColor = EEEEEE;
     [view addSubview:lineView];
     
-    UITextField *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoView.frame),  CGRectGetMaxY(titleLabel.frame)+20, 150, 40)];
+    UITextField *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoView.frame)+22,  CGRectGetMaxY(logoView.frame)-16, 150, 13)];
     textFiled.borderStyle = UITextBorderStyleNone;
     textFiled.textColor = UNMAIN_TEXT_COLOR;
-    textFiled.font = [UIFont systemFontOfSize:18];
+    textFiled.font = [UIFont systemFontOfSize:13];
     textFiled.textAlignment = NSTextAlignmentCenter;
     textFiled.placeholder = @"输入账号，身份证";
     [view addSubview:textFiled];
     
-    UIImageView *logoView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic03"]];
-    logoView1.frame = CGRectMake((CURRENT_BOUNDS.width-200)/2*TYPERATION, CGRectGetMaxY(logoView.frame)+20, 50, 50);
+    UIImageView *logoView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_icon_password"]];
+    logoView1.frame = CGRectMake((CURRENT_BOUNDS.width-200)/2*TYPERATION, CGRectGetMaxY(logoView.frame)+20, 15, 15);
 //    logoView1.backgroundColor = [UIColor redColor];
     [view addSubview:logoView1];
     
@@ -112,10 +124,10 @@
     lineView1.backgroundColor = EEEEEE;
     [view addSubview:lineView1];
     
-    UITextField *textFiled1 = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoView.frame),  CGRectGetMaxY(logoView.frame)+20, 150, 40)];
+    UITextField *textFiled1 = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoView.frame)+22,  CGRectGetMaxY(logoView1.frame)-16, 150, 13)];
     textFiled1.borderStyle = UITextBorderStyleNone;
     textFiled1.textColor = UNMAIN_TEXT_COLOR;
-    textFiled1.font = [UIFont systemFontOfSize:18];
+    textFiled1.font = [UIFont systemFontOfSize:13];
     textFiled1.textAlignment = NSTextAlignmentCenter;
     textFiled1.placeholder = @"输入密码";
     [view addSubview:textFiled1];
@@ -132,9 +144,9 @@
     [view addSubview:logoBtn];
     
     UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(logoBtn.frame)+20, CURRENT_BOUNDS.width, 18)];
-    tipsLabel.font = [UIFont systemFontOfSize:12];
+    tipsLabel.font = [UIFont systemFontOfSize:11];
     tipsLabel.textAlignment = NSTextAlignmentCenter;
-    tipsLabel.textColor = UNMAIN_TEXT_COLOR;
+    tipsLabel.textColor = ADB1B9;
     tipsLabel.text = @"请根据12123500（重庆交巡警）发送的短信内容进行登录";
     [view addSubview:tipsLabel];
     
@@ -142,7 +154,8 @@
 }
 
 - (void)logoBtnClick:(UIButton *)btn{
-    
+    SubscribeTestViewController *v = [[SubscribeTestViewController alloc] init];
+    [self.navigationController pushViewController:v animated:YES];
     NSLog(@"btn Click");
 }
 

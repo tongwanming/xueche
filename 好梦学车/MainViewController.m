@@ -23,6 +23,7 @@
 #import "SuperFirstViewController.h"
 
 #import "SubjectOneCurrentViewController.h"
+#import "testOneViewController.h"
 
 // RGB颜色
 #define RGBColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
@@ -37,7 +38,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self addChildVc:[[SubjectOneCurrentViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
+    [self addChildVc:[[testOneViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
     
 //    [self addChildVc:[[SuperFirstViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];
 //    [self addChildVc:[[FirstViewController alloc] init] title:@"首页" image:[self svgImageNamed:@"homepage"] selectedImage:[self svgImageNamed:@"homepage_click"] andHasNav:YES withFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width/4, 44)];

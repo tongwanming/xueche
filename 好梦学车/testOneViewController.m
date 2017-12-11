@@ -19,6 +19,10 @@
 
 #import "SubjectOneViewControllera.h"
 
+#import "SubscribeTestViewController.h"
+#import "DriveAppraiseViewController.h"
+
+
 @interface testOneViewController ()
 
 @end
@@ -28,12 +32,12 @@
     UIButton *btn = sender;
     switch (btn.tag) {
         case 1001:{
-            ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
+            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
             [self.navigationController pushViewController:v animated:YES];
         }
             break;
         case 1002:{
-            CheckMedicalStationViewController *v = [[CheckMedicalStationViewController alloc] init];
+            TestSiteChoosedViewController *v = [[TestSiteChoosedViewController alloc] init];
             [self.navigationController pushViewController:v animated:YES];
         }
             break;

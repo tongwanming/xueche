@@ -59,7 +59,7 @@
         NSAttributedString *attributedString = [NSAttributedString attributedStringWithAttachment:attachement];
         [mutAttributedStr appendAttributedString:attributedString];
     }
-    NSMutableAttributedString *attributedStra = [[NSMutableAttributedString alloc] initWithString:otherStr attributes:nil];
+    NSMutableAttributedString *attributedStra = [[NSMutableAttributedString alloc] initWithString:firstStr attributes:nil];
     [mutAttributedStr appendAttributedString:attributedStra];
     
     

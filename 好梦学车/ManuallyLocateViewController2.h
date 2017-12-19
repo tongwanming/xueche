@@ -7,7 +7,16 @@
 //
 
 #import "BasicViewController.h"
+#import <BaiduMapAPI_Utils/BMKGeometry.h>
+
+typedef void(^ManuallLocateBlock)(NSArray *,CLLocationCoordinate2D);
 
 @interface ManuallyLocateViewController2 : BasicViewController
+
+@property (nonatomic, strong) NSString *current;//为@“1”是新版本，nil 或则@“”为老版本
+
+@property (nonatomic, copy)ManuallLocateBlock block;
+
+- (void)manuallBlokcWithBlock:(void(^)(NSArray *data,CLLocationCoordinate2D p))block;
 
 @end

@@ -22,7 +22,7 @@
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VgZ-Sg-kYc">
                         <rect key="frame" x="0.0" y="88.5" width="371" height="15"/>
-                        <color key="backgroundColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.96078431372549022" green="0.96470588235294119" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="8bL-CB-t0F"/>
                         </constraints>
@@ -46,7 +46,7 @@
                         <color key="textColor" red="0.4039215686" green="0.43137254899999999" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e7V-zt-zrV">
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e7V-zt-zrV">
                         <rect key="frame" x="255" y="17" width="100" height="50"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="TMk-Zj-rXB"/>
@@ -55,6 +55,9 @@
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <inset key="imageEdgeInsets" minX="50" minY="10" maxX="0.0" maxY="10"/>
                         <state key="normal" image="testPhone.png"/>
+                        <connections>
+                            <action selector="btnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Sws-WI-ycc"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
@@ -77,6 +80,11 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="addressLabel" destination="3Nf-qS-HgS" id="oSN-LE-bF5"/>
+                <outlet property="btn" destination="e7V-zt-zrV" id="ycT-1q-hI3"/>
+                <outlet property="nameLabel" destination="ts9-5j-hTH" id="Ir2-du-78d"/>
+            </connections>
             <point key="canvasLocation" x="59.5" y="84"/>
         </tableViewCell>
     </objects>

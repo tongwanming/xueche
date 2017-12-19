@@ -11,6 +11,10 @@
 #import "TestSiteChoosedViewController.h"
 #import "ApplySureViewController.h"
 #import "ChoosedDateBtn.h"
+#import "URLConnectionHelper.h"
+#import "NSDictionary+objectForKeyWitnNoNsnull.m"
+#import "CustomAlertView.h"
+
 
 typedef void(^SubscribeOneBlock)(UIButton *btn);
 
@@ -255,8 +259,15 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
         if (!cell) {
             cell = [[SubscribeTableViewCell1 alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ind];
         }
+       
         [((SubscribeTableViewCell1*)cell) SubscribeOneBlockActiveWithBlock:^(UIButton *btn) {
             TestSiteChoosedViewController *v = [[TestSiteChoosedViewController alloc] init];
+            
+            v.kskm = _kskm;
+            v.userName = _userName;
+            [v TestSiteChoosedViewControllerActive:^(TestSiteChoosedModel *model) {
+                [self getDataWithModel:model];
+            }];
             [self.navigationController pushViewController:v animated:YES];
         }];
     }else if (indexPath.row == 1){
@@ -300,10 +311,35 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
     return v;
 }
 
+- (void)getDataWithModel:(TestSiteChoosedModel *)model{
+    [CustomAlertView showAlertViewWithVC:self];
+    NSDictionary *dic = @{ @"addressCode": model.xh,
+                          @"endTime": model.endTime,
+                          @"startTime": model.startTime,
+                          @"username": @"500236199108066674"};
+    NSString *url = @"http://172.31.101.233:7080/student/exam/time";
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
+        NSLog(@"%@",data);
+        dispatch_async(dispatch_get_main_queue(), ^{
+             [CustomAlertView hideAlertView];
+        });
+       
+        
+       
+        
+        
+    } andFiledBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        });
+    }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 /*
 #pragma mark - Navigation

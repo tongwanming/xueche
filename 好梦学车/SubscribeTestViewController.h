@@ -10,4 +10,8 @@
 
 @interface SubscribeTestViewController : BasicViewController
 
+@property (nonatomic, strong) NSString *userName;
+
+@property (nonatomic, strong) NSString *kskm;
+
 @end

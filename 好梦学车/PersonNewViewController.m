@@ -163,6 +163,13 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     _locationData = [DefaultManager shareDefaultManager].locationData;
     _carStyleData = [DefaultManager shareDefaultManager].carStyleData;
+    if (@available(iOS 11.0, *)) {
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
+   
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -274,6 +281,12 @@
         [showQRCodelBtn setImage:[UIImage imageNamed:@"icon_me_erweima"] forState:UIControlStateNormal];
         [showQRCodelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:showQRCodelBtn];
+        if (@available(iOS 11.0, *)) {
+            settingBtn.frame = CGRectMake(CURRENT_BOUNDS.width-16-44, 60, 44, 44);
+            showQRCodelBtn.frame = CGRectMake(CURRENT_BOUNDS.width-16-44-44, 60, 44, 44);
+        } else {
+            // Fallback on earlier versions
+        }
         
     }else{
     

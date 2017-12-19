@@ -22,4 +22,10 @@
 //不添加Token的post请求
 - (void)loadPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andFiledBlock:(void(^)(NSError *error))failedBlock;
 
+//不添加Token的post请求
+- (void)loadPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andDicFiledBlock:(void(^)(NSDictionary *dic))failedBlock;
+
+//get请求
+- (void)loadGetDataWithUrl:(NSString *)urlStr andSuccessBlock:(void(^)(NSArray *data))successBlock andFiledBlock:(void(^)(NSError *error))failedBlock;
+
 @end

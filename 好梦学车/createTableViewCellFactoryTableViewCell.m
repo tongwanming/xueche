@@ -131,12 +131,20 @@
             }
                 break;
             case createNormalCellStyleUserDdfinedTwo:{
+                UIView *backView;
+                if (model.hasDefalut) {
+                    backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, model.he)];
+                    backView.backgroundColor = [UIColor whiteColor];
+                    
+                    [self addSubview:backView];
+                }else{
+                    backView = [[UIView alloc] initWithFrame:CGRectMake(LEFT_INTEVAL*TYPERATION, 0, CURRENT_BOUNDS.width-LEFT_INTEVAL*TYPERATION*2, model.he)];
+                    backView.backgroundColor = [UIColor whiteColor];
+                    backView.layer.masksToBounds = YES;
+                    backView.layer.cornerRadius = 8;
+                    [self addSubview:backView];
+                }
                 
-                UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(LEFT_INTEVAL*TYPERATION, 0, CURRENT_BOUNDS.width-LEFT_INTEVAL*TYPERATION*2, model.he)];
-                backView.backgroundColor = [UIColor whiteColor];
-                backView.layer.masksToBounds = YES;
-                backView.layer.cornerRadius = 8;
-                [self addSubview:backView];
                 
                 UIView *backView1 = [[UIView alloc] initWithFrame:CGRectMake(LEFT_INTEVAL*TYPERATION, 0, CURRENT_BOUNDS.width-LEFT_INTEVAL*TYPERATION*2, 10)];
                 backView1.backgroundColor = [UIColor whiteColor];
@@ -152,6 +160,7 @@
                 [sureBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
                 sureBtn.layer.masksToBounds = YES;
                 sureBtn.layer.cornerRadius = 20;
+                sureBtn.titleLabel.font = [UIFont systemFontOfSize:14];
                 [self addSubview:sureBtn];
                 
                 if (model.detailTitle) {
@@ -400,7 +409,41 @@
                 
             }
                 break;
+            case createNormalCellStyleNormal1:{
+                self.backgroundColor = [UIColor whiteColor];
+                UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(20*TYPERATION, 15, 150, model.he)];
+                titleLabel1.text = model.title;
+                titleLabel1.font = [UIFont systemFontOfSize:model.titleFont];
+                titleLabel1.textColor = model.color;
+                titleLabel1.textAlignment = NSTextAlignmentLeft;
+                [self addSubview:titleLabel1];
                 
+                UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(CURRENT_BOUNDS.width-20*TYPERATION-200, 15, 200, model.he)];
+                titleLabel2.font = [UIFont systemFontOfSize:model.titleFont];
+                titleLabel2.attributedText = model.AttributedStr;
+                titleLabel2.textAlignment = NSTextAlignmentRight;
+                [self addSubview:titleLabel2];
+                
+                UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20*TYPERATION, model.he-1, CURRENT_BOUNDS.width-20*TYPERATION*2, 1)];
+                lineView.backgroundColor = EEEEEE;
+                [self addSubview:lineView];
+            }
+                break;
+                
+            case createNormalCellStyleUserDdfinedWhite:{
+                UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, model.he)];
+                bgView.backgroundColor = [UIColor whiteColor];
+                [self addSubview:bgView];
+                
+                UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(20*TYPERATION, 15, CURRENT_BOUNDS.width-20*TYPERATION*2, model.he-15)];
+                titleLabel2.textColor = model.color;
+                titleLabel2.font = [UIFont systemFontOfSize:model.titleFont];
+                titleLabel2.attributedText = model.AttributedStr;
+                titleLabel2.textAlignment = NSTextAlignmentCenter;
+                titleLabel2.numberOfLines = 2;
+                [bgView addSubview:titleLabel2];
+            }
+                break;
             default:
                 break;
         }

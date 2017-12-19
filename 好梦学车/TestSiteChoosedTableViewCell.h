@@ -7,6 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TestSiteChoosedModel.h"
+
+
+typedef void(^TestSiteChoosedBlock)(TestSiteChoosedModel *);
 
 @interface TestSiteChoosedTableViewCell : UITableViewCell
 
@@ -19,5 +23,14 @@
 + (id)cellWithTableToDequeueReusable:(UITableView *)table
                           identifier:(NSString *)identifier
                              nibName:(NSString *)nibName;
+@property (nonatomic, strong) TestSiteChoosedModel *model;
+
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *addressLabel;
+@property (weak, nonatomic) IBOutlet UIButton *btn;
+
+@property (nonatomic, copy) TestSiteChoosedBlock block;
+
+- (void)TestSiteChoosedActive:(void(^)(TestSiteChoosedModel *model))block;
 
 @end

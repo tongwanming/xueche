@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+//此为创建各种cell的数据模型
+
 typedef NS_ENUM(NSInteger, createNormalCellStyle) {
     //此处为自定的cell
     createNormalCellStyleUserDdfinedOne,//学习时长和累积学习时间
@@ -22,6 +24,8 @@ typedef NS_ENUM(NSInteger, createNormalCellStyle) {
     createNormalCellStyleUserDdfinedTen,//场地第一个
     createNormalCellStyleUserDdfinedEleven,//场地第二个
     createNormalCellStyleUserDdfinedThreeth,//场地第三个
+    createNormalCellStyleUserDdfinedWhite,//白底的cell  超文本
+    createNormalCellStyleUserDdfinedAppointment,//预约考试的界面cell
     
 //------------------------------------------------------
     createNormalCellStyleNormal,//文字剧中，需要传入文字颜色大小,只有文字

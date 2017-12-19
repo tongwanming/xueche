@@ -16,8 +16,10 @@
 
 @implementation ApplyLocationViewController
 - (IBAction)btnclick:(id)sender {
-    
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated{

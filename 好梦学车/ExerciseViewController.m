@@ -22,7 +22,7 @@
 #import "SubjectOneCheatsViewController.h"
 #import "SubjectOneTrafficSignViewController.h"
 #import "SubjectOneRegulationsViewController.h"
-#import "SamailerImgBtn.h"
+#import "NavigationBtn.h"
 #import "SubjectRecordViewController.h"
 //科目二
 #import "SubjectTwoViewController.h"
@@ -101,10 +101,11 @@
     myScrollView.backgroundColor = [UIColor clearColor];
      self.navigationItem.titleView = myScrollView;
     
-    SamailerImgBtn *rightBtn = [SamailerImgBtn buttonWithType:UIButtonTypeCustom];
-    [rightBtn setImage:[UIImage imageNamed:@"nav_btn_service"] forState:UIControlStateNormal];
+    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rightBtn setImage:[UIImage imageNamed:@"index_go"] forState:UIControlStateNormal];
 //    rightBtn.backgroundColor = [UIColor redColor];
     [rightBtn addTarget:self action:@selector(rightBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     rightBtn.frame = CGRectMake(0, 0, 50*TYPERATION, 50*TYPERATION);
     UIBarButtonItem *rightBtna = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     self.navigationItem.rightBarButtonItem = rightBtna;
@@ -141,10 +142,13 @@
 }
 
 - (void)rightBtnClick:(UIButton *)btn{
-    SubjectTwoPopWebViewController *v = [[SubjectTwoPopWebViewController alloc] init];
-    v.url = @"https://eco-api.meiqia.com/dist/standalone.html?eid=10708";
-    v.titleStr = @"在线咨询";
-    [self.navigationController pushViewController:v animated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+//    SubjectTwoPopWebViewController *v = [[SubjectTwoPopWebViewController alloc] init];
+//    v.url = @"https://eco-api.meiqia.com/dist/standalone.html?eid=10708";
+//    v.titleStr = @"在线咨询";
+//    [self.navigationController pushViewController:v animated:YES];
 }
 
 #pragma mark - myScrollViewDelegate

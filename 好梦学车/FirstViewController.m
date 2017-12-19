@@ -45,6 +45,7 @@
 #import "ApplyOrderViewController.h"
 #import "AppDelegate.h"
 #import "URLConnectionHelper.h"
+#import "SubjectOneCurrentViewController.h"
 
 @interface FirstNavRightBtn : UIButton
 
@@ -161,6 +162,11 @@
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.showsVerticalScrollIndicator = NO;
+    if (@available(iOS 11.0, *)) {
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
 //    _tableView.backgroundColor = [UIColor redColor];
     [self.view addSubview:_tableView];
     [self.view addSubview:_topView];
@@ -809,6 +815,8 @@
                         [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
                             [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
                         }];
+//                        SubjectOneCurrentViewController *typeVc = [[SubjectOneCurrentViewController alloc] init];
+//                        typeVc.locationData = array;
                        
                         if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
                             [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:typeVc withObject:@"1"];

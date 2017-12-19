@@ -19,7 +19,7 @@
 #import <BaiduMapAPI_Search/BMKRouteSearch.h>
 #import <BaiduMapAPI_Search/BMKRouteSearchOption.h>
 #import <BaiduMapAPI_Search/BMKRouteSearchType.h>
-#import <BaiduMapAPI_Utils/BMKGeometry.h>
+
 #import "SearchModel.h"
 #import "FirstLocationModel.h"
 #import "CustomAlertView.h"
@@ -337,18 +337,23 @@
                     }
                     
                     __weak typeof(self) wSelf = self;
+                    if (_current && [_current isEqualToString:@"1"]) {
+                        if (_block) {
+                            _block(_dataArray,pt);
+                        }
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    }else{
+                        //预选场地
+                        ChoosedPlaceViewController *typeVc = [[ChoosedPlaceViewController alloc] init];
+                        typeVc.allExerciseLocationData = _dataArray;
+                        typeVc.isByPersonVC = YES;
+                        typeVc.currentLocation = model.pt;
+                        typeVc.isHasSearch = YES;
+                        
+                        self.navigationController.navigationBar.hidden = NO;
+                        [self.navigationController pushViewController:typeVc animated:YES];
+                    }
                     
-                    //预选场地
-                    ChoosedPlaceViewController *typeVc = [[ChoosedPlaceViewController alloc] init];
-                    typeVc.allExerciseLocationData = _dataArray;
-                    typeVc.isByPersonVC = YES;
-                    typeVc.currentLocation = model.pt;
-                    typeVc.isHasSearch = YES;
-//                    [typeVc returnHasChooedExercisePlaceBlock:^(FirstLocationModel *place) {
-//                        [[OrderValidityManager defaultManager] saveCurrentPlaceID:place.currentId];
-//                    }];
-                    self.navigationController.navigationBar.hidden = NO;
-                    [self.navigationController pushViewController:typeVc animated:YES];
         
                 });
                 
@@ -361,6 +366,9 @@
         }
     }];
     [dataTask resume];
+}
+- (void)manuallBlokcWithBlock:(void (^)(NSArray *, CLLocationCoordinate2D))block{
+    _block = block;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -73,7 +73,7 @@
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     
-    _collectView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, [UIScreen mainScreen].bounds.size.height - 104) collectionViewLayout:layout];
+    _collectView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, [UIScreen mainScreen].bounds.size.height-64) collectionViewLayout:layout];
     _collectView.delegate = self;
     _collectView.dataSource = self;
     _collectView.showsVerticalScrollIndicator = NO;

@@ -22,10 +22,29 @@
     UITableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil] objectAtIndex:0];
     return cell;
 }
+- (void)TestSiteChoosedActive:(void (^)(TestSiteChoosedModel *))block{
+    _block = block;
+}
+
+- (void)setModel:(TestSiteChoosedModel *)model{
+    _model = model;
+    _nameLabel.text = model.name;
+    _addressLabel.text = model.address;
+    if ([model.phone isEqualToString:@""]) {
+        _btn.enabled = NO;
+    }else{
+        _btn.enabled = YES;
+    }
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+}
+- (IBAction)btnClick:(id)sender {
+    if (_block) {
+        _block(_model);
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

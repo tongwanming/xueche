@@ -7,13 +7,18 @@
 //
 
 #import "BasicViewController.h"
+#import "TestSiteChoosedModel.h"
 
-typedef void(^TestSiteChoosedViewControllerBlock)(int n);
+typedef void(^TestSiteChoosedViewControllerBlock)(TestSiteChoosedModel *);
 
 @interface TestSiteChoosedViewController : BasicViewController
 
+@property (nonatomic, strong) NSString *kskm;
+
+@property (nonatomic, strong) NSString *userName;
+
 @property (nonatomic, copy)TestSiteChoosedViewControllerBlock block;
 
-- (void)TestSiteChoosedViewControllerActive:(TestSiteChoosedViewControllerBlock)block;
+- (void)TestSiteChoosedViewControllerActive:(void(^)(TestSiteChoosedModel *model))block;
 
 @end

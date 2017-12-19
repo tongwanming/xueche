@@ -14,21 +14,53 @@
 #import "CheckMedicalStationViewController.h"
 #import "ApplyLocationViewController.h"
 #import "TestMapTableViewCell.h"
+#import "ManuallyLocateViewController2.h"
+#import "ExaminationAppointmentTableViewCell.h"
+#import "CreateViewByDataAvtive.h"
+
+#import "URLConnectionHelper.h"
+#import "NSDictionary+objectForKeyWitnNoNsnull.m"
+#import "CustomAlertView.h"
+#import "ExaminationBookingViewController.h"
+#import "ExerciseViewController.h"
 
 @interface SubjectOneCurrentViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *data;
+
+@property (nonatomic, strong)FirstLocationModel *locationModela;
+
+@property (nonatomic, strong)ProgressDataModel *currentModel;
 @end
 
 @implementation SubjectOneCurrentViewController{
     int _n;
+    NSMutableDictionary *_dic;
+    CLLocationCoordinate2D _p;
 }
 - (IBAction)click:(id)sender {
     NSLog(@"点击按钮 当前的n值：%d",_n);
-   
     
-    
+    NSArray *arr1 = @[@"0",@"0",@"1",@"1",@"2",@"2",@"2",@"2",@"2",@"3",@"3",@"3",@"3",@"3",@"3",@"4",@"4",@"4",@"4"];
+    NSArray *arr2 = @[@"0",@"1",@"0",@"1",@"0",@"1",@"2",@"3",@"4",@"0",@"1",@"2",@"3",@"4",@"5",@"0",@"1",@"2",@"3"];
+    if (_data.count > 0) {
+        [_data removeAllObjects];
+    }
+    _tableView.scrollEnabled = YES;
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:arr1[_n] andSubProgress:arr2[_n] andBlock:^(NSMutableArray *add) {
+        _currentModel.periodNum = arr1[_n];
+        _currentModel.status = arr2[_n];
+        _data = add;
+        createNormalCellModel *model = add[0];
+        _progressImageView.image = [UIImage imageNamed:model.imageViewStr];
+        [_tableView reloadData];
+    }];
+    _n+=1;
+    if (_n == arr2.count) {
+        _n = 0;
+    }
+    return;
     switch (_n) {
         case 1:
             [self getData];
@@ -59,22 +91,26 @@
             break;
     }
    
-    _n+=1;
-    if (_n == 9) {
+    
+    if (_n == 5) {
         _n =1;
     }
+    _n+=1;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _n = 2;
+    _n = 1;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    _dic = [[NSMutableDictionary alloc] init];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     _data = [[NSMutableArray alloc] init];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.scrollEnabled = NO;
+//    _tableView.scrollEnabled = NO;
     self.view.backgroundColor = EEEEEE;
-    [self getDataTen];
+//    [self getData];
+    [self getDataAvite];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -83,11 +119,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _data.count;
+    return _data.count-1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    createNormalCellModel *modle = _data[indexPath.row];
+    createNormalCellModel *modle = _data[indexPath.row+1];
     return modle.he;
 }
 
@@ -96,11 +132,55 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell;
     static NSString *index = @"";
-    createNormalCellModel *model = _data[indexPath.row];
+    createNormalCellModel *model = _data[indexPath.row+1];
     if (model.style == createNormalCellStyleUserDdfinedTen) {
-        cell = [TestMapTableViewCell cellWithTableToDequeueReusable:tableView identifier:index nibName:@"TestMapTableViewCell"];
+        cell = [_dic objectForKey:@"map"];
+        if (!cell) {
+            cell = [TestMapTableViewCell cellWithTableToDequeueReusable:tableView identifier:@"TestMapTableViewCell" nibName:@"TestMapTableViewCell"];
+            [_dic setObject:cell forKey:@"map"];
+        }
+        ((TestMapTableViewCell *)cell).pt = _p;
+        ((TestMapTableViewCell *)cell).data = _locationData;
+        ((TestMapTableViewCell *)cell).subVC = self;        
+        [((TestMapTableViewCell *)cell) blcokActiveWithBlock:^(UIButton *btn, FirstLocationModel *model) {
+            if (btn.tag == 1001) {
+                ManuallyLocateViewController2 *v = [[ManuallyLocateViewController2 alloc] init];
+                v.current = @"1";
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+                [v manuallBlokcWithBlock:^(NSArray *data, CLLocationCoordinate2D p) {
+                    _p = p;
+                    _locationData = data;
+                    [_tableView reloadData];
+                }];
+            }else if (btn.tag == 1002){
+                [self showNavigationWithModel:model];
+            }else if (btn.tag == 1003){
+                [self getDataEleven];
+            }else{
+                
+            }
+        }];
+       
+    }else if (model.style == createNormalCellStyleUserDdfinedAppointment){
+        cell = [_dic objectForKey:@"appointment"];
+        if (!cell) {
+            cell = [ExaminationAppointmentTableViewCell cellWithTableToDequeueReusable:tableView identifier:@"ExaminationAppointmentTableViewCell" nibName:@"ExaminationAppointmentTableViewCell"];
+            [_dic setObject:cell forKey:@"appointment"];
+        }
+        [((ExaminationAppointmentTableViewCell *)cell) ExaminationAppointmentWithBlock:^(UIButton *btn) {
+            if (btn.tag == 1001) {
+                
+            }else if (btn.tag == 1002){
+                
+            }else{
+                
+            }
+        }];
+        
     }else{
-      cell  = [createTableViewHander createTableViewWithModel:_data[indexPath.row]];
+      cell  = [createTableViewHander createTableViewWithModel:_data[indexPath.row+1]];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -108,32 +188,252 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (_n == 2) {
-        if (indexPath.row == _data.count-2) {
-            ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
-            [self.navigationController pushViewController:v animated:YES];
+    NSLog(@"%@---%@---%@",_currentModel.periodNum,_currentModel.status,@(indexPath.row));
+    //报名
+    if ([_currentModel.periodNum isEqualToString:@"0"]) {
+        if ([_currentModel.status isEqualToString:@"0"]) {
+            if (indexPath.row == 3) {
+                CheckMedicalStationViewController *v = [[CheckMedicalStationViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+            if (indexPath.row == 14) {
+                ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+        }else if ([_currentModel.status isEqualToString:@"1"]){
+            if (indexPath.row == 11) {
+                ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+        }else if ([_currentModel.status isEqualToString:@"2"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"3"]){
+            
+        }else{
+            
         }
-    }
-    
-    if (_n == 3) {
-        if (indexPath.row == 3) {
-            CheckMedicalStationViewController *v = [[CheckMedicalStationViewController alloc] init];
-            [self.navigationController pushViewController:v animated:YES];
+        //入籍
+    }else if ([_currentModel.periodNum isEqualToString:@"1"]){
+        if ([_currentModel.status isEqualToString:@"0"]) {
+            if (indexPath.row == 3) {
+                //入籍资格审核
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"您的驾驶员报考资料将上传到122系统进行审核，审核通过后，您可预约考试。"];
+                }
+               
+            }
+            if (indexPath.row == 4) {
+                //考试资格
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"西培学堂是重庆交管部门指定的科目一学习平台。"];
+                }
+              
+            }
+            if (indexPath.row == 5) {
+                //描述
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"您的入籍资料将上传到成为系统进行审核，审核通过后，您会收到西培学堂的短信，您即可开始预约科目的学习。"];
+                }
+                
+            }
+            if (indexPath.row == 6) {
+                //下载西培学堂
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"3"];
+                }
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/%E8%A5%BF%E5%9F%B9%E5%AD%A6%E5%A0%82/id1189867693?mt=8"]];
+            }
+            
+        }else if ([_currentModel.status isEqualToString:@"1"]){
+            if (indexPath.row == 3) {
+                //拨打电话
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"4"];
+                }
+            }
+            if (indexPath.row == 4) {
+                //下载西培学堂
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"3"];
+                }
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/%E8%A5%BF%E5%9F%B9%E5%AD%A6%E5%A0%82/id1189867693?mt=8"]];
+            }
+        }else if ([_currentModel.status isEqualToString:@"2"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"3"]){
+            
+        }else{
+            
         }
-        if (indexPath.row == _data.count -2) {
-            ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
-            [self.navigationController pushViewController:v animated:YES];
+        //科目一
+    }else if ([_currentModel.periodNum isEqualToString:@"2"]){
+        if ([_currentModel.status isEqualToString:@"0"]) {
+            if (indexPath.row == 2) {
+                //立即练题
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+        }else if ([_currentModel.status isEqualToString:@"1"]){
+            if (indexPath.row == 2) {
+                //立即练题
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            if (indexPath.row == 5) {
+                //立即约考
+                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+        }else if ([_currentModel.status isEqualToString:@"2"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"3"]){
+            if (indexPath.row == 2) {
+                //立即练题
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            if (indexPath.row == 6) {
+                //预约考试
+                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+        }else if ([_currentModel.status isEqualToString:@"4"]){
+            if (indexPath.row == 4) {
+                //开始科目二的学习
+            }
+            
+        }else{
+            
         }
-    }
-    if (_n == 4) {
-        if (indexPath.row == _data.count-2) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/%E8%A5%BF%E5%9F%B9%E5%AD%A6%E5%A0%82/id1189867693?mt=8"]];
+        //科目二
+    }else if ([_currentModel.periodNum isEqualToString:@"3"]){
+        if ([_currentModel.status isEqualToString:@"0"]) {
+            
+        }else if ([_currentModel.status isEqualToString:@"1"]){
+            if (indexPath.row == 3) {
+                //考试场地导航
+            }
+            
+            if (indexPath.row == 5) {
+                //联系电话
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"4"];
+                }
+            }
+        }else if ([_currentModel.status isEqualToString:@"2"]){
+            if (indexPath.row == 2) {
+                //科目二的视频学习
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+            if (indexPath.row == 4) {
+                //查看打卡累积
+            }
+            if (indexPath.row == 6) {
+                //立即约考
+                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+        }else if ([_currentModel.status isEqualToString:@"3"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"4"]){
+            if (indexPath.row == 2) {
+                //观看视频
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            if (indexPath.row == 6) {
+                //继续练车
+            }
+        }else if ([_currentModel.status isEqualToString:@"5"]){
+            if (indexPath.row == 4) {
+                //开始科目三的学习
+            }
+        }else{
+            
         }
-    }
-    if (_n == 5) {
-        if (indexPath.row == _data.count-2) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/%E8%A5%BF%E5%9F%B9%E5%AD%A6%E5%A0%82/id1189867693?mt=8"]];
+        //科目三
+    }else if ([_currentModel.periodNum isEqualToString:@"4"]){
+        if ([_currentModel.status isEqualToString:@"0"]) {
+            if (indexPath.row == 2) {
+                //科目三的学习
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+            if (indexPath.row == 4) {
+                //查看打卡记录
+            }
+            if (indexPath.row == 6) {
+                //立即约考
+                
+            }
+            
+        }else if ([_currentModel.status isEqualToString:@"1"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"2"]){
+            if (indexPath.row == 2) {
+                //科目三的学习
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+           
+            if (indexPath.row == 6) {
+                //再次练车
+            }
+        }else if ([_currentModel.status isEqualToString:@"3"]){
+            if (indexPath.row == 4) {
+                //进入科目四
+            }
+        }else{
+            
         }
+        //科目四
+    }else if ([_currentModel.periodNum isEqualToString:@"5"]){
+        if ([_currentModel.status isEqualToString:@"0"]) {
+            
+        }else if ([_currentModel.status isEqualToString:@"1"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"2"]){
+            
+        }else if ([_currentModel.status isEqualToString:@"3"]){
+            
+        }else{
+            
+        }
+    }else{
+        
     }
 }
 
@@ -141,121 +441,13 @@
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_one",@"",@"content_img_watermark",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@100,@100,@20,@100,@40,@20,@40,@20,@20,@40,@20,@20,@100,@40];
-    NSArray *title = @[@"",@"当前进度:科目一学时",@"恭喜你缴费成功！",@"查询体检站",@"",@"体检完成后",@"",@"",@"",@"",@"",@"",@"",@"",@"查询报名点",@""];
+    _tableView.scrollEnabled = YES;
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"1" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
+        _data = add;
+        [_tableView reloadData];
+    }];
     
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.detailTitle = @"请前往就近体检站体检";
-                model.hasFootViewLine = YES;
-            }
-                break;
-            case 3:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 5:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.detailTitle = @"请携带以下资料前往好梦报名点报名";
-            }
-                break;
-            case 6:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"本地身份证请携带：" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                
-                break;
-            case 7:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithImage:[UIImage imageNamed:@"note_star"] andWithStr:@"身份证  " andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 8:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"增加请携带：" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 9:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithImage:[UIImage imageNamed:@"note_star"] andWithStr:@"身份证  " andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 10:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 11:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"外地身份证请携带：" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 12:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithImage:[UIImage imageNamed:@"note_star"] andWithStr:@"身份证  " andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 13:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"暂住证明或居住证" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 14:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-            case 15:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
+    
     
 }
 
@@ -263,105 +455,13 @@
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_one",@"",@"content_img_watermark",@"",@"",@"",@"",@"",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@100,@40,@20,@40,@20,@20,@40,@20,@20,@100,@40];
-    NSArray *title = @[@"",@"当前进度:科目一学时",@"恭喜你缴费成功！",@"",@"",@"",@"",@"",@"",@"",@"",@"查询报名点",@""];
-   
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.detailTitle = @"请携带以下资料前往好梦报名点报名";
-            }
-                break;
-            case 3:{
-              model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"本地身份证请携带：" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 4:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithImage:[UIImage imageNamed:@"note_star"] andWithStr:@"身份证  " andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 5:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"增加请携带：" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 6:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithImage:[UIImage imageNamed:@"note_star"] andWithStr:@"身份证  " andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 7:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 8:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"外地身份证请携带：" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 9:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithImage:[UIImage imageNamed:@"note_star"] andWithStr:@"身份证  " andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"体检表" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 10:{
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"note_star"] andOtherStr:@"暂住证明或居住证" andBound:CGRectMake(0,-3,14,14)];
-                model.style = createNormalCellStyleUserDdfinedForth;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-            case 11:{
-                 model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-            case 12:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
+    _tableView.scrollEnabled = YES;
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"0" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
+        _data = add;
+        [_tableView reloadData];
+    }];
+    
+
     
 }
 
@@ -369,371 +469,54 @@
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_one",@"",@"img_adopt",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@150,@100,@100,@40];
-    NSArray *title = @[@"",@"",@"",@"尊敬的好梦学院，您的资料已经审核通过，您可以在完成西培学堂的学习后预约考试啦。有任何问题欢迎随时联系我们呃客服。联系电话：40000000",@"下载西培学堂APP",@""];
-    
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.detailTitle = @"";
-                model.contenModel = UIViewContentModeCenter;
-                model.hasFootViewLine = YES;
-            }
-                break;
-            case 3:{
-                model.style = createNormalCellStyleUserDdfinedFifth;
-                model.titleFont = 14*TYPERATION;
-                NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"" andBound:CGRectMake(0,-3,14,14)];
-                [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(str.length-9,8)];
-                NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-                [style setLineSpacing:6];
-                [str addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, str.length)];
-                model.AttributedStr = str;
-                model.color = UNMAIN_TEXT_COLOR;
-               
-            }
-                break;
-            case 4:{
-                 model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-            case 5:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            
-            
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
+    _tableView.scrollEnabled = YES;
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"2" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
+        _data = add;
+        [_tableView reloadData];
+    }];
 }
 
 - (void)getDataForth{
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_one",@"",@"img_waitfor",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@150,@40,@40,@100,@100,@40];
-    NSArray *title = @[@"",@"",@"",@"入籍资格审核：审核中    ",@"考试资格审核：审核中    ",@"尊敬的好梦学员，您的报名资料已经提交到交管部门审核，请耐心等待。您可以先下载西培学堂APP提前进行科目一练习",@"下载西培学堂APP",@""];
+    _tableView.scrollEnabled = YES;
     
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.detailTitle = @"";
-                model.contenModel = UIViewContentModeCenter;
-                model.hasFootViewLine = YES;
-            }
-                break;
-            case 3:{
-                model.style = createNormalCellStyleUserDdfinedFifth;
-                model.titleFont = 20*TYPERATION;
-                NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"" andBound:CGRectMake(0,-1,18,18)];
-                [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(7,3)];
-                model.AttributedStr = str;
-                model.color = TEXT_COLOR;
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleUserDdfinedFifth;
-                model.titleFont = 20*TYPERATION;
-                NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"" andBound:CGRectMake(0,-1,18,18)];
-                [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(7,3)];
-                model.AttributedStr = str;
-                model.color = TEXT_COLOR;
-            }
-                break;
-            
-            case 5:{
-                model.style = createNormalCellStyleUserDdfinedFifth;
-                model.titleFont = 14*TYPERATION;
-                NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@"btn_why"] andOtherStr:@"" andBound:CGRectMake(0,-3,14,14)];
-                
-                NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-                [style setLineSpacing:6];
-                [str addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, str.length)];
-                model.AttributedStr = str;
-                model.color = UNMAIN_TEXT_COLOR;
-                
-            }
-                break;
-            case 6:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-            case 7:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-                
-                
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"3" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
+        _data = add;
+        [_tableView reloadData];
+    }];
 }
 
 - (void)getDataFifth{
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@60,@20,@150,@100];
-    NSArray *title = @[@"",@"",@"我的错题：32",@"",@"",@"在西培学堂完成1320分钟学习后即可约考"];
+    _tableView.scrollEnabled = YES;
     
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedSix;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-                model.hasDefalut = YES;
-            }
-                break;
-            
-            case 3:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleUserDdfinedOne;
-                model.titleFont = 20*TYPERATION;
-                
-                model.color = TEXT_COLOR;
-                model.title = @"1320min";
-                model.detailTitle = @"280min";
-            }
-                break;
-                
-            case 5:{
-                model.style = createNormalCellStyleUserDdfinedSeven;
-                model.titleFont = 18*TYPERATION;
-                model.color = UNMAIN_TEXT_COLOR;
-                model.bgColor = [UIColor whiteColor];
-                
-            }
-                break;
-            
-                
-                
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"4" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
+        _data = add;
+        [_tableView reloadData];
+    }];
 }
 
 - (void)getDataSix{
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"img_waitfor",@""];
-    NSArray *heights = @[@100,@20,@60,@20,@50,@250,@100];
-    NSArray *title = @[@"",@"",@"我的错题：32",@"",@"",@"在西培学堂完成1320分钟学习后即可约考",@"立即约考"];
-    
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedSix;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"科目二学习视频  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-            }
-                break;
-                
-            case 3:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleValue1;
-                model.titleFont = 20*TYPERATION;
-                
-                model.color = TEXT_COLOR;
-                model.title = @"科目二练车打卡累积";
-                model.detailTitle = @"100次";
-            }
-                break;
-                
-            case 5:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-//                model.contenModel = UIViewContentModeCenter;
-                model.hasFootViewLine = YES;
-                
-                
-            }
-                break;
-            case 6:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
+    _tableView.scrollEnabled = YES;
+    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"1" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
+        _data = add;
+        [_tableView reloadData];
+    }];
 }
 
 - (void)getDataSeven{
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@60,@20,@100,@150,@200,@40];
-    NSArray *title = @[@"",@"",@"我的错题：32",@"",@"",@"",@"预约考试",@""];
+    _tableView.scrollEnabled = YES;
     
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedSix;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-                model.hasDefalut = YES;
-            }
-                break;
-                
-            case 3:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.detailTitle = @"很遗憾，您未能通过考试,请继续加油!";
-                model.hasFootViewLine = YES;
-            }
-                break;
-            case 5:{
-                model.style = createNormalCellStyleBang;
-                model.grade = 89.0;
-                
-                
-            }
-                break;
-            case 6:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-                model.detailTitle = @"根据交管部门的规定，您在首次考试10个工作日之后，即可再次预约考试。";
-                model.titleFont = 14;
-            }
-                break;
-            case 7:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-                
-                
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
     [_tableView reloadData];
 }
 
@@ -741,60 +524,8 @@
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
-    NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@20,@100,@150,@100,@40];
-    NSArray *title = @[@"",@"",@"",@"",@"开始科目二的学习",@""];
+    _tableView.scrollEnabled = YES;
     
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.detailTitle = @"恭喜您通过科目一考试";
-                model.hasFootViewLine = YES;
-            }
-                break;
-            case 3:{
-                model.style = createNormalCellStyleBang;
-                model.grade = 100.0;
-                
-                
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-            }
-                break;
-            case 5:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-                
-                
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
     [_tableView reloadData];
 }
 
@@ -802,9 +533,10 @@
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
+    _tableView.scrollEnabled = YES;
     NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@"",@""];
     NSArray *heights = @[@100,@60,@20,@100,@150,@200,@40];
-    NSArray *title = @[@"",@"我的错题：32",@"",@"",@"",@"预约考试",@""];
+    NSArray *title = @[@"",@"",@"",@"",@"",@"预约考试",@""];
     
     for (int i = 0; i<title.count; i++) {
         
@@ -825,7 +557,7 @@
                 model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
                 model.color = UNMAIN_TEXT_COLOR;
                 model.titleFont = 14;
-                model.hasDefalut = YES;
+               
             }
                 break;
                 
@@ -875,6 +607,7 @@
     if (_data.count > 0) {
         [_data removeAllObjects];
     }
+    _tableView.scrollEnabled = NO;
     NSArray *arra = @[@"banner_two",@""];
     NSArray *heights = @[@100,@(CURRENT_BOUNDS.height-164-44)];
     NSArray *title = @[@"",@""];
@@ -898,13 +631,85 @@
                 model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
                 model.color = UNMAIN_TEXT_COLOR;
                 model.titleFont = 14;
-                model.hasDefalut = YES;
+                
+            }
+                break;
+            default:
+                break;
+        }
+        
+        [_data addObject:model];
+    }
+    [_tableView reloadData];
+}
+
+- (void)getDataEleven{
+    if (_data.count > 0) {
+        [_data removeAllObjects];
+    }
+    _tableView.scrollEnabled = YES;
+    NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"",@""];
+    NSArray *heights = @[@100,@30,@60,@60,@10,@60,@100];
+    NSArray *title = @[@"",@"",@"场地名称:",@"详细地址:",@"场地名称:",@"系统正在为你匹配教练，匹配成功后，教练会与您联系，如果长时间教练没有和您联系，请拨打：40000000客服热线",@"教练已联系"];
+    
+    for (int i = 0; i<title.count; i++) {
+        
+        createNormalCellModel *model = [[createNormalCellModel alloc] init];
+        model.imageViewStr = arra[i];
+        model.he = [heights[i] floatValue];
+        model.title = title[i];
+        switch (i) {
+            case 0:{
+                model.color = BLUE_BACKGROUND_COLOR;
+                model.style = createNormalCellStyleOnlyImageCenter;
+                model.contenModel = UIViewContentModeScaleAspectFit;
             }
                 break;
                 
-            
-                
-                
+            case 1:{
+                model.style = createNormalCellStyleOnlyImageCenter;
+                model.color = EEEEEE;
+            }
+                break;
+            case 2:{
+                model.style = createNormalCellStyleNormal1;
+                model.color = TEXT_COLOR;
+                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+               
+                model.titleFont = 14;
+            }
+                break;
+            case 3:{
+                model.style = createNormalCellStyleNormal1;
+                model.color = TEXT_COLOR;
+                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"两江新区互联网产业园 " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                model.color = UNMAIN_TEXT_COLOR;
+                model.titleFont = 14;
+              
+            }
+                break;
+            case 4:{
+                model.style = createNormalCellStyleOnlyImageCenter;
+                model.color = [UIColor whiteColor];
+            }
+                break;
+            case 5:{
+                model.style = createNormalCellStyleUserDdfinedWhite;
+                model.titleFont = 14*TYPERATION;
+                NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,14,14)];
+                [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(str.length-12,8)];
+                NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+                [style setLineSpacing:6];
+                [str addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, str.length)];
+                model.AttributedStr = str;
+                model.color = ADB1B9;
+            }
+                break;
+            case 6:{
+                model.style = createNormalCellStyleUserDdfinedTwo;
+                model.hasDefalut = YES;
+            }
+                break;
                 
             default:
                 break;
@@ -915,12 +720,258 @@
     [_tableView reloadData];
 }
 
+- (void)getDataTwelve{
+    if (_data.count > 0) {
+        [_data removeAllObjects];
+    }
+    _tableView.scrollEnabled = YES;
+    NSArray *arra = @[@"banner_three",@"",@""];
+    NSArray *heights = @[@100,@0,@(300+44*5)];
+    NSArray *title = @[@"",@"",@"场地名称:"];
+    
+    for (int i = 0; i<title.count; i++) {
+        
+        createNormalCellModel *model = [[createNormalCellModel alloc] init];
+        model.imageViewStr = arra[i];
+        model.he = [heights[i] floatValue];
+        model.title = title[i];
+        switch (i) {
+            case 0:{
+                model.color = BLUE_BACKGROUND_COLOR;
+                model.style = createNormalCellStyleOnlyImageCenter;
+                model.contenModel = UIViewContentModeScaleAspectFit;
+            }
+                break;
+                
+            case 1:{
+                model.style = createNormalCellStyleOnlyImageCenter;
+                model.color = EEEEEE;
+            }
+                break;
+            case 2:{
+                model.style = createNormalCellStyleUserDdfinedAppointment;
+                model.color = TEXT_COLOR;
+                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                
+                model.titleFont = 14;
+            }
+                break;
+            
+                
+            default:
+                break;
+        }
+        
+        [_data addObject:model];
+    }
+    [_tableView reloadData];
+}
+
+- (void)showNavigationWithModel:(FirstLocationModel *)model{
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = [model.latitude doubleValue];
+    coordinate.longitude = [model.longitude doubleValue];
+    _locationModela = model;
+    //test
+    NSArray *arr = [self getInstalledMapAppWithAddr:model.address withEndLocation:coordinate];
+    [self showAlertViewWithData:arr andCoordinate:coordinate];
+}
+
+#pragma mark - 选择导航的功能
+
+- (NSArray *)getInstalledMapAppWithAddr:(NSString *)addrString withEndLocation:(CLLocationCoordinate2D)endLocation
+
+{
+    
+    NSMutableArray *maps = [NSMutableArray array];
+    
+    //苹果地图
+    
+    NSMutableDictionary *iosMapDic = [NSMutableDictionary dictionary];
+    
+    iosMapDic[@"title"] = @"苹果地图";
+    
+    [maps addObject:iosMapDic];
+    
+    NSString *appStr = NSLocalizedString(@"app_name", nil);
+    
+    //高德地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
+        
+        NSMutableDictionary *gaodeMapDic = [NSMutableDictionary dictionary];
+        
+        gaodeMapDic[@"title"] = @"高德地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"iosamap://path?sourceApplication=%@&sid=BGVIS1&did=BGVIS2&dname=%@&dev=0&t=2",appStr ,addrString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        gaodeMapDic[@"url"] = urlString;
+        
+        [maps addObject:gaodeMapDic];
+        
+    }
+    
+    //百度地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"baidumap://"]]) {
+        
+        NSMutableDictionary *baiduMapDic = [NSMutableDictionary dictionary];
+        
+        baiduMapDic[@"title"] = @"百度地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin=我的位置&destination=%@&mode=walking&src=%@",addrString ,appStr] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        baiduMapDic[@"url"] = urlString;
+        
+        [maps addObject:baiduMapDic];
+        
+    }
+    
+    //腾讯地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"qqmap://"]]) {
+        
+        NSMutableDictionary *qqMapDic = [NSMutableDictionary dictionary];
+        
+        qqMapDic[@"title"] = @"腾讯地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"qqmap://map/routeplan?from=我的位置&type=walk&tocoord=%f,%f&to=%@&coord_type=1&policy=0",endLocation.latitude , endLocation.longitude ,addrString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        qqMapDic[@"url"] = urlString;
+        
+        [maps addObject:qqMapDic];
+        
+    }
+    
+    //谷歌地图
+    
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
+        
+        NSMutableDictionary *googleMapDic = [NSMutableDictionary dictionary];
+        
+        googleMapDic[@"title"] = @"谷歌地图";
+        
+        NSString *urlString = [[NSString stringWithFormat:@"comgooglemaps://?saddr=&daddr=%@&directionsmode=walking",addrString] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet  URLQueryAllowedCharacterSet]];
+        
+        googleMapDic[@"url"] = urlString;
+        
+        [maps addObject:googleMapDic];
+        
+    }
+    
+    return maps;
+    
+}
+
+-(void)showAlertViewWithData:(NSArray *)data andCoordinate:(CLLocationCoordinate2D)coordinate{
+    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"地图" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (int i = 0; i < data.count; i++) {
+        NSDictionary *dic = data[i];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[dic objectForKey:@"title"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            if ([action.title isEqualToString:@"百度地图"]) {
+                
+                NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin=latlng:%f,%f|name=%@&destination=latlng:%@,%@|name=%@&mode=driving&coord_type=bd09ll",_currentLocation.latitude,_currentLocation.longitude,@"起点",self.locationModela.latitude, self.locationModela.longitude,self.locationModela.address] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:urlString]];
+            }else if ([action.title isEqualToString:@"高德地图"]){
+                
+                NSString *urlsting =[[NSString stringWithFormat:@"iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=%lf&slon=%lf&sname=起点&did=BGVIS2&dlat=%f&dlon=%f&dname=%@&dev=0&m=0&t=0",_currentLocation.latitude,_currentLocation.longitude,coordinate.latitude,coordinate.longitude,_locationModela.name]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication  sharedApplication]openURL:[NSURL URLWithString:urlsting]];
+            }else if ([action.title isEqualToString:@"谷歌地图"]){
+                //谷歌地图
+                NSString *urlString = [[NSString stringWithFormat:@"comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving",@"好梦学车",@"",coordinate.latitude, coordinate.longitude] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+            }else{
+                //苹果自带地图
+                MKMapItem *currentLocation = [MKMapItem mapItemForCurrentLocation];
+                MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil]];
+                
+                [MKMapItem openMapsWithItems:@[currentLocation, toLocation]
+                               launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                                               MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
+            }
+            NSLog(@"%@",action.title);
+        }];
+        
+        [v addAction:action];
+    }
+    UIAlertAction *active1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [v addAction:active1];
+    [self presentViewController:v animated:YES completion:^{
+        
+    }];
+}
+
+- (void)getDataAvite{
+    
+    [CustomAlertView showAlertViewWithVC:self];
+    [[URLConnectionHelper shareDefaulte] loadGetDataWithUrl:@"http://101.37.161.13:7081/student/v1/basicInfo/3000021321332132131" andSuccessBlock:^(NSArray *data) {
+        NSDictionary *dic = (NSDictionary *)data;
+        ProgressDataModel *model = [[ProgressDataModel alloc] init];
+        model.userId = [dic objectForKeyWithNoNsnull:@"userId"];
+        model.status = [dic objectForKeyWithNoNsnull:@"status"];
+        model.belongPeriod = [dic objectForKeyWithNoNsnull:@"belongPeriod"];
+        model.periodNum = [NSString stringWithFormat:@"%@",[dic objectForKey:@"periodNum"]];
+        model.realName = [dic objectForKeyWithNoNsnull:@"realName"];
+        model.nickName = [dic objectForKeyWithNoNsnull:@"nickName"];
+        model.headPicture = [dic objectForKeyWithNoNsnull:@"headPicture"];
+        model.phone = [dic objectForKeyWithNoNsnull:@"phone"];
+        model.classTypeCode = [dic objectForKeyWithNoNsnull:@"classTypeCode"];
+        model.classTypeName = [dic objectForKeyWithNoNsnull:@"classTypeName"];
+        model.carTypeCode = [dic objectForKeyWithNoNsnull:@"carTypeCode"];
+        model.carTypeName = [dic objectForKeyWithNoNsnull:@"carTypeName"];
+        
+        
+        model.cwStatus = [dic objectForKeyWithNoNsnull:@"cwStatus"];
+        model.cwSubjectOneValidTime = (long)[dic objectForKey:@"cwSubjectOneValidTime"];
+        model.cwSubjectTwoValidTime = (long)[dic objectForKey:@"cwSubjectTwoValidTime"];
+        model.cwSubjectThreeValidTime = (long)[dic objectForKey:@"cwSubjectThreeValidTime"];
+        model.cwSubjectOneTrainTime = (long)[dic objectForKey:@"cwSubjectOneTrainTime"];
+        model.cwSubjectTwoTrainTime = (long)[dic objectForKey:@"cwSubjectTwoTrainTime"];
+        model.cwSubjectThreeTrainTime = (long)[dic objectForKey:@"cwSubjectThreeTrainTime"];
+        model.govCheckStatus = [dic objectForKeyWithNoNsnull:@"govCheckStatus"];
+        model.govFailReason = [dic objectForKeyWithNoNsnull:@"govFailReason"];
+        
+        model.subject = [dic objectForKeyWithNoNsnull:@"subject"];
+        model.studyStatus = [dic objectForKeyWithNoNsnull:@"studyStatus"];
+        model.studyStartTime = [dic objectForKeyWithNoNsnull:@"studyStartTime"];
+        model.studyEndTime = [dic objectForKeyWithNoNsnull:@"studyEndTime"];
+        model.examStatus = [dic objectForKeyWithNoNsnull:@"examStatus"];
+        model.lastExamScore = [dic objectForKeyWithNoNsnull:@"lastExamScore"];
+        model.examTimeLimit = [dic objectForKeyWithNoNsnull:@"examTimeLimit"];
+        NSLog(@"%@",model);
+        _currentModel = model;
+        [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.status andBlock:^(NSMutableArray *add) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+                createNormalCellModel *model = add[0];
+                _progressImageView.image = [UIImage imageNamed:model.imageViewStr];
+                _data = add;
+                [_tableView reloadData];
+            });
+            
+        }];
+    } andFiledBlock:^(NSError *error) {
+         [CustomAlertView hideAlertView];
+    }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-
+- (void)showAlertViewActiveWithDes:(NSString *)des{
+    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"提示" message:des preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [v addAction:active];
+    [self presentViewController:v animated:YES completion:^{
+        
+    }];
+}
 
 @end

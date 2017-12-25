@@ -57,8 +57,8 @@
         [_data removeAllObjects];
     }
     [CustomAlertView showAlertViewWithVC:self];
-    NSDictionary *dic = @{@"username":@"500236199108066674",@"subjectCode":self.kskm};
-    NSString *url = @"http://172.31.101.233:7080/student/exam/address/query";
+    NSDictionary *dic = @{@"username":_userName,@"subjectCode":self.kskm};
+    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/address";
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
       
@@ -75,7 +75,7 @@
             if ([[dic objectForKey:@"kskm"] isEqualToString:_kskm]) {
                 TestSiteChoosedModel *model = [[TestSiteChoosedModel alloc] init];
                 model.name = [dic objectForKeyWithNoNsnull:@"kcmc"];
-                model.xh = [dic objectForKeyWithNoNsnull:@"xh"];
+                model.kcdddh = [dic objectForKeyWithNoNsnull:@"kcdddh"];
                 model.startTime = startTime;
                 model.endTime = endTime;
                 if ([[dic objectForKey:@"netSysPlacesiteVo"] isEqual:[NSNull null]]) {

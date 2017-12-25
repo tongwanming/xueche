@@ -53,6 +53,9 @@
                             <constraint firstAttribute="height" constant="50" id="x0M-r8-T64"/>
                         </constraints>
                         <state key="normal" image="icon_service_go.png"/>
+                        <connections>
+                            <action selector="clickActive:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ri1-2q-5zH"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
@@ -75,6 +78,11 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="firstLabel" destination="b65-Qf-jGB" id="b7b-Yc-8Hz"/>
+                <outlet property="logoImageView" destination="2K1-kN-0ob" id="HXA-I5-Rvp"/>
+                <outlet property="secondLabel" destination="HbU-aQ-ckD" id="Jas-AY-t6s"/>
+            </connections>
             <point key="canvasLocation" x="13" y="82"/>
         </tableViewCell>
     </objects>

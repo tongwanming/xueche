@@ -55,15 +55,22 @@
     _tableView.dataSource = self;
     [_tableView setTableFooterView:[self createFootView]];
     
-    _data1 = @[@"姓名",@"证件号码",@"手机号码",@"准驾车型",@"考试原因"];
-    _data2 = @[@"张涛涛",@"50023619988***********1616",@"158****78",@"小型汽车（C1）",@"初次申领"];
+    _data1 = @[@"姓名",@"证件号码",@"手机号码",@"准驾车型"];
     
-    [self getData];
+
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     [center addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applySuccessActive:) name:@"applySuccess" object:nil];
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)applySuccessActive:(NSNotification *)notification{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
+    
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification{
@@ -99,7 +106,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 4;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -140,7 +147,7 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, footViewHeight)];
     view.backgroundColor = [UIColor whiteColor];
     
-    UIImageView *topImagve = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"content_img_information"]];
+    UIImageView *topImagve = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
     topImagve.frame = CGRectMake(0, 0, CURRENT_BOUNDS.width, 8);
 //    topImagve.contentMode = UIViewContentModeScaleAspectFit;
     [view addSubview:topImagve];
@@ -211,6 +218,7 @@
     _textFiled2.font = [UIFont systemFontOfSize:13];
     _textFiled2.textAlignment = NSTextAlignmentLeft;
     _textFiled2.placeholder = @"输入验证码";
+    
     _textFiled2.delegate = self;
     [view addSubview:_textFiled2];
     
@@ -258,15 +266,15 @@
     return view;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    if (textField == _textFiled2) {
+        [self getData];
+    }
+}
+
 - (void)logoBtnClick:(UIButton *)btn{
     if (btn.tag == 1001) {
-        //test
-        [_textFiled2 resignFirstResponder];
-        [_textFiled1 resignFirstResponder];
-        [_textFiled resignFirstResponder];
-        [self getLoginActive];
-        return;
-        
+    
         if (_textFiled.text.length < 1 || _textFiled2.text.length <1 || _textFiled1.text.length <1) {
             [_textFiled2 resignFirstResponder];
              [_textFiled1 resignFirstResponder];
@@ -297,17 +305,27 @@
     }
 }
 
+- (void)setModel:(ProgressDataModel *)model{
+    _model = model;
+    _data2 = @[_model.realName,_model.idCard,_model.phone,_model.subject];
+}
+
 - (void)getData{
     NSDictionary *dic = @{@"username":_textFiled.text};
-    NSString *url = @"http://172.31.101.233:7080/student/exam/check/image";
+    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/check/image";
+    [CustomAlertView showAlertViewWithVC:self];
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
+    
         NSData *imageData = [[NSData alloc] initWithBase64EncodedString:data[0] options:NSDataBase64DecodingIgnoreUnknownCharacters];
         dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
            _testView.image = [UIImage imageWithData:imageData];
         });
     } andFiledBlock:^(NSError *error) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        });
     }];
 }
 
@@ -316,13 +334,19 @@
                           @"password":_textFiled1.text,
                           @"verifyCode":_textFiled2.text,
                           };
-    NSString *url = @"http://172.31.101.233:7080/student/imitate/login";
+    NSString *url = @"http://172.31.101.114:7080/student/v201701/imitate/login";
+    [CustomAlertView showAlertViewWithVC:self];
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        });
         [self checkCanJoinExnation];
         
     } andFiledBlock:^(NSError *error) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        });
     }];
 }
 
@@ -331,7 +355,7 @@
     NSDictionary *dic = @{@"username":_textFiled.text,
                           @"subject":@"2"
                           };
-    NSString *url = @"http://172.31.101.233:7080/student/exam/check";
+    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/check";
 
     
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {

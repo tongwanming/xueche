@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "QuitBoxView.h"
 
+
+
 @protocol QuitAlertViewBtnClickedDelegate <NSObject>
 
 - (void)btnClickedWithBtn:(UIButton *)btn;
@@ -27,12 +29,14 @@
 
 @property (nonatomic, strong) NSString *rightTitle;
 
+@property (nonatomic, strong) NSString *sureTitle;
+
 + (instancetype)createShowView;
 
 /**
  *  @brief 弹出提醒框
  */
-- (void)presentAddView:(UIView *)view;
+- (void)presentAddView:(UIView *)view withType:(QuitBoxViewType)type;
 
 /**
  *  @brief 弹出提醒框

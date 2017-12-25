@@ -7,7 +7,10 @@
 //
 
 #import "BasicViewController.h"
+#import "ProgressDataModel.h"
 
 @interface ExaminationBookingViewController : BasicViewController
+
+@property (nonatomic, strong) ProgressDataModel *model;
 
 @end

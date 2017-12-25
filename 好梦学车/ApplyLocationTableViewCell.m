@@ -7,6 +7,7 @@
 //
 
 #import "ApplyLocationTableViewCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation ApplyLocationTableViewCell
 
@@ -21,6 +22,29 @@
     }
     UITableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil] objectAtIndex:0];
     return cell;
+}
+
+- (void)setModel:(OffLineServerStation *)model{
+    _model = model;
+    
+    if (model.imageUrl) {
+        [_logoImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"pic02"]];
+    }else{
+        [_logoImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"pic02"]];
+    }
+    
+    _firstLabel.text = [NSString stringWithFormat:@"%@",model.name];
+    _secondLabel.text = [NSString stringWithFormat:@"地址:%@",model.address];
+//    _Third.text = [NSString stringWithFormat:@"电话:%@",model.phone];
+}
+- (IBAction)clickActive:(id)sender {
+    if (_block) {
+        _block(_model);
+    }
+}
+
+- (void)blockActiveWithBlock:(void (^)(OffLineServerStation *))block{
+    _block = block;
 }
 
 - (void)awakeFromNib {

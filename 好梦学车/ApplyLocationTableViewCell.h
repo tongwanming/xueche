@@ -7,8 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OffLineServerStation.h"
+
+typedef void(^ApplyLocationTableViewCellBlock)(OffLineServerStation *);
 
 @interface ApplyLocationTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (weak, nonatomic) IBOutlet UILabel *firstLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondLabel;
+
+@property (nonatomic, copy)ApplyLocationTableViewCellBlock block;
+
+@property (nonatomic, strong) OffLineServerStation *model;
 
 /**
  * @brief 创建tableViewCell的类方法
@@ -20,5 +30,6 @@
                           identifier:(NSString *)identifier
                              nibName:(NSString *)nibName;
 
+- (void)blockActiveWithBlock:(void(^)(OffLineServerStation *model))block;
 
 @end

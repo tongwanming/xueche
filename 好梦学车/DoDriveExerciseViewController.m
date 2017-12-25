@@ -7,6 +7,9 @@
 //
 
 #import "DoDriveExerciseViewController.h"
+#import "DoDriveExerciseModel.h"
+#import "DoDriveExerciseViewControllerCell.h"
+#import "EventCoachView.h"
 
 @interface DoDriveExerciseViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -25,6 +28,35 @@
     _tableView.dataSource = self;
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
     // Do any additional setup after loading the view from its nib.
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 115;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *inde = @"";
+    DoDriveExerciseViewControllerCell *cell = [tableView dequeueReusableCellWithIdentifier:inde];
+    if (!cell) {
+        cell = [DoDriveExerciseViewControllerCell cellWithTableToDequeueReusable:tableView identifier:@"DoDriveExerciseViewControllerCell" nibName:@"DoDriveExerciseViewControllerCell"];
+        
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [[EventCoachView shareDefault] showEventCoachViewWithVC:self andWithName:@"张淘淘" andDes:@"这是一个很长很长的评论,这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论" andImage:@"" andPoint:3 andBlock:^(NSString *str) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

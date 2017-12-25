@@ -21,6 +21,8 @@
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
 
 @property (nonatomic, weak)id<SubjectOneCurrentViewControllerDelegate>delegate;
+
+@property (nonatomic, strong) NSString *refreshAvtive;
 @property (weak, nonatomic) IBOutlet UIImageView *progressImageView;
 
 @end

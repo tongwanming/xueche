@@ -85,6 +85,9 @@
 
 /*******************学习进度信息******************/
 
+/**身份证*/
+@property (nonatomic, strong) NSString *idCard;
+
 /** 学习科目 */
 @property (nonatomic, strong) NSString *subject;
 

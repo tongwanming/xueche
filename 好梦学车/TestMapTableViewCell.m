@@ -66,7 +66,7 @@
     
     _geocodesearch = [[BMKGeoCodeSearch alloc] init];
     _geocodesearch.delegate = self;
-    _mapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width,CURRENT_BOUNDS.height-164-44)];
+    _mapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width,CURRENT_BOUNDS.height-210-44)];
     _mapView.mapType = BMKMapTypeStandard;
     _mapView.delegate = self;
         [_mapView setTrafficEnabled:YES];
@@ -91,7 +91,7 @@
     [_locServer startUserLocationService];
     
     _searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _searchBtn.frame = CGRectMake(16*TYPERATION, CURRENT_BOUNDS.height-164-44-42-27, CURRENT_BOUNDS.width-16*2*TYPERATION, 42*TYPERATION);
+    _searchBtn.frame = CGRectMake(16*TYPERATION, CURRENT_BOUNDS.height-210-44-42-27, CURRENT_BOUNDS.width-16*2*TYPERATION, 42*TYPERATION);
     _searchBtn.backgroundColor = [UIColor whiteColor];
     _searchBtn.layer.masksToBounds = YES;
     _searchBtn.layer.cornerRadius = 6;
@@ -103,7 +103,7 @@
     [self addSubview:_searchBtn];
     
     UIButton *locationBtm = [UIButton buttonWithType:UIButtonTypeCustom];
-    locationBtm.frame = CGRectMake(CURRENT_BOUNDS.width - 44-16*TYPERATION, CURRENT_BOUNDS.height-164-44-42-27-44, 44, 44);
+    locationBtm.frame = CGRectMake(CURRENT_BOUNDS.width - 44-16*TYPERATION, CURRENT_BOUNDS.height-210-44-42-27-44, 44, 44);
     locationBtm.backgroundColor = [UIColor clearColor];
     [locationBtm setImage:[UIImage imageNamed:@"btn_urrentlocation"] forState:UIControlStateNormal];
     locationBtm.titleLabel.font = [UIFont systemFontOfSize:18];
@@ -272,7 +272,7 @@
         
         
         //设置动画
-        newAnnotation.animatesDrop = YES;
+        newAnnotation.animatesDrop = NO;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
         label.text = @"起点";
         label.textColor = TEXT_COLOR;
@@ -358,9 +358,9 @@
         _data = [[NSMutableArray alloc] init];
     }
     NSDictionary *dic = @{@"longitude":[NSString stringWithFormat:@"%f",pt.longitude],
-                          @"latitude":[NSString stringWithFormat:@"%f",pt.latitude],
-                          @"displayNum":@10};
-
+                          @"latitude":[NSString stringWithFormat:@"%f",pt.latitude]
+                          };
+//    NSDictionary *dic = @{};
     
     NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
@@ -379,7 +379,7 @@
     NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
     
     //    NSURL *url = [NSURL URLWithString:urlstr];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/manage-service/trainplace/listByCoords",PUBLIC_LOCATION]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",@"http://101.37.161.13:7081/v1/listTrainPlaceInfo"]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
@@ -406,21 +406,22 @@
                         model.descrip = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
                         
                         model.trainDrivingLicense = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"trainDrivingLicense"]];
-                        model.contactPersonPhone = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonPhone"]];
                         model.trainSubjects = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"trainSubjects"]];
+                        model.schoolId = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"schoolId"]];
                         model.contactPersonName = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonName"]];
+                        model.contactPersonPhone = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"contactPersonPhone"]];
                         model.province = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"province"]];
                         model.longitude = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"longitude"]];
                         model.latitude =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"latitude"]];
                         model.pictures = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"pictures"]];
-                        model.belongSchool =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"belongSchool"]];
+                        model.belongSchool =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"schoolName"]];
                         model.address = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
                         model.city = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"city"]];
-                        model.addTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"addTime"]];
+//                        model.addTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"addTime"]];
                         model.district = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"district"]];
                         model.distance = [NSString stringWithFormat:@"距你%.2lfkm",[[dic objectForKey:@"distance"] floatValue]];
                         model.name = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"name"]];
-                        model.updateTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"updateTime"]];
+//                        model.updateTime = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"updateTime"]];
                         [_data addObject:model];
                     }
                     

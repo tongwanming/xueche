@@ -18,6 +18,8 @@
 
 - (void)showEventCoachViewWithVC:(UIViewController *)vc andModel:(FirstLocationModel *)model andBlock:(void(^)(UIButton *btn))block;
 
+- (void)showEventCoachViewWithVC:(UIViewController *)vc andWithName:(NSString *)coachName andDes:(NSString *)des andImage:(NSString *)image andPoint:(float)point andBlock:(void(^)(NSString *str))block;
+
 - (void)dismissView;
 
 @end

@@ -16,7 +16,7 @@
 
 @property (nonatomic, strong) NSString *phone;
 
-@property (nonatomic, strong) NSString *xh;
+@property (nonatomic, strong) NSString *kcdddh;
 
 @property (nonatomic, strong) NSString *startTime;
 

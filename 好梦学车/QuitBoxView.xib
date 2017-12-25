@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -26,7 +27,7 @@
                         <action selector="btnClickActive:" destination="hMc-6D-5Gj" eventType="touchUpInside" id="ntp-YR-5UA"/>
                     </connections>
                 </button>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="确认是否取消当前订单" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkZ-2x-TRl">
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="确认是否取消当前订单" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MkZ-2x-TRl">
                     <rect key="frame" x="20" y="30" width="335" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.27450980392156865" green="0.29803921568627451" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -58,29 +59,56 @@
                         <constraint firstAttribute="height" constant="0.5" id="iho-of-LSX"/>
                     </constraints>
                 </view>
+                <button opaque="NO" tag="1003" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6by-ac-ZQ2">
+                    <rect key="frame" x="0.0" y="622" width="375" height="45"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="6ie-xy-VFJ"/>
+                    </constraints>
+                    <state key="normal" title="确定">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnClickActive:" destination="hMc-6D-5Gj" eventType="touchUpInside" id="hmf-pO-WZo"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="td0-ln-gOf">
+                    <rect key="frame" x="0.0" y="621.5" width="375" height="0.5"/>
+                    <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="y1S-ko-hcZ"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="sWO-aO-3Gs" firstAttribute="trailing" secondItem="Aw8-aY-j4j" secondAttribute="trailing" id="011-5H-OIh"/>
                 <constraint firstItem="sWO-aO-3Gs" firstAttribute="leading" secondItem="hMc-6D-5Gj" secondAttribute="leading" id="9ZS-UP-2XT"/>
                 <constraint firstAttribute="bottom" secondItem="sWO-aO-3Gs" secondAttribute="bottom" id="HQY-nM-8HB"/>
+                <constraint firstItem="6by-ac-ZQ2" firstAttribute="leading" secondItem="hMc-6D-5Gj" secondAttribute="leading" id="JMn-B3-6n9"/>
                 <constraint firstItem="zfh-cO-rg5" firstAttribute="leading" secondItem="sWO-aO-3Gs" secondAttribute="trailing" id="KCT-3l-6uW"/>
                 <constraint firstItem="Aw8-aY-j4j" firstAttribute="centerX" secondItem="hMc-6D-5Gj" secondAttribute="centerX" id="OKS-aO-DXm"/>
                 <constraint firstItem="9az-GB-ham" firstAttribute="leading" secondItem="hMc-6D-5Gj" secondAttribute="leading" id="OpT-WS-VUF"/>
+                <constraint firstAttribute="bottom" secondItem="6by-ac-ZQ2" secondAttribute="bottom" id="Qg2-FD-wK4"/>
                 <constraint firstAttribute="trailing" secondItem="zfh-cO-rg5" secondAttribute="trailing" id="RFj-Jg-efj"/>
+                <constraint firstItem="td0-ln-gOf" firstAttribute="leading" secondItem="hMc-6D-5Gj" secondAttribute="leading" id="Tdk-u1-gLe"/>
                 <constraint firstAttribute="trailing" secondItem="MkZ-2x-TRl" secondAttribute="trailing" constant="20" id="UPK-sz-Wts"/>
                 <constraint firstItem="MkZ-2x-TRl" firstAttribute="top" secondItem="hMc-6D-5Gj" secondAttribute="top" constant="30" id="Vtk-0F-OXU"/>
                 <constraint firstItem="zfh-cO-rg5" firstAttribute="top" secondItem="9az-GB-ham" secondAttribute="bottom" id="aVb-L7-bl3"/>
                 <constraint firstItem="9az-GB-ham" firstAttribute="width" secondItem="sWO-aO-3Gs" secondAttribute="width" id="fBu-QK-cLw"/>
                 <constraint firstAttribute="bottom" secondItem="zfh-cO-rg5" secondAttribute="bottom" id="i9Q-90-gkS"/>
                 <constraint firstItem="MkZ-2x-TRl" firstAttribute="leading" secondItem="hMc-6D-5Gj" secondAttribute="leading" constant="20" id="k8V-nH-bu2"/>
+                <constraint firstItem="6by-ac-ZQ2" firstAttribute="top" secondItem="td0-ln-gOf" secondAttribute="bottom" id="lee-M8-NW1"/>
+                <constraint firstAttribute="trailing" secondItem="6by-ac-ZQ2" secondAttribute="trailing" id="nhU-hg-7jd"/>
                 <constraint firstItem="MkZ-2x-TRl" firstAttribute="centerX" secondItem="hMc-6D-5Gj" secondAttribute="centerX" id="o6s-9Y-Aye"/>
+                <constraint firstAttribute="trailing" secondItem="td0-ln-gOf" secondAttribute="trailing" id="p6y-e6-sTR"/>
                 <constraint firstAttribute="bottom" secondItem="Aw8-aY-j4j" secondAttribute="bottom" id="pxP-p5-mFN"/>
             </constraints>
             <connections>
                 <outlet property="LeaveBtn" destination="zfh-cO-rg5" id="0Xh-Cc-f7m"/>
                 <outlet property="LookBtn" destination="sWO-aO-3Gs" id="q4W-5p-W1C"/>
+                <outlet property="lineView" destination="td0-ln-gOf" id="a4x-el-y1M"/>
                 <outlet property="showLabel" destination="MkZ-2x-TRl" id="n4S-T3-C8w"/>
+                <outlet property="sureBtn" destination="6by-ac-ZQ2" id="9hi-j3-a8L"/>
             </connections>
             <point key="canvasLocation" x="-25.5" y="-5.5"/>
         </view>

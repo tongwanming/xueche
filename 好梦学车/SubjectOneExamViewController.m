@@ -182,7 +182,7 @@
         _quitrView.delegate = self;
         _quitrView.frame = self.view.bounds;
         
-        [_quitrView presentAddView:self.view];
+        [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelAndSure];
         if (_true >= 90) {
             if (self.examType == ExamViewControllerTypeOne) {
                 _quitrView.describeStr = [NSString stringWithFormat:@"你已经答错%ld题，得分%ld分，考试成绩合格，是否交卷",_fault,_true];
@@ -207,7 +207,7 @@
         _quitrView.delegate = self;
         _quitrView.frame = self.view.bounds;
         
-        [_quitrView presentAddView:self.view];
+        [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelAndSure];
         if (_true >= 90) {
             if (self.examType == ExamViewControllerTypeOne) {
                 _quitrView.describeStr = [NSString stringWithFormat:@"你已经答错%ld题，得分%ld分，考试成绩合格，是否交卷",_fault,_true];

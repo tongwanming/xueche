@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger,QuitBoxViewType) {
+    QuitBoxViewTypeCancelOnly,
+    QuitBoxViewTypeCancelAndSure
+};
+
 @protocol QuitBoxViewDelegate <NSObject>
 
 - (void)QuitBoxViewBtnClick:(UIButton *)btn;
@@ -18,7 +23,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *showLabel;
 @property (weak, nonatomic) IBOutlet UIButton *LookBtn;
 @property (weak, nonatomic) IBOutlet UIButton *LeaveBtn;
+@property (weak, nonatomic) IBOutlet UIButton *sureBtn;
+@property (weak, nonatomic) IBOutlet UIView *lineView;
 
+@property (nonatomic, assign)QuitBoxViewType type;
 @property (nonatomic, weak) id<QuitBoxViewDelegate>delegate;
 
 @end

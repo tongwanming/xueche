@@ -22,7 +22,7 @@ typedef void(^CreateViewByDataAvtiveBlock)(NSMutableArray *);
  * progress 字符串“0～6” 表示入籍到考试完成
  * subgrogress 字符串“0～n” 表示在progress 的前提下的进程
  */
-- (void)getViewDataWithModel:(ProgressDataModel *)model
+- (void)getViewDataWithModel:(ProgressDataModel *)modela
                  andProgress:(NSString *)progrss
               andSubProgress:(NSString *)subProgress
                     andBlock:(void(^)(NSMutableArray *add))block;

@@ -378,7 +378,7 @@
         QuitAlertView *_quitrView = [QuitAlertView createShowView];
         _quitrView.delegate = self;
         _quitrView.frame = self.view.bounds;
-        [_quitrView presentAddView:self.view];
+        [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelAndSure];
     }
 }
 

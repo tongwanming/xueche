@@ -23,8 +23,9 @@
 #import "CustomAlertView.h"
 #import "ExaminationBookingViewController.h"
 #import "ExerciseViewController.h"
+#import "QuitAlertView.h"
 
-@interface SubjectOneCurrentViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface SubjectOneCurrentViewController ()<UITableViewDelegate,UITableViewDataSource,QuitAlertViewBtnClickedDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *data;
@@ -41,7 +42,8 @@
 }
 - (IBAction)click:(id)sender {
     NSLog(@"点击按钮 当前的n值：%d",_n);
-    
+    [self getDataAvite];
+    return;
     NSArray *arr1 = @[@"0",@"0",@"1",@"1",@"2",@"2",@"2",@"2",@"2",@"3",@"3",@"3",@"3",@"3",@"3",@"4",@"4",@"4",@"4"];
     NSArray *arr2 = @[@"0",@"1",@"0",@"1",@"0",@"1",@"2",@"3",@"4",@"0",@"1",@"2",@"3",@"4",@"5",@"0",@"1",@"2",@"3"];
     if (_data.count > 0) {
@@ -98,6 +100,16 @@
     _n+=1;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+     [self getDataAvite];
+}
+
+- (void)setRefreshAvtive:(NSString *)refreshAvtive{
+    _refreshAvtive = refreshAvtive;
+    [self getDataAvite];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _n = 1;
@@ -110,7 +122,7 @@
 //    _tableView.scrollEnabled = NO;
     self.view.backgroundColor = EEEEEE;
 //    [self getData];
-    [self getDataAvite];
+   
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -132,8 +144,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell;
     static NSString *index = @"";
+    _tableView.scrollEnabled = YES;
     createNormalCellModel *model = _data[indexPath.row+1];
     if (model.style == createNormalCellStyleUserDdfinedTen) {
+        _tableView.scrollEnabled = NO;
         cell = [_dic objectForKey:@"map"];
         if (!cell) {
             cell = [TestMapTableViewCell cellWithTableToDequeueReusable:tableView identifier:@"TestMapTableViewCell" nibName:@"TestMapTableViewCell"];
@@ -157,7 +171,8 @@
             }else if (btn.tag == 1002){
                 [self showNavigationWithModel:model];
             }else if (btn.tag == 1003){
-                [self getDataEleven];
+                [self choosedCocoaActiveWithModel:model];
+//                [self getDataEleven];
             }else{
                 
             }
@@ -191,22 +206,22 @@
     NSLog(@"%@---%@---%@",_currentModel.periodNum,_currentModel.status,@(indexPath.row));
     //报名
     if ([_currentModel.periodNum isEqualToString:@"0"]) {
-        if ([_currentModel.status isEqualToString:@"0"]) {
-            if (indexPath.row == 3) {
+        if ([_currentModel.cwStatus isEqualToString:@"0"]) {
+            if (indexPath.row == 3-1) {
                 CheckMedicalStationViewController *v = [[CheckMedicalStationViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
             
-            if (indexPath.row == 14) {
+            if (indexPath.row == 14-1) {
                 ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-        }else if ([_currentModel.status isEqualToString:@"1"]){
-            if (indexPath.row == 11) {
+        }else if ([_currentModel.cwStatus isEqualToString:@"1"]){
+            if (indexPath.row == 11-1) {
                 ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
@@ -222,29 +237,43 @@
         }
         //入籍
     }else if ([_currentModel.periodNum isEqualToString:@"1"]){
-        if ([_currentModel.status isEqualToString:@"0"]) {
-            if (indexPath.row == 3) {
+        if ([_currentModel.cwStatus isEqualToString:@"0"] || [_currentModel.govCheckStatus isEqualToString:@"0"]) {
+            if (indexPath.row == 3-1) {
                 //入籍资格审核
-                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"您的驾驶员报考资料将上传到122系统进行审核，审核通过后，您可预约考试。"];
-                }
+                QuitAlertView *_quitrView = [QuitAlertView createShowView];
+                _quitrView.delegate = self;
+                _quitrView.frame = self.view.bounds;
+                
+                [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelOnly];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _quitrView.describeStr = @"您的驾驶员报考资料将上传到122系统进行审核，审核通过后，您可预约考试。";
+                });
                
             }
-            if (indexPath.row == 4) {
+            if (indexPath.row == 4-1) {
                 //考试资格
-                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"西培学堂是重庆交管部门指定的科目一学习平台。"];
-                }
-              
+                QuitAlertView *_quitrView = [QuitAlertView createShowView];
+                _quitrView.delegate = self;
+                _quitrView.frame = self.view.bounds;
+                
+                [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelOnly];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _quitrView.describeStr = @"西培学堂是重庆交管部门指定的科目一学习平台。";
+                });
             }
-            if (indexPath.row == 5) {
+            if (indexPath.row == 5-1) {
                 //描述
-                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"您的入籍资料将上传到成为系统进行审核，审核通过后，您会收到西培学堂的短信，您即可开始预约科目的学习。"];
-                }
+                QuitAlertView *_quitrView = [QuitAlertView createShowView];
+                _quitrView.delegate = self;
+                _quitrView.frame = self.view.bounds;
+                
+                [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelOnly];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _quitrView.describeStr = @"您的入籍资料将上传到成为系统进行审核，审核通过后，您会收到西培学堂的短信，您即可开始预约科目的学习。";
+                });
                 
             }
-            if (indexPath.row == 6) {
+            if (indexPath.row == 6-1) {
                 //下载西培学堂
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"3"];
@@ -252,14 +281,14 @@
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/%E8%A5%BF%E5%9F%B9%E5%AD%A6%E5%A0%82/id1189867693?mt=8"]];
             }
             
-        }else if ([_currentModel.status isEqualToString:@"1"]){
-            if (indexPath.row == 3) {
+        }else if ([_currentModel.cwStatus isEqualToString:@"1"]){
+            if (indexPath.row == 3-1) {
                 //拨打电话
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"4"];
                 }
             }
-            if (indexPath.row == 4) {
+            if (indexPath.row == 4-1) {
                 //下载西培学堂
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"3"];
@@ -275,49 +304,55 @@
         }
         //科目一
     }else if ([_currentModel.periodNum isEqualToString:@"2"]){
-        if ([_currentModel.status isEqualToString:@"0"]) {
-            if (indexPath.row == 2) {
+        if ([_currentModel.studyStatus isEqualToString:@"0"]) {
+            if (indexPath.row == 2-1) {
                 //立即练题
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-        }else if ([_currentModel.status isEqualToString:@"1"]){
-            if (indexPath.row == 2) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
+            if (indexPath.row == 2-1) {
                 //立即练题
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-            if (indexPath.row == 5) {
+            if (indexPath.row == 5-1) {
                 //立即约考
                 ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                v.model = _currentModel;
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-        }else if ([_currentModel.status isEqualToString:@"2"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
             
-        }else if ([_currentModel.status isEqualToString:@"3"]){
-            if (indexPath.row == 2) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
+            if (indexPath.row == 2-1) {
                 //立即练题
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-            if (indexPath.row == 6) {
+            if (indexPath.row == 6-1) {
                 //预约考试
                 ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                v.model = _currentModel;
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-        }else if ([_currentModel.status isEqualToString:@"4"]){
-            if (indexPath.row == 4) {
+            if (indexPath.row == 3) {
+                [self getLearnChangedActive];
+            }
+        }else if ([_currentModel.studyStatus isEqualToString:@"4"]){
+            if (indexPath.row == 4-1) {
                 //开始科目二的学习
+                [self getLearnChangedActive];
             }
             
         }else{
@@ -325,21 +360,21 @@
         }
         //科目二
     }else if ([_currentModel.periodNum isEqualToString:@"3"]){
-        if ([_currentModel.status isEqualToString:@"0"]) {
+        if ([_currentModel.studyStatus isEqualToString:@"0"]) {
             
         }else if ([_currentModel.status isEqualToString:@"1"]){
-            if (indexPath.row == 3) {
+            if (indexPath.row == 3-1) {
                 //考试场地导航
             }
             
-            if (indexPath.row == 5) {
+            if (indexPath.row == 5-1) {
                 //联系电话
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"4"];
                 }
             }
-        }else if ([_currentModel.status isEqualToString:@"2"]){
-            if (indexPath.row == 2) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
+            if (indexPath.row == 2-1) {
                 //科目二的视频学习
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
@@ -347,41 +382,43 @@
                 }
             }
             
-            if (indexPath.row == 4) {
+            if (indexPath.row == 4-1) {
                 //查看打卡累积
             }
-            if (indexPath.row == 6) {
+            if (indexPath.row == 6-1) {
                 //立即约考
                 ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                v.model = _currentModel;
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
             
-        }else if ([_currentModel.status isEqualToString:@"3"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
             
-        }else if ([_currentModel.status isEqualToString:@"4"]){
-            if (indexPath.row == 2) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"4"]){
+            if (indexPath.row == 2-1) {
                 //观看视频
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-            if (indexPath.row == 6) {
+            if (indexPath.row == 6-1) {
                 //继续练车
             }
-        }else if ([_currentModel.status isEqualToString:@"5"]){
-            if (indexPath.row == 4) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"5"]){
+            if (indexPath.row == 4-1) {
                 //开始科目三的学习
+                [self getDataAvite];
             }
         }else{
             
         }
         //科目三
     }else if ([_currentModel.periodNum isEqualToString:@"4"]){
-        if ([_currentModel.status isEqualToString:@"0"]) {
-            if (indexPath.row == 2) {
+        if ([_currentModel.studyStatus isEqualToString:@"0"]) {
+            if (indexPath.row == 2-1) {
                 //科目三的学习
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
@@ -389,18 +426,18 @@
                 }
             }
             
-            if (indexPath.row == 4) {
+            if (indexPath.row == 4-1) {
                 //查看打卡记录
             }
-            if (indexPath.row == 6) {
+            if (indexPath.row == 6-1) {
                 //立即约考
                 
             }
             
-        }else if ([_currentModel.status isEqualToString:@"1"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
             
-        }else if ([_currentModel.status isEqualToString:@"2"]){
-            if (indexPath.row == 2) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
+            if (indexPath.row == 2-1) {
                 //科目三的学习
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
@@ -409,11 +446,11 @@
             }
             
            
-            if (indexPath.row == 6) {
+            if (indexPath.row == 6-1) {
                 //再次练车
             }
-        }else if ([_currentModel.status isEqualToString:@"3"]){
-            if (indexPath.row == 4) {
+        }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
+            if (indexPath.row == 4-1) {
                 //进入科目四
             }
         }else{
@@ -421,13 +458,13 @@
         }
         //科目四
     }else if ([_currentModel.periodNum isEqualToString:@"5"]){
-        if ([_currentModel.status isEqualToString:@"0"]) {
+        if ([_currentModel.studyStatus isEqualToString:@"0"]) {
             
-        }else if ([_currentModel.status isEqualToString:@"1"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
             
-        }else if ([_currentModel.status isEqualToString:@"2"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
             
-        }else if ([_currentModel.status isEqualToString:@"3"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
             
         }else{
             
@@ -905,12 +942,14 @@
 }
 
 - (void)getDataAvite{
-    
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *userId = [userDic objectForKey:@"userId"];
     [CustomAlertView showAlertViewWithVC:self];
-    [[URLConnectionHelper shareDefaulte] loadGetDataWithUrl:@"http://101.37.161.13:7081/student/v1/basicInfo/3000021321332132131" andSuccessBlock:^(NSArray *data) {
+    [[URLConnectionHelper shareDefaulte] loadGetDataWithUrl:[NSString stringWithFormat:@"http://101.37.161.13:7081/v1/student/basicInfo/%@",userId] andSuccessBlock:^(NSArray *data) {
         NSDictionary *dic = (NSDictionary *)data;
         ProgressDataModel *model = [[ProgressDataModel alloc] init];
         model.userId = [dic objectForKeyWithNoNsnull:@"userId"];
+        model.idCard = [dic objectForKeyWithNoNsnull:@"idCard"];
         model.status = [dic objectForKeyWithNoNsnull:@"status"];
         model.belongPeriod = [dic objectForKeyWithNoNsnull:@"belongPeriod"];
         model.periodNum = [NSString stringWithFormat:@"%@",[dic objectForKey:@"periodNum"]];
@@ -943,7 +982,7 @@
         model.examTimeLimit = [dic objectForKeyWithNoNsnull:@"examTimeLimit"];
         NSLog(@"%@",model);
         _currentModel = model;
-        [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.status andBlock:^(NSMutableArray *add) {
+        [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.studyStatus andBlock:^(NSMutableArray *add) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
                 createNormalCellModel *model = add[0];
@@ -954,7 +993,10 @@
             
         }];
     } andFiledBlock:^(NSError *error) {
-         [CustomAlertView hideAlertView];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        });
+        
     }];
 }
 
@@ -974,4 +1016,48 @@
     }];
 }
 
+#pragma mark - QuitAlertViewBtnClickedDelegate
+- (void)btnClickedWithBtn:(UIButton *)btn{
+    
+}
+
+- (void)choosedCocoaActiveWithModel:(FirstLocationModel *)model{
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *userId = [userDic objectForKey:@"userId"];
+    NSDictionary *dic =@{@"trainPlaceId":model.currentId,
+                         @"stuId":userId
+                         };
+    [CustomAlertView showAlertViewWithVC:self];
+    [[URLConnectionHelper shareDefaulte] loadPostTwoDataWithUrl:@"http://101.37.161.13:7081/v1/student/applicationCoach" andDic:dic andSuccessBlock:^(NSArray *data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            [self getDataAvite];
+        });
+        
+    } andFiledBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        
+        });
+    }];
+}
+
+//进入下一个学习阶段的方法
+- (void)getLearnChangedActive{
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *userId = [userDic objectForKey:@"userId"];
+
+    [CustomAlertView showAlertViewWithVC:self];
+    [[URLConnectionHelper shareDefaulte] loadGetDataWithUrl:[NSString stringWithFormat:@"http://101.37.161.13:7081/v1/student/enterNextStudyProgress/%@",userId] andSuccessBlock:^(NSArray *data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            [self getDataAvite];
+        });
+    } andFiledBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            
+        });
+    }];
+}
 @end

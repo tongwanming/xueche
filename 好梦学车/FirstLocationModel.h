@@ -54,5 +54,7 @@
 
 @property (nonatomic, strong) NSString *updateTime;
 
+@property (nonatomic, strong) NSString *schoolId;
+
 
 @end

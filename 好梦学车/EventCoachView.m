@@ -167,7 +167,7 @@ typedef void(^choosedLocationBlock)(UIButton *);
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     view.backgroundColor = [UIColor blackColor];
-    view.alpha = 0.4;
+    view.alpha = 0;
     [self addSubview:view];
     
     [self animationActive];
@@ -240,6 +240,99 @@ typedef void(^choosedLocationBlock)(UIButton *);
     [sureBtn addTarget:self action:@selector(locationActive:) forControlEvents:UIControlEventTouchUpInside];
     [sub addSubview:sureBtn];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissView)];
+    [self addGestureRecognizer:tap];
+    
+    UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissViewa)];
+    [sub addGestureRecognizer:tap1];
+}
+
+- (void)showEventCoachViewWithVC:(UIViewController *)vc andWithName:(NSString *)coachName andDes:(NSString *)des andImage:(NSString *)image andPoint:(float)point andBlock:(void (^)(NSString *))block{
+    
+    _showVc = vc;
+    self.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, CURRENT_BOUNDS.width, [UIScreen mainScreen].bounds.size.height);
+    self.backgroundColor = [UIColor clearColor];
+    //    self.alpha = 0.4;
+    [_showVc.view.window addSubview:self];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    view.backgroundColor = [UIColor blackColor];
+    view.alpha = 0.4;
+    [self addSubview:view];
+    
+    [self animationActive];
+    
+    sub = [[subCenterView alloc] initWithFrame:CGRectMake(20, ([UIScreen mainScreen].bounds.size.height-350)/2, CURRENT_BOUNDS.width-40, 350)];
+    sub.backgroundColor = [UIColor whiteColor];
+    sub.layer.masksToBounds = YES;
+    sub.layer.cornerRadius = 4;
+    sub.tag = 1001;
+    [self addSubview:sub];
+    
+    UIImageView *imageView = [[UIImageView alloc] init];
+    
+    if (image) {
+        [imageView sd_setImageWithURL:[NSURL URLWithString:image] placeholderImage:[UIImage imageNamed:@"pic03"]];
+    }else{
+        imageView.image = [UIImage imageNamed:@"pic03"];
+    }
+    
+    imageView.frame = CGRectMake(0, -40, 80, 80);
+    imageView.center = CGPointMake(CURRENT_BOUNDS.width/2, ([UIScreen mainScreen].bounds.size.height-350)/2);
+    imageView.layer.masksToBounds = YES;
+    imageView.layer.cornerRadius = 40;
+    [self addSubview:imageView];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, sub.frame.size.width, 18)];
+    nameLabel.textColor = [UIColor blackColor];
+    nameLabel.font = [UIFont boldSystemFontOfSize:18];
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    nameLabel.text = coachName;
+    //    nameLabel.backgroundColor = [UIColor redColor];
+    [sub addSubview:nameLabel];
+    
+    CGFloat width = (sub.frame.size.width-130*TYPERATION-10*4*TYPERATION)/5;
+    CGFloat height = width*33/32;
+    
+    UILabel *nameLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(nameLabel.frame)+30*TYPERATION, 80, height)];
+    nameLabel1.textColor = [UIColor blackColor];
+    nameLabel1.font = [UIFont boldSystemFontOfSize:18];
+    nameLabel1.textAlignment = NSTextAlignmentCenter;
+    nameLabel1.text = @"总体评价";
+    //    nameLabel.backgroundColor = [UIColor redColor];
+    [sub addSubview:nameLabel1];
+    
+    
+    for (int i = 0; i < 5; i++) {
+        StartButton *btn = [StartButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(CGRectGetMaxX(nameLabel1.frame)+20+width*i, CGRectGetMaxY(nameLabel.frame)+30*TYPERATION, width, height);
+        if (point <= i) {
+             [btn setImage:[UIImage imageNamed:@"content_btn_star_default"] forState:UIControlStateNormal];
+            
+        }else{
+           [btn setImage:[UIImage imageNamed:@"content_btn_star_selected"] forState:UIControlStateNormal];
+        }
+        
+        //        [btn setImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
+        btn.tag = 1+i;
+//        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        //        btn.backgroundColor = [UIColor purpleColor];
+        [sub addSubview:btn];
+    }
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(nameLabel1.frame)+20, sub.frame.size.width, 0.5)];
+    lineView.backgroundColor = EEEEEE;
+    [sub addSubview:lineView];
+    
+    UILabel *nameLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(lineView.frame)+30*TYPERATION, sub.frame.size.width-40, 100)];
+
+    nameLabel2.font = [UIFont systemFontOfSize:18];
+    nameLabel2.textAlignment = NSTextAlignmentCenter;
+    nameLabel2.text = des;
+    nameLabel2.textColor = TEXT_COLOR;
+    nameLabel2.numberOfLines = 0;
+    //    nameLabel.backgroundColor = [UIColor redColor];
+    [sub addSubview:nameLabel2];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissView)];
     [self addGestureRecognizer:tap];
     

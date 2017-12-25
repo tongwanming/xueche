@@ -11,6 +11,9 @@
 #define ShowBoxViewWidth 315
 #define ShowBoxViewHeight 135
 
+#define ShowBoxViewWidthTwo 315
+#define ShowBoxViewHeightTwo 165
+
 #define WRation [UIScreen mainScreen].bounds.size.width/375
 #define HRation [UIScreen mainScreen].bounds.size.height/667
 
@@ -33,15 +36,24 @@
     });
 }
 
-- (void)presentAddView:(UIView *)view{
+- (void)presentAddView:(UIView *)view withType:(QuitBoxViewType)type{
     [view.window addSubview:self];
-    CGFloat w = ShowBoxViewWidth*WRation;
-    CGFloat H = ShowBoxViewHeight*HRation;
+    CGFloat w = 0;
+    CGFloat H = 0;
+    if (type == QuitBoxViewTypeCancelAndSure) {
+        w = ShowBoxViewWidth*WRation;
+       H = ShowBoxViewHeight*HRation;
+    }else{
+        w = ShowBoxViewWidthTwo*WRation;
+        H = ShowBoxViewHeightTwo*HRation;
+    }
+    
     NSArray *xibs = [[NSBundle mainBundle] loadNibNamed:@"QuitBoxView" owner:nil options:nil];
     
     showView = xibs.firstObject;
     showView.frame = CGRectMake(self.center.x-w/2, self.center.y - H/2, 0, 0);
     showView.center = CGPointMake(self.center.x, self.center.y);
+    showView.type = type;
     showView.delegate = self;
     showView.layer.cornerRadius = 3;
     showView.layer.masksToBounds = YES;
@@ -53,8 +65,6 @@
         
     } completion:^(BOOL finished) {
         showView.showLabel.hidden = NO;
-        showView.LookBtn.hidden = NO;
-        showView.LeaveBtn.hidden = NO;
     }];
 }
 
@@ -68,6 +78,10 @@
 
 - (void)setRightTitle:(NSString *)rightTitle{
     [showView.LeaveBtn setTitle:rightTitle forState:UIControlStateNormal];
+}
+
+- (void)setSureTitle:(NSString *)sureTitle{
+    [showView.sureBtn setTitle:sureTitle forState:UIControlStateNormal];
 }
 
 #pragma mark - QuitBoxViewDelegate

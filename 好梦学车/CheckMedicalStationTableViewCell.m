@@ -23,6 +23,25 @@
     return cell;
 }
 
+- (void)cellBtnClickActiveWith:(void (^)(CheckMedicalStationModel *))block{
+    _block = block;
+}
+
+- (IBAction)btnClick:(id)sender {
+    if (_block) {
+        _block(_model);
+    }
+}
+
+- (void)setModel:(CheckMedicalStationModel *)model{
+    _model = model;
+    
+    _nameLabel.text = model.name;
+    _distanceLabel.text = [NSString stringWithFormat:@"%@ km",model.distance];
+    _addressLabel.text = model.address;
+}
+
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

@@ -7,7 +7,10 @@
 //
 
 #import "BasicViewController.h"
+#import "SureApplyModel.h"
 
 @interface ApplySureViewController : BasicViewController
+
+@property (nonatomic, strong) SureApplyModel *model;
 
 @end

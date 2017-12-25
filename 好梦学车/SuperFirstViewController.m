@@ -10,53 +10,180 @@
 #import "FirstViewController.h"
 
 #import "SubjectOneCurrentViewController.h"
+#import "CustomAlertView.h"
+#import "URLConnectionHelper.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface SuperFirstViewController ()<FirstViewControllerDelegate,SubjectOneCurrentViewControllerDelegate>
+@interface SuperFirstViewController ()<FirstViewControllerDelegate,SubjectOneCurrentViewControllerDelegate,CLLocationManagerDelegate>
 
 @end
 
 @implementation SuperFirstViewController{
     FirstViewController *_firstV;
     SubjectOneCurrentViewController *_progressV;
+    
+    CLLocationManager *locationManager;//定位服务
+    NSString *currentCity;
+    NSString *Strlatitude;//经度
+    NSString *Strlongitude;//纬度
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:YES];
+ 
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
-    
-//    if (_firstV == nil) {
-//        _firstV = [[FirstViewController alloc] init];
-//        _firstV.delegate = self;
-//    }
-//    _firstV.view.frame = self.view.bounds;
-//    [_firstV didMoveToParentViewController:self];
-//    [self.view addSubview:_firstV.view];
-//    return;
-    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
+        NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+        NSString *userId = [userDic objectForKey:@"userId"];
+        [CustomAlertView showAlertViewWithVC:self];
+        [[URLConnectionHelper shareDefaulte] loadGetDataWithUrl:[NSString stringWithFormat:@"http://101.37.161.13:7081/v1/student/basicInfo/%@",userId] andSuccessBlock:^(NSArray *data) {
+            NSLog(@"%@",data);
+            if ([data isEqual:[NSNull new]]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                     [CustomAlertView hideAlertView];
+                    //未缴费
+                    if (_firstV == nil) {
+                        _firstV = [[FirstViewController alloc] init];
+                        _firstV.delegate = self;
+                        _firstV.view.frame = self.view.bounds;
+                        [_firstV didMoveToParentViewController:self];
+                        [self.view addSubview:_firstV.view];
+                        
+                    }else{
+                        [self.view bringSubviewToFront:_firstV.view];
+                    }
+                });
+                return ;
+            }
+            NSDictionary *dic = (NSDictionary *)data;
+            NSString *status = [dic objectForKey:@"status"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+                if ([status isEqualToString:@"0"]) {
+                    //未缴费
+                    if (_firstV == nil) {
+                        _firstV = [[FirstViewController alloc] init];
+                        _firstV.delegate = self;
+                        _firstV.view.frame = self.view.bounds;
+                        [_firstV didMoveToParentViewController:self];
+                        [self.view addSubview:_firstV.view];
+
+                    }else{
+                        [self.view bringSubviewToFront:_firstV.view];
+                    }
+                    
+                }else{
+                    //已经缴费
+                    if (_progressV == nil) {
+                        _progressV = [[SubjectOneCurrentViewController alloc] init];
+                        _progressV.delegate = self;
+                        _progressV.view.frame = self.view.bounds;
+                        [_progressV didMoveToParentViewController:self];
+                        [self.view addSubview:_progressV.view];
+                    }else{
+                        [self.view bringSubviewToFront:_progressV.view];
+                        _progressV.refreshAvtive = @"";
+                    }
+                    
+                    
+                }
+            });
+        } andFiledBlock:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+                if (_firstV == nil) {
+                    _firstV = [[FirstViewController alloc] init];
+                    _firstV.delegate = self;
+                    _firstV.view.frame = self.view.bounds;
+                    [_firstV didMoveToParentViewController:self];
+                    [self.view addSubview:_firstV.view];
+                }else{
+                    [self.view bringSubviewToFront:_firstV.view];
+                    _progressV.refreshAvtive = @"";
+                }
+               
+            });
+        }];
+        
+        
+        
+    }else{
         if (_firstV == nil) {
             _firstV = [[FirstViewController alloc] init];
             _firstV.delegate = self;
+            _firstV.view.frame = self.view.bounds;
+            [_firstV didMoveToParentViewController:self];
+            [self.view addSubview:_firstV.view];
+        }else{
+            [self.view bringSubviewToFront:_firstV.view];
+//            [_firstV.view bringSubviewToFront:self.view];
+//            _progressV.refreshAvtive = @"";
         }
-        _firstV.view.frame = self.view.bounds;
-        [_firstV didMoveToParentViewController:self];
-        [self.view addSubview:_firstV.view];
-    }else{
-        if (_progressV == nil) {
-            _progressV = [[SubjectOneCurrentViewController alloc] init];
-            _progressV.delegate = self;
-        }
-        _progressV.view.frame = self.view.bounds;
-        [_progressV didMoveToParentViewController:self];
-        [self.view addSubview:_progressV.view];
+        
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Appear"];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.hidden = YES;
     
-    
+    [self locatemap];
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)locatemap{
+    if ([CLLocationManager locationServicesEnabled]) {
+        locationManager = [[CLLocationManager alloc] init];
+        locationManager.delegate = self;
+        [locationManager requestAlwaysAuthorization];
+        
+        currentCity = [[NSString alloc] init];
+        [locationManager requestWhenInUseAuthorization];
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.distanceFilter = 5.0;
+        [locationManager startUpdatingLocation];
+    }
+}
+
+#pragma mark coreLacation deleagte
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    
+    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"允许定位提示" message:@"请在设置中打开定位" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"打开定位" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //打开定位设置
+        NSURL *settingURl = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        [[UIApplication sharedApplication] openURL:settingURl];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [v addAction:ok];
+    [v addAction:cancel];
+    [self presentViewController:v animated:YES completion:^{
+        
+    }];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    [locationManager stopUpdatingLocation];
+    
+    CLLocation *currentLocation = [locations lastObject];
+    
+    NSString *latitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+    NSString *longitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];
+    [[NSUserDefaults standardUserDefaults] setObject:latitude forKey:@"cuurentLatitude"];
+    [[NSUserDefaults standardUserDefaults] setObject:longitude forKey:@"cuurentLongitude"];
+    
+    NSLog(@"la:%f-Long:%f",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude);
 }
 
 #pragma mark - SubjectOneCurrentViewControllerDelegateActive

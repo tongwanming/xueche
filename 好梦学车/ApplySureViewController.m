@@ -8,17 +8,27 @@
 
 #import "ApplySureViewController.h"
 #import "SubjectOneViewControllera.h"
+#import "CustomAlertView.h"
+#import "URLConnectionHelper.h"
 
 @interface ApplySureViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *btnView;
+@property (weak, nonatomic) IBOutlet UITextField *textFiled1;
+
+
+
 
 @end
 
 @implementation ApplySureViewController
 
+- (void)setModel:(SureApplyModel *)model{
+    _model = model;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     _btnView.layer.masksToBounds = YES;
     _btnView.layer.cornerRadius = 20;
     // Do any additional setup after loading the view from its nib.
@@ -29,8 +39,53 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         //[self.navigationController popViewControllerAnimated:YES];
     }else if (btn.tag == 1002){
-        SubjectOneViewControllera *v = [[SubjectOneViewControllera alloc] init];
-        [self.navigationController pushViewController:v animated:YES];
+        if (_textFiled1.text.length == 6) {
+            [CustomAlertView showAlertViewWithVC:self];
+            NSDictionary *dic = @{@"endTime":_model.endTime,
+                                  @"examTimeCode":_model.examTimeCode,
+                                  @"smsCode":_textFiled1.text,
+                                  @"startTime":_model.startTime,
+                                  @"username":_model.username};
+            [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://172.31.101.114:7080/student/v201701/exam/apply" andDic:dic andSuccessBlock:^(NSArray *data) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [CustomAlertView hideAlertView];
+                    
+                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"预约考试已经提交成功！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
+                    }];
+                    [v addAction:active];
+                    [self presentViewController:v animated:YES completion:^{
+                        
+                    }];
+                   
+                });
+            } andFiledBlock:^(NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [CustomAlertView hideAlertView];
+                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"预约考试失败！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        
+                    }];
+                    [v addAction:active];
+                    [self presentViewController:v animated:YES completion:^{
+                        
+                    }];
+                    
+                });
+            }];
+        }else{
+            UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"请输入正确的验证码" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [v addAction:active];
+            [self presentViewController:v animated:YES completion:^{
+                
+            }];
+        }
+       
     }
 }
 

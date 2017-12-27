@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ProgressDataModel.h"
+
 typedef void(^ExaminationAppointmentBlock)(UIButton *);
 
 @interface ExaminationAppointmentTableViewCell : UITableViewCell
+
+@property (nonatomic, strong) ProgressDataModel *model;
 + (id)cellWithTableToDequeueReusable:(UITableView *)table
                           identifier:(NSString *)identifier
                              nibName:(NSString *)nibName;

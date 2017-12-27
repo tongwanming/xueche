@@ -312,7 +312,7 @@
 
 - (void)getData{
     NSDictionary *dic = @{@"username":_textFiled.text};
-    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/check/image";
+    NSString *url = @"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/exam/check/image";
     [CustomAlertView showAlertViewWithVC:self];
     
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
@@ -336,16 +336,16 @@
                           @"password":_textFiled1.text,
                           @"verifyCode":_textFiled2.text,
                           };
-    NSString *url = @"http://101.37.161.13:7084/student/v201701/imitate/login";
+    NSString *url = @"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/imitate/login";
     [CustomAlertView showAlertViewWithVC:self];
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
+            [self checkCanJoinExnation];
         });
-        [self checkCanJoinExnation];
         
-    } andFiledBlock:^(NSError *error) {
+    } andDicFiledResonBlock:^(NSObject *dic) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
             if ([dic isKindOfClass:[NSString class]]) {
@@ -376,7 +376,7 @@
     NSDictionary *dic = @{@"username":_textFiled.text,
                           @"subject":@"2"
                           };
-    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/check";
+    NSString *url = @"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/exam/check";
 
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);

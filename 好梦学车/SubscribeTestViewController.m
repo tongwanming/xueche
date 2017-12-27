@@ -296,7 +296,7 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
     }else if (btn.tag == 1002){
         [CustomAlertView showAlertViewWithVC:self];
         NSDictionary *dic = @{@"username":_userName};
-        [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7084/student/v201701/send/appoint/sms" andDic:dic andSuccessBlock:^(NSArray *data) {
+        [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/send/appoint/sms" andDic:dic andSuccessBlock:^(NSArray *data) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
                 ApplySureViewController *v = [[ApplySureViewController alloc] init];
@@ -442,7 +442,7 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
                           @"endTime": model.endTime,
                           @"startTime": model.startTime,
                           @"username": _userName};
-    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/time";
+    NSString *url = @"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/exam/time";
     
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSArray *detailData = [((NSDictionary *)data) objectForKey:@"data"];

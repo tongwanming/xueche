@@ -185,6 +185,7 @@
             cell = [ExaminationAppointmentTableViewCell cellWithTableToDequeueReusable:tableView identifier:@"ExaminationAppointmentTableViewCell" nibName:@"ExaminationAppointmentTableViewCell"];
             [_dic setObject:cell forKey:@"appointment"];
         }
+        ((ExaminationAppointmentTableViewCell *)cell).model = _currentModel;
         [((ExaminationAppointmentTableViewCell *)cell) ExaminationAppointmentWithBlock:^(UIButton *btn) {
             if (btn.tag == 1001) {
                 //注意事项
@@ -204,7 +205,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"%@---%@---%@",_currentModel.periodNum,_currentModel.status,@(indexPath.row));
+    NSLog(@"%@---%@---%@",_currentModel.periodNum,_currentModel.studyStatus,@(indexPath.row));
     //报名
     if ([_currentModel.periodNum isEqualToString:@"0"]) {
         if ([_currentModel.cwStatus isEqualToString:@"0"]) {
@@ -321,6 +322,15 @@
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
+            
+        }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
+            if (indexPath.row == 2-1) {
+                //立即练题
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
             if (indexPath.row == 5-1) {
                 //立即约考
                 ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
@@ -329,8 +339,7 @@
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-        }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
-            
+
         }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
             if (indexPath.row == 2-1) {
                 //立即练题
@@ -385,6 +394,7 @@
             if (indexPath.row == 4-1) {
                 //查看打卡累积
                 DoDriveExerciseViewController *v = [[DoDriveExerciseViewController alloc] init];
+                v.subject = _currentModel.subject;
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
                 }
@@ -401,8 +411,6 @@
                     _quitrView.letfTitle = @"再想想";
                     _quitrView.rightTitle = @"立即约考";
                 });
-                
-                
             }
         }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
             if (indexPath.row == 2-1) {
@@ -416,6 +424,7 @@
             if (indexPath.row == 4-1) {
                 //查看打卡累积
                 DoDriveExerciseViewController *v = [[DoDriveExerciseViewController alloc] init];
+                v.subject = _currentModel.subject;
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
                 }
@@ -439,41 +448,53 @@
         }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
             
         }else if ([_currentModel.studyStatus isEqualToString:@"4"]){
-            if (indexPath.row == 2-1) {
-                //观看视频
-                ExerciseViewController *v = [[ExerciseViewController alloc] init];
-                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
-                }
-            }
-            if (indexPath.row == 6-1) {
-                //继续练车
+            if (indexPath.row == 3) {
+                //开始进入科目三的学习
+                [self getLearnChangedActive];
             }
         }else if ([_currentModel.studyStatus isEqualToString:@"5"]){
-            if (indexPath.row == 4-1) {
-                //开始科目三的学习
-                [self getDataAvite];
-            }
-        }else{
-            
-        }
-        //科目三
-    }else if ([_currentModel.periodNum isEqualToString:@"4"]){
-        if ([_currentModel.studyStatus isEqualToString:@"0"]) {
-            if (indexPath.row == 2-1) {
+            if (indexPath.row == 1) {
                 //科目三的学习
                 ExerciseViewController *v = [[ExerciseViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
+            if (indexPath.row == 5) {
+                //继续练车
+                
+            }
+        }
+        else{
+            
+        }
+        //科目三
+    }else if ([_currentModel.periodNum isEqualToString:@"4"]){
+        if ([_currentModel.studyStatus isEqualToString:@"0"]) {
+            if (indexPath.row == 2-1) {
+                
+            }
             
             if (indexPath.row == 4-1) {
                 //查看打卡记录
+                DoDriveExerciseViewController *v = [[DoDriveExerciseViewController alloc] init];
+                v.subject = _currentModel.subject;
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
+                }
             }
             if (indexPath.row == 6-1) {
                 //立即约考
+                QuitAlertView *_quitrView = [QuitAlertView createShowView];
+                _quitrView.delegate = self;
+                _quitrView.frame = self.view.bounds;
                 
+                [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelAndSure];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _quitrView.describeStr = @"请与您的教练通报并获取同意，再确定是否预约科目二考试。";
+                    _quitrView.letfTitle = @"再想想";
+                    _quitrView.rightTitle = @"立即约考";
+                });
             }
             
         }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
@@ -492,10 +513,28 @@
                 //再次练车
             }
         }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
-            if (indexPath.row == 4-1) {
+            if (indexPath.row == 4) {
                 //进入科目四
+                 [self getLearnChangedActive];
             }
-        }else{
+        }else if ([_currentModel.studyStatus isEqualToString:@"4"]){
+         
+        }else if ([_currentModel.studyStatus isEqualToString:@"5"]){
+            if (indexPath.row == 1) {
+                //科目三的学习
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            if (indexPath.row == 5) {
+                //继续练车
+                
+            }
+        }else if ([_currentModel.studyStatus isEqualToString:@"6"]){
+            
+        }
+        else{
             
         }
         //科目四
@@ -507,6 +546,8 @@
         }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
             
         }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
+            
+        }else if ([_currentModel.studyStatus isEqualToString:@"4"]){
             
         }else{
             
@@ -1003,26 +1044,35 @@
         model.classTypeName = [dic objectForKeyWithNoNsnull:@"classTypeName"];
         model.carTypeCode = [dic objectForKeyWithNoNsnull:@"carTypeCode"];
         model.carTypeName = [dic objectForKeyWithNoNsnull:@"carTypeName"];
-        
+        model.reservationStatus = [[dic objectForKeyWithNoNsnull:@"reservationStatus"] intValue];
         
         model.cwStatus = [dic objectForKeyWithNoNsnull:@"cwStatus"];
-        model.cwSubjectOneValidTime = (long)[dic objectForKey:@"cwSubjectOneValidTime"];
-        model.cwSubjectTwoValidTime = (long)[dic objectForKey:@"cwSubjectTwoValidTime"];
-        model.cwSubjectThreeValidTime = (long)[dic objectForKey:@"cwSubjectThreeValidTime"];
-        model.cwSubjectOneTrainTime = (long)[dic objectForKey:@"cwSubjectOneTrainTime"];
-        model.cwSubjectTwoTrainTime = (long)[dic objectForKey:@"cwSubjectTwoTrainTime"];
-        model.cwSubjectThreeTrainTime = (long)[dic objectForKey:@"cwSubjectThreeTrainTime"];
+        model.cwSubjectOneValidTime = [[dic objectForKey:@"cwSubjectOneValidTime"] integerValue];
+        model.cwSubjectTwoValidTime = [[dic objectForKey:@"cwSubjectTwoValidTime"] integerValue];
+        model.cwSubjectThreeValidTime = [[dic objectForKey:@"cwSubjectThreeValidTime"] integerValue];
+        model.cwSubjectOneTrainTime = [[dic objectForKey:@"cwSubjectOneTrainTime"] integerValue];
+        model.cwSubjectTwoTrainTime = [[dic objectForKey:@"cwSubjectTwoTrainTime"] integerValue];
+        model.cwSubjectThreeTrainTime = [[dic objectForKey:@"cwSubjectThreeTrainTime"] integerValue];
         model.govCheckStatus = [dic objectForKeyWithNoNsnull:@"govCheckStatus"];
         model.govFailReason = [dic objectForKeyWithNoNsnull:@"govFailReason"];
         
         model.subject = [dic objectForKeyWithNoNsnull:@"subject"];
+        model.examTime = [dic objectForKeyWithNoNsnull:@"examTime"];
+        model.examAddress = [dic objectForKeyWithNoNsnull:@"examAddress"];
         model.studyStatus = [dic objectForKeyWithNoNsnull:@"studyStatus"];
+        model.examDuration = [dic objectForKeyWithNoNsnull:@"examDuration"];
+        
         model.studyStartTime = [dic objectForKeyWithNoNsnull:@"studyStartTime"];
         model.studyEndTime = [dic objectForKeyWithNoNsnull:@"studyEndTime"];
         model.examStatus = [dic objectForKeyWithNoNsnull:@"examStatus"];
         model.lastExamScore = [dic objectForKeyWithNoNsnull:@"lastExamScore"];
         model.examTimeLimit = [dic objectForKeyWithNoNsnull:@"examTimeLimit"];
-        model.studyCount = [[dic objectForKey:@"studyCount"] intValue];
+        if ([[dic objectForKey:@"studyCount"] isEqual:[NSNull new]]) {
+            model.studyCount = 0;
+        }else{
+            model.studyCount = [[dic objectForKey:@"studyCount"] intValue];
+        }
+        
         NSLog(@"%@",model);
         _currentModel = model;
 //        _currentModel.periodNum = @"3";
@@ -1067,6 +1117,12 @@
         
     }else if (btn.tag == 1002){
         if ([_currentModel.periodNum isEqualToString:@"3"] && ([_currentModel.studyStatus isEqualToString:@"1"] || [_currentModel.studyStatus isEqualToString:@"2"])) {
+            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+            v.model = _currentModel;
+            if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+            }
+        }else if ([_currentModel.periodNum isEqualToString:@"4"]){
             ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
             v.model = _currentModel;
             if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {

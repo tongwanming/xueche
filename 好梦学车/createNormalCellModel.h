@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, createNormalCellStyle) {
     createNormalCellStyleUserDdfinedThreeth,//场地第三个
     createNormalCellStyleUserDdfinedWhite,//白底的cell  超文本
     createNormalCellStyleUserDdfinedAppointment,//预约考试的界面cell
+    createNormalCellStyleUserDdfinedImageOnly,//上部分只有图片
     
 //------------------------------------------------------
     createNormalCellStyleNormal,//文字剧中，需要传入文字颜色大小,只有文字

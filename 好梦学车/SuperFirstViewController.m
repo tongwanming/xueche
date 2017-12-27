@@ -33,7 +33,6 @@
     if ([UIApplication sharedApplication].statusBarStyle == UIStatusBarStyleLightContent) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
 }
 

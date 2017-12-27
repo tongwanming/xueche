@@ -235,6 +235,60 @@
                 
             }
                 break;
+            case createNormalCellStyleUserDdfinedImageOnly:{
+                UIImageView *bacvView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:model.imageViewStr]];
+                if (model.contenModel) {
+                    bacvView.contentMode = model.contenModel;
+                }else{
+                    bacvView.contentMode = UIViewContentModeTop;
+                }
+                
+                bacvView.frame = CGRectMake(0, 0, CURRENT_BOUNDS.width, model.he);
+                bacvView.backgroundColor = [UIColor whiteColor];
+              
+                [self addSubview:bacvView];
+                
+                UIImageView *bacvView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+                bacvView1.frame = CGRectMake(LEFT_INTEVAL*TYPERATION, model.he-10, CURRENT_BOUNDS.width-LEFT_INTEVAL*TYPERATION*2, 10);
+                bacvView1.backgroundColor = [UIColor whiteColor];
+                
+                [self addSubview:bacvView1];
+                
+                UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, CURRENT_BOUNDS.width, 18)];
+                titleLabel.font = [UIFont systemFontOfSize:18*TYPERATION];
+                if (model.color) {
+                    titleLabel.textColor = model.color;
+                }else{
+                    titleLabel.textColor = TEXT_COLOR;
+                }
+                
+                titleLabel.textAlignment = NSTextAlignmentCenter;
+                titleLabel.text = model.title;
+                [self addSubview:titleLabel];
+                
+                UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(titleLabel.frame)+6, CURRENT_BOUNDS.width, 18)];
+                titleLabel1.font = [UIFont systemFontOfSize:18*TYPERATION];
+                if (model.color) {
+                    titleLabel1.textColor = model.color;
+                }else{
+                    titleLabel1.textColor = TEXT_COLOR;
+                }
+                
+                titleLabel1.textAlignment = NSTextAlignmentCenter;
+                titleLabel1.text = model.detailTitle;
+                [self addSubview:titleLabel1];
+                if (model.hasFootViewLine) {
+                    
+                }else{
+                    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 1.5)];
+                    lineView.backgroundColor = BLUE_BACKGROUND_COLOR;
+                    lineView.center = CGPointMake(CURRENT_BOUNDS.width/2, CGRectGetMaxY(titleLabel1.frame)+30);
+                    [self addSubview:lineView];
+                }
+                
+                
+            }
+                break;
             case createNormalCellStyleUserDdfinedForth:{
                 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(LEFT_INTEVAL*TYPERATION, 0, CURRENT_BOUNDS.width-LEFT_INTEVAL*TYPERATION*2, model.he)];
                 view.backgroundColor = [UIColor whiteColor];

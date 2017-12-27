@@ -36,6 +36,9 @@
 /** 学员电话 */
 @property (nonatomic, strong) NSString *phone;
 
+/** 预约状态 */
+@property (nonatomic, assign) int reservationStatus;
+
 /** 班型编码 */
 @property (nonatomic, strong) NSString *classTypeCode;
 
@@ -90,6 +93,15 @@
 
 /** 学习科目 */
 @property (nonatomic, strong) NSString *subject;
+
+/** 考试场地 */
+@property (nonatomic, strong) NSString *examAddress;
+
+/** 考试时间 */
+@property (nonatomic, strong) NSString *examTime;
+
+/** 考试场次 */
+@property (nonatomic, strong) NSString *examDuration;
 
 /** 学员学习状态（0 未开始 1 学习中 2 可约考 3 约考中 4 通过） */
 @property (nonatomic, strong) NSString *studyStatus;

@@ -206,8 +206,8 @@ typedef void(^choosedLocationBlock)(UIButton *);
 //    NSArray *imageArray = [src componentsSeparatedByString:@","];
 //    NSData *imageData = [[NSData alloc] initWithBase64EncodedString:imageArray[1] options:NSDataBase64DecodingIgnoreUnknownCharacters];
 //    imageView.image = [UIImage imageWithData:imageData];
-    if (@"") {
-        [imageView sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"img_nothing"]];
+    if (model.pictures) {
+        [imageView sd_setImageWithURL:[NSURL URLWithString:model.pictures] placeholderImage:[UIImage imageNamed:@"img_nothing"]];
     }else{
         imageView.image = [UIImage imageNamed:@"img_nothing"];
     }

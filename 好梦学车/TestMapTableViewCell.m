@@ -413,7 +413,7 @@
                         model.province = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"province"]];
                         model.longitude = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"longitude"]];
                         model.latitude =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"latitude"]];
-                        model.pictures = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"pictures"]];
+                        model.pictures = [NSString stringWithFormat:@"%@",((NSArray *)[dic objectForSubKey:@"pictures"]).firstObject];
                         model.belongSchool =[NSString stringWithFormat:@"%@",[dic objectForSubKey:@"schoolName"]];
                         model.address = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"descrip"]];
                         model.city = [NSString stringWithFormat:@"%@",[dic objectForSubKey:@"city"]];

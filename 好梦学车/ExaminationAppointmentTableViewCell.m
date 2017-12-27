@@ -19,6 +19,8 @@
 {
     NSArray *_data1;
     NSArray *_data2;
+    NSArray *_imageData;
+    NSArray *_stateData;
 }
 + (id)cellWithTableToDequeueReusable:(UITableView *)table
                           identifier:(NSString *)identifier
@@ -42,6 +44,13 @@
     [self createView];
 }
 
+- (void)setModel:(ProgressDataModel *)model{
+    _model = model;
+    _data1 = @[model.subject,@"报考姓名",@"考试场地",@"考试场次"];
+    _data2 = @[@"  受理中",model.realName,model.examAddress,model.examDuration];
+    [_tableView reloadData];
+}
+
 - (void)createView{
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 40)];
@@ -62,6 +71,8 @@
     [_tableView setTableFooterView:[self createFootView]];
     _data1 = @[@"科目一",@"报考姓名",@"考试场地",@"考试场次"];
     _data2 = @[@"  受理中",@"张涛涛",@"科目一九龙坡西彭考场",@"2017-12-5（逸动）8:00－12:00"];
+    _imageData = @[@"content_img_msg",@"content_img_msg",@"content_img_msg"];
+    _stateData = @[@"  受授理",@"  已授理",@"  授理失败"];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -86,7 +97,7 @@
     cell.textLabel.text = _data1[indexPath.row];
     if (indexPath.row == 0) {
         NSString *str = _data2[indexPath.row];
-        cell.detailTextLabel.attributedText = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:@"content_img_msg"] andOtherStr:str andBound:CGRectMake(0, -3, 14, 14)];
+        cell.detailTextLabel.attributedText = [NSMutableAttributedString textKitAboutWithStr:@"" andImage:[UIImage imageNamed:_imageData[_model.reservationStatus]] andOtherStr:_stateData[_model.reservationStatus] andBound:CGRectMake(0, -3, 14, 14)];
     }else{
         cell.detailTextLabel.text = _data2[indexPath.row];
     }

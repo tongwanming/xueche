@@ -58,7 +58,7 @@
     }
     [CustomAlertView showAlertViewWithVC:self];
     NSDictionary *dic = @{@"username":_userName,@"subjectCode":self.kskm};
-    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/address";
+    NSString *url = @"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/exam/address";
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];

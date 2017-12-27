@@ -46,7 +46,7 @@
                                   @"smsCode":_textFiled1.text,
                                   @"startTime":_model.startTime,
                                   @"username":_model.username};
-            [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7084/student/v201701/exam/apply" andDic:dic andSuccessBlock:^(NSArray *data) {
+            [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/exam/apply" andDic:dic andSuccessBlock:^(NSArray *data) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [CustomAlertView hideAlertView];
                     

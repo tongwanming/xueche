@@ -10,4 +10,6 @@
 
 @interface DoDriveExerciseViewController : BasicViewController
 
+@property (nonatomic, strong) NSString *subject;
+
 @end

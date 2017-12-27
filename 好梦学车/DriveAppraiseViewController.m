@@ -29,7 +29,7 @@
     float _n4;
 }
 - (IBAction)btnClick:(id)sender {
-    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)setModel:(DoDriveExerciseModel *)model{

@@ -49,7 +49,10 @@
     
     NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
     NSString *userId = [userDic objectForKey:@"userId"];
-    NSDictionary *dic = @{@"stuId":userId};
+    NSDictionary *dic = @{@"stuId":userId,@"subject":_subject};
+    if (_data.count > 0) {
+        [_data removeAllObjects];
+    }
     [CustomAlertView showAlertViewWithVC:self];
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7081/v1/student/study/record/list" andDic:dic andSuccessBlock:^(NSArray *data) {
         dispatch_async(dispatch_get_main_queue(), ^{

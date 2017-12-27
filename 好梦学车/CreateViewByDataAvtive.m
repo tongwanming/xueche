@@ -410,7 +410,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
     }else if ([progrss isEqualToString:@"2"]){
         
         //练题完成
-        if ([subProgress isEqualToString:@"0"]) {
+        if ([subProgress isEqualToString:@"1"]) {
             NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@60,@20,@150,@100];
             NSArray *title = @[@"",@"",@"",@"",@"",@"在西培学堂完成1320分钟学习后即可约考"];
@@ -453,7 +453,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         
                         model.color = TEXT_COLOR;
                         model.title = @"1320min";
-                        model.detailTitle = @"280min";
+                        model.detailTitle = [NSString stringWithFormat:@"%ldmin",(long)modela.cwSubjectOneValidTime];
                     }
                         break;
                         
@@ -477,7 +477,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
             }
             
             
-        }else if ([subProgress isEqualToString:@"1"]){
+        }else if ([subProgress isEqualToString:@"2"]){
             NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@60,@20,@150,@100];
             NSArray *title = @[@"",@"",@"",@"",@"",@"立即约考"];
@@ -520,7 +520,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         
                         model.color = TEXT_COLOR;
                         model.title = @"1320min";
-                        model.detailTitle = @"1320min";
+                        model.detailTitle = [NSString stringWithFormat:@"%ldmin",(long)modela.cwSubjectOneValidTime];
                     }
                         break;
                         
@@ -543,7 +543,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
             //科目一预约考试
-        }else if ([subProgress isEqualToString:@"2"]){
+        }else if ([subProgress isEqualToString:@"6"]){
             NSArray *arra = @[@"banner_two",@"",@""];
             NSArray *heights = @[@100,@0,@(300+44*5)];
             NSArray *title = @[@"",@"",@"场地名称:"];
@@ -755,9 +755,9 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
         }else if ([subProgress isEqualToString:@"6"]){
-            NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"",@""];
-            NSArray *heights = @[@100,@30,@60,@60,@10,@60,@100];
-            NSArray *title = @[@"",@"",@"场地名称:",@"详细地址:",@"场地名称:",@"系统正在为你匹配教练，匹配成功后，教练会与您联系，如果长时间教练没有和您联系，请拨打：40000000  客服热线",@"教练已联系"];
+            NSArray *arra = @[@"banner_three",@"",@"img_waitfor",@"",@"",@"",@""];
+            NSArray *heights = @[@100,@30,@130,@60,@60,@10,@120];
+            NSArray *title = @[@"",@"",@"",@"场地名称:",@"详细地址:",@"场地名称:",@"系统正在为你匹配教练，匹配成功后，教练会与您联系，如果长时间教练没有和您联系，请拨打：40000000  客服热线"];
             
             for (int i = 0; i<title.count; i++) {
                 
@@ -779,6 +779,13 @@ static CreateViewByDataAvtive *_shareDefaulte;
                     }
                         break;
                     case 2:{
+                        model.style = createNormalCellStyleUserDdfinedImageOnly;
+                        model.detailTitle = @"";
+                        model.contenModel = UIViewContentModeCenter;
+                        model.hasFootViewLine = YES;
+                    }
+                        break;
+                    case 3:{
                         model.style = createNormalCellStyleNormal1;
                         model.color = TEXT_COLOR;
                         model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
@@ -786,7 +793,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         model.titleFont = 14;
                     }
                         break;
-                    case 3:{
+                    case 4:{
                         model.style = createNormalCellStyleNormal1;
                         model.color = TEXT_COLOR;
                         model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"两江新区互联网产业园 " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
@@ -795,12 +802,12 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         
                     }
                         break;
-                    case 4:{
+                    case 5:{
                         model.style = createNormalCellStyleOnlyImageCenter;
                         model.color = [UIColor whiteColor];
                     }
                         break;
-                    case 5:{
+                    case 6:{
                         model.style = createNormalCellStyleUserDdfinedWhite;
                         model.titleFont = 14*TYPERATION;
                         NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,14,14)];
@@ -812,7 +819,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         model.color = ADB1B9;
                     }
                         break;
-                    case 6:{
+                    case 7:{
                         model.style = createNormalCellStyleUserDdfinedTwo;
                         model.hasDefalut = YES;
                     }
@@ -978,7 +985,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         break;
                     case 5:{
                         model.style = createNormalCellStyleBang;
-                        model.grade = 89.0;
+                        model.grade = [modela.lastExamScore floatValue];
                         
                         
                     }
@@ -1004,7 +1011,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
             //科目二通过考试
-        }else if ([subProgress isEqualToString:@"5"]){
+        }else if ([subProgress isEqualToString:@"4"]){
             NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@100,@150,@100,@40];
             NSArray *title = @[@"",@"",@"",@"",@"开始科目三的学习",@""];
@@ -1036,7 +1043,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         break;
                     case 3:{
                         model.style = createNormalCellStyleBang;
-                        model.grade = 100.0;
+                        model.grade = [modela.lastExamScore floatValue];
                         
                         
                     }
@@ -1107,7 +1114,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         
                         model.color = TEXT_COLOR;
                         model.title = @"科目三练车打卡累积";
-                        model.detailTitle = @"100次";
+                        model.detailTitle = [NSString stringWithFormat:@"%d次",modela.studyCount];
                     }
                         break;
                         
@@ -1131,7 +1138,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
            //科目三预约考试
-        }else if ([subProgress isEqualToString:@"1"]){
+        }else if ([subProgress isEqualToString:@"3"]){
             NSArray *arra = @[@"banner_four",@"",@""];
             NSArray *heights = @[@100,@0,@(300+44*5)];
             NSArray *title = @[@"",@"",@"场地名称:"];
@@ -1172,7 +1179,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
              //科目三未通过考试
-        }else if ([subProgress isEqualToString:@"2"]){
+        }else if ([subProgress isEqualToString:@"5"]){
             NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@60,@20,@100,@150,@200,@40];
             NSArray *title = @[@"",@"",@"",@"",@"",@"",@"再次练车",@""];
@@ -1218,7 +1225,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         break;
                     case 5:{
                         model.style = createNormalCellStyleBang;
-                        model.grade = 89.0;
+                        model.grade = [modela.lastExamScore floatValue];
                         
                         
                     }
@@ -1242,7 +1249,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
             //科目三通过考试
-        }else if ([subProgress isEqualToString:@"3"]){
+        }else if ([subProgress isEqualToString:@"4"]){
             NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@100,@150,@100,@40];
             NSArray *title = @[@"",@"",@"",@"",@"进入科目四",@""];
@@ -1274,7 +1281,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         break;
                     case 3:{
                         model.style = createNormalCellStyleBang;
-                        model.grade = 100.0;
+                        model.grade = [modela.lastExamScore floatValue];
                         
                     }
                         break;

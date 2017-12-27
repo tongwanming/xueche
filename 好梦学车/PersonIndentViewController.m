@@ -441,8 +441,8 @@
         });
         if (error == nil) {
             NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            NSString *message = [jsonDict objectForKey:@"message"];
-            if ([message isEqualToString:@"订单取消成功"]) {
+            BOOL message = [[jsonDict objectForKey:@"success"] boolValue];
+            if (message) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[OrderValidityManager defaultManager] destroyOrderValidity];
                     [self.navigationController popViewControllerAnimated:YES];

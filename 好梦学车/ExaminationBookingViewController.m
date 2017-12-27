@@ -312,21 +312,23 @@
 
 - (void)getData{
     NSDictionary *dic = @{@"username":_textFiled.text};
-    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/check/image";
+    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/check/image";
     [CustomAlertView showAlertViewWithVC:self];
+    
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
-    
+        
         NSData *imageData = [[NSData alloc] initWithBase64EncodedString:data[0] options:NSDataBase64DecodingIgnoreUnknownCharacters];
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
-           _testView.image = [UIImage imageWithData:imageData];
+            _testView.image = [UIImage imageWithData:imageData];
         });
-    } andFiledBlock:^(NSError *error) {
+    } andDicFiledResonBlock:^(NSObject *dic) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
         });
     }];
+    
 }
 
 - (void)getLoginActive{
@@ -334,7 +336,7 @@
                           @"password":_textFiled1.text,
                           @"verifyCode":_textFiled2.text,
                           };
-    NSString *url = @"http://172.31.101.114:7080/student/v201701/imitate/login";
+    NSString *url = @"http://101.37.161.13:7084/student/v201701/imitate/login";
     [CustomAlertView showAlertViewWithVC:self];
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
@@ -346,6 +348,25 @@
     } andFiledBlock:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
+            if ([dic isKindOfClass:[NSString class]]) {
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
         });
     }];
 }
@@ -355,9 +376,8 @@
     NSDictionary *dic = @{@"username":_textFiled.text,
                           @"subject":@"2"
                           };
-    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/check";
+    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/check";
 
-    
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSLog(@"%@",data);
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -367,18 +387,28 @@
             v.kskm = @"2";
             [self.navigationController pushViewController:v animated:YES];
         });
-    } andDicFiledBlock:^(NSDictionary *dic) {
-        
+    } andDicFiledResonBlock:^(NSObject *dic) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
-            UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [v addAction:active];
-            [self presentViewController:v animated:YES completion:^{
-                
-            }];
+            if ([dic isKindOfClass:[NSString class]]) {
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
         });
     }];
 }

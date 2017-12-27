@@ -58,10 +58,8 @@
     }
     [CustomAlertView showAlertViewWithVC:self];
     NSDictionary *dic = @{@"username":_userName,@"subjectCode":self.kskm};
-    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/address";
+    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/address";
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
-        NSLog(@"%@",data);
-      
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
         });
@@ -91,11 +89,28 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [_tableView reloadData];
         });
-        
-        
-    } andFiledBlock:^(NSError *error) {
+    } andDicFiledResonBlock:^(NSObject *dic) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
+            if ([dic isKindOfClass:[NSString class]]) {
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
         });
     }];
 }

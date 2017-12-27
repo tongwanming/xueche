@@ -590,7 +590,7 @@
         NSMutableDictionary *personDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
         NSDictionary *dic = @{
                               @"billType": @"",
-                              @"categoryCode": _model.categoryCode,
+                              
                               @"coachUid": @"",
                               @"header": @{
                                       @"cmd": @"",
@@ -606,9 +606,9 @@
                               @"needBill": @"N",
                               @"payType": @"INSTALLMENT",
                               @"price": @1,
-                              @"projectTypeCode": _model.projectTypeCode,
+                              @"productCode":productCode1,
                               @"serviceStationId": @"",
-                              @"studentUid": [personDic objectForKey:@"userId"],
+                              @"buyerId": [personDic objectForKey:@"userId"],
                               @"trainPlaceId": @"",
                               @"coachName":_coach,
                               @"trainPlaceName":_location
@@ -630,8 +630,9 @@
         NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (error == nil) {
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSString *mesg = [jsonDict objectForKey:@"success"];
-                if ([mesg boolValue]) {
+                
+                NSString *code = [jsonDict objectForKey:@"code"];
+                if ([code isEqualToString:@"200"]) {
                     NSDictionary *did = [jsonDict objectForKey:@"data"];
                     _payNum = [did objectForKey:@"orderNo"];
                     NSLog(@"---:%@",@"请求成功");
@@ -668,7 +669,7 @@
                     model.data = @[_userName,_location,_typeLabel.text,_coach];
                     model.indentNum = _payNum;
                     model.createTimeStr = DateTime;
-                   
+                    
                     
                     [[OrderValidityManager defaultManager] setModelWithData:model];
                     [[OrderValidityManager defaultManager] initOrderValidity];
@@ -676,7 +677,20 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.navigationController pushViewController:v animated:YES];
                     });
+                }else{
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"创建订单失败" message:[NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"message"]] preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    });
                 }
+                
             }else{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self showNotAllowIn];
@@ -694,7 +708,7 @@
         NSMutableDictionary *personDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
         NSDictionary *dic = @{
                               @"billType": @"",
-                              @"categoryCode": _model.categoryCode,
+                              
                               @"coachUid": @"",
                               @"header": @{
                                   @"cmd": @"",
@@ -710,9 +724,9 @@
                               @"needBill": @"N",
                               @"payType": @"ONLINE",
                               @"price": @1,
-                              @"projectTypeCode": _model.projectTypeCode,
+                             
                               @"serviceStationId": @"",
-                              @"studentUid": [personDic objectForKey:@"userId"],
+                              @"buyerId": [personDic objectForKey:@"userId"],
                               @"trainPlaceId": @"",
                               @"coachName":_coach,
                               @"trainPlaceName":_location,
@@ -739,8 +753,9 @@
             });
             if (error == nil) {
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSString *mesg = [jsonDict objectForKey:@"success"];
-                if ([mesg boolValue]) {
+                BOOL mesg = [[jsonDict objectForKey:@"success"] boolValue];
+                NSString *code = [jsonDict objectForKey:@"code"];
+                if ([code isEqualToString:@"200"]) {
                     NSDictionary *did = [jsonDict objectForKey:@"data"];
                     _payNum = [did objectForKey:@"orderNo"];
                     NSLog(@"---:%@",@"请求成功");
@@ -783,6 +798,17 @@
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.navigationController pushViewController:v animated:YES];
+                    });
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"创建订单失败" message:[NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"message"]] preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
                     });
                 }
                 

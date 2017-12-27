@@ -25,12 +25,16 @@
 - (void)setModel:(DoDriveExerciseModel *)model{
     _model = model;
     
-    _currentType.text = model.currentType;
-    _timeLabel.text = model.time;
-    _locationLabel.text = model.location;
+    _currentType.text = model.subject;
+    _timeLabel.text = model.signTime;
+    _locationLabel.text = model.trainPlaceName;
     _cocoaNameLabel.text = model.cocoaName;
+    if (model.isEvaluate) {
+        [_stateLabel setTitle:@"已评价" forState:UIControlStateNormal];
+    }else{
+        [_stateLabel setTitle:@"未评价" forState:UIControlStateNormal];
+    }
     
-    [_stateLabel setTitle:model.stateName forState:UIControlStateNormal];
 }
 
 - (void)awakeFromNib {

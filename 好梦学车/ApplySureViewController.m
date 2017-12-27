@@ -46,11 +46,11 @@
                                   @"smsCode":_textFiled1.text,
                                   @"startTime":_model.startTime,
                                   @"username":_model.username};
-            [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://172.31.101.114:7080/student/v201701/exam/apply" andDic:dic andSuccessBlock:^(NSArray *data) {
+            [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7084/student/v201701/exam/apply" andDic:dic andSuccessBlock:^(NSArray *data) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [CustomAlertView hideAlertView];
                     
-                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"预约考试已经提交成功！" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"预约成功" message:@"预约考试已经提交成功！" preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                         [self dismissViewControllerAnimated:YES completion:nil];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
@@ -59,20 +59,30 @@
                     [self presentViewController:v animated:YES completion:^{
                         
                     }];
-                   
+                    
                 });
-            } andFiledBlock:^(NSError *error) {
+            } andDicFiledResonBlock:^(NSObject *dic) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [CustomAlertView hideAlertView];
-                    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"预约考试失败！" preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                        
-                    }];
-                    [v addAction:active];
-                    [self presentViewController:v animated:YES completion:^{
-                        
-                    }];
-                    
+                    if ([dic isKindOfClass:[NSString class]]) {
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    }else{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    }
                 });
             }];
         }else{

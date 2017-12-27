@@ -198,7 +198,7 @@
         NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
         
         //    NSURL *url = [NSURL URLWithString:urlstr];
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/payment-service/api/pay/weChatAppPay/toPay",PUBLIC_LOCATION]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/pay/weChatAppPay/toPay",PUBLIC_LOCATION]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
         NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
         [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -211,9 +211,25 @@
         NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (error == nil) {
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSDictionary *dic = [jsonDict objectForKey:@"data"];
-                //            // NOTE: 调用支付结果开始支付
-                [[YHNAdditionManager sharedManager] sendWeiXinPayRequestWithString:dic withDelegate:self];
+                NSString *code = [jsonDict objectForKey:@"code"];
+                if ([code isEqualToString:@"200"]) {
+                    NSDictionary *dic = [jsonDict objectForKey:@"data"];
+                    //            // NOTE: 调用支付结果开始支付
+                    [[YHNAdditionManager sharedManager] sendWeiXinPayRequestWithString:dic withDelegate:self];
+                }else{
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"支付失败" message:[NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"message"]] preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    });
+                }
+                
                 
             }else{
                 
@@ -243,7 +259,7 @@
         NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
         
         //    NSURL *url = [NSURL URLWithString:urlstr];
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7072/payment-service/api/pay/alipayAppPay/toPay",PUBLIC_LOCATION]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/pay/alipayAppPay/toPay",PUBLIC_LOCATION]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
         NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
         [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
@@ -256,11 +272,25 @@
         NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (error == nil) {
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                NSString *appScheme = @"alisdkdemo";
-                NSDictionary *dic = [jsonDict objectForKey:@"data"];
-                NSString *text = [dic objectForKey:@"text"];
-
-                [[YHNAdditionManager sharedManager] sendAliPayRequestWithString:text withDelegate:self];
+                NSString *code = [jsonDict objectForKey:@"code"];
+                if ([code isEqualToString:@"200"]) {
+                    NSString *appScheme = @"alisdkdemo";
+                    NSDictionary *dic = [jsonDict objectForKey:@"data"];
+                    NSString *text = [dic objectForKey:@"text"];
+                    
+                    [[YHNAdditionManager sharedManager] sendAliPayRequestWithString:text withDelegate:self];
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"支付失败" message:[NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"message"]] preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    });
+                }
                 
             }else{
                 UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];

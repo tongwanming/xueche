@@ -87,7 +87,7 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UeA-hF-KQI">
-                    <rect key="frame" x="0.0" y="210" width="375" height="457"/>
+                    <rect key="frame" x="0.0" y="210" width="375" height="413"/>
                     <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
@@ -96,7 +96,7 @@
                 <constraint firstItem="UeA-hF-KQI" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="Fpu-5f-7dU"/>
                 <constraint firstItem="PUI-7P-XVh" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="Pfn-5i-EGg"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="UeA-hF-KQI" secondAttribute="trailing" id="W9b-6e-6vv"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="UeA-hF-KQI" secondAttribute="bottom" id="bwp-e1-UrU"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="UeA-hF-KQI" secondAttribute="bottom" constant="44" id="bwp-e1-UrU"/>
                 <constraint firstItem="PUI-7P-XVh" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="n8k-UT-Aoj"/>
                 <constraint firstItem="UeA-hF-KQI" firstAttribute="top" secondItem="PUI-7P-XVh" secondAttribute="bottom" id="vUP-5W-PJ0"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="PUI-7P-XVh" secondAttribute="trailing" id="x2Z-zB-Bzz"/>

@@ -28,6 +28,9 @@
 //不添加Token的post请求
 - (void)loadPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andDicFiledBlock:(void(^)(NSDictionary *dic))failedBlock;
 
+//不添加Token的post请求 返回错误
+- (void)loadPostDataWithUrl:(NSString *)urlStr andDic:(NSDictionary *)dic andSuccessBlock:(void(^)(NSArray *data))successBlock andDicFiledResonBlock:(void(^)(NSObject *dic))failedBlock;
+
 //get请求
 - (void)loadGetDataWithUrl:(NSString *)urlStr andSuccessBlock:(void(^)(NSArray *data))successBlock andFiledBlock:(void(^)(NSError *error))failedBlock;
 

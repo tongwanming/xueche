@@ -10,24 +10,104 @@
 #import "DoDriveExerciseModel.h"
 #import "DoDriveExerciseViewControllerCell.h"
 #import "EventCoachView.h"
+#import "CustomAlertView.h"
+#import "URLConnectionHelper.h"
+#import "NSDictionary+objectForKeyWitnNoNsnull.m"
+#import "DriveAppraiseViewController.h"
 
 @interface DoDriveExerciseViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
-@implementation DoDriveExerciseViewController
+@implementation DoDriveExerciseViewController{
+    NSMutableArray *_data;
+}
 
 - (IBAction)btnClick:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+     [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
+     [self loadData];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _data = [[NSMutableArray alloc] init];
     
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+   
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)loadData{
+    
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *userId = [userDic objectForKey:@"userId"];
+    NSDictionary *dic = @{@"stuId":userId};
+    [CustomAlertView showAlertViewWithVC:self];
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7081/v1/student/study/record/list" andDic:dic andSuccessBlock:^(NSArray *data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+        });
+        for (NSDictionary *dic in data) {
+            DoDriveExerciseModel *model = [[DoDriveExerciseModel alloc] init];
+            model.currentId = [[dic objectForKey:@"id"] floatValue];
+            model.stuId = [dic objectForKeyWithNoNsnull:@"stuId"];
+            model.studentName = [dic objectForKeyWithNoNsnull:@"studentName"];
+            model.subject = [dic objectForKeyWithNoNsnull:@"subject"];
+            model.coachUserId = [dic objectForKeyWithNoNsnull:@"coachUserId"];
+            model.cocoaName = [dic objectForKeyWithNoNsnull:@"coachName"];
+            model.trainPlaceId = [[dic objectForKey:@"stuId"] floatValue];
+            model.trainPlaceName = [dic objectForKeyWithNoNsnull:@"trainPlaceName"];
+            model.recordRemark = [dic objectForKeyWithNoNsnull:@"recordRemark"];
+            model.signTime = [dic objectForKeyWithNoNsnull:@"signTime"];
+            model.evaluateId = [[dic objectForKey:@"evaluateId"] floatValue];
+            model.evaluateRemark = [dic objectForKeyWithNoNsnull:@"evaluateRemark"];
+            model.totalityStars = [[dic objectForKey:@"totalityStars"] floatValue];
+            model.qualityStars = [[dic objectForKey:@"qualityStars"] floatValue];
+            model.serviceStars = [[dic objectForKey:@"serviceStars"] floatValue];
+            model.planStars = [[dic objectForKey:@"planStars"] floatValue];
+            model.isEvaluate = [[dic objectForKey:@"isEvaluate"] boolValue];
+            model.evaluateTime = [dic objectForKeyWithNoNsnull:@"evaluateTime"];
+            [_data addObject:model];
+        }
+     
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+        });
+        
+        
+    } andDicFiledResonBlock:^(NSObject *dic) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            if ([dic isKindOfClass:[NSString class]]) {
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
+        });
+        
+    }];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -35,7 +115,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return _data.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -51,12 +131,24 @@
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.model = _data[indexPath.row];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [[EventCoachView shareDefault] showEventCoachViewWithVC:self andWithName:@"张淘淘" andDes:@"这是一个很长很长的评论,这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论这是一个很长很长的评论" andImage:@"" andPoint:3 andBlock:^(NSString *str) {
-        
-    }];
+    
+    DoDriveExerciseModel *model = _data[indexPath.row];
+    
+    if (model.isEvaluate) {
+        [[EventCoachView shareDefault] showEventCoachViewWithVC:self andWithName:@"张淘淘" andDes:model.evaluateRemark andImage:@"" andPoint:3 andBlock:^(NSString *str) {
+            
+        }];
+    }else{
+        DriveAppraiseViewController *v = [[DriveAppraiseViewController alloc] init];
+        v.model = model;
+        [self.navigationController pushViewController:v animated:YES];
+    }
+    
+   
 }
 
 - (void)didReceiveMemoryWarning {

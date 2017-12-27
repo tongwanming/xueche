@@ -296,7 +296,7 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
     }else if (btn.tag == 1002){
         [CustomAlertView showAlertViewWithVC:self];
         NSDictionary *dic = @{@"username":_userName};
-        [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://172.31.101.114:7080/student/v201701/send/appoint/sms" andDic:dic andSuccessBlock:^(NSArray *data) {
+        [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7084/student/v201701/send/appoint/sms" andDic:dic andSuccessBlock:^(NSArray *data) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
                 ApplySureViewController *v = [[ApplySureViewController alloc] init];
@@ -442,7 +442,8 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
                           @"endTime": model.endTime,
                           @"startTime": model.startTime,
                           @"username": _userName};
-    NSString *url = @"http://172.31.101.114:7080/student/v201701/exam/time";
+    NSString *url = @"http://101.37.161.13:7084/student/v201701/exam/time";
+    
     [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:url andDic:dic andSuccessBlock:^(NSArray *data) {
         NSArray *detailData = [((NSDictionary *)data) objectForKey:@"data"];
         for (NSDictionary *dic in detailData) {
@@ -466,7 +467,7 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
                 }
                 
             }
-          
+            
             model.subData = mutArr;
             
             [_data addObject:model];
@@ -474,17 +475,32 @@ typedef void(^SubscribeTwoBlock)(UIButton *btn);
         }
         NSLog(@"%@",data);
         dispatch_async(dispatch_get_main_queue(), ^{
-             [CustomAlertView hideAlertView];
+            [CustomAlertView hideAlertView];
             [_tableView reloadData];
         });
-       
-        
-       
-        
-        
-    } andFiledBlock:^(NSError *error) {
+    } andDicFiledResonBlock:^(NSObject *dic) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
+            [_tableView reloadData];
+            if ([dic isKindOfClass:[NSString class]]) {
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
         });
     }];
 }

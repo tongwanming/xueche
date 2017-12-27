@@ -30,13 +30,18 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:YES];
- 
+    if ([UIApplication sharedApplication].statusBarStyle == UIStatusBarStyleLightContent) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+     [self.navigationController setNavigationBarHidden:YES animated:YES];
+     [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Appear"];
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"]) {
         NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
         NSString *userId = [userDic objectForKey:@"userId"];

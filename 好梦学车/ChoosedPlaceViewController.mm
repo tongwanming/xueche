@@ -472,10 +472,7 @@
     [super viewWillAppear:YES];
    
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-    });
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -484,6 +481,10 @@
     _mapView.delegate = self;
     _locServer.delegate = self;
     [self searchRouteWithFirstLocationModel:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SubViewController" object:@"Disappear"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+    });
 }
 
 - (void)dealloc{
@@ -493,6 +494,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:YES];
+    [_locServer stopUserLocationService];
     [_mapView viewWillDisappear];
     _mapView.delegate = nil;
     _locServer.delegate = nil;

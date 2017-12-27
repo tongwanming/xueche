@@ -11,6 +11,8 @@
 #import "StartButtonOne.h"
 #import "StartButtonTwo.h"
 #import "StartButtonThree.h"
+#import "CustomAlertView.h"
+#import "URLConnectionHelper.h"
 
 @interface DriveAppraiseViewController ()<UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -21,14 +23,25 @@
     UIView *topView;
     UIView *bottonView;
     UITextView *textView;
+    float _n1;
+    float _n2;
+    float _n3;
+    float _n4;
 }
 - (IBAction)btnClick:(id)sender {
     
 }
 
+- (void)setModel:(DoDriveExerciseModel *)model{
+    _model = model;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _n1 = 0;
+    _n2 = 0;
+    _n3 = 0;
+    _n4 = 0;
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     
     _scrollView.delegate = self;
@@ -177,6 +190,7 @@
         if ([button isKindOfClass:[StartButton class]]) {
             if (((StartButton *)button).tag <= n) {
                 [(StartButton *)button setImage:[UIImage imageNamed:@"content_btn_star_selected"] forState:UIControlStateNormal];
+                _n1 = n;
             }else{
                 [(StartButton *)button setImage:[UIImage imageNamed:@"content_btn_star_default"] forState:UIControlStateNormal];
             }
@@ -191,6 +205,7 @@
         if ([button isKindOfClass:[StartButtonOne class]]) {
             if (((StartButtonOne *)button).tag <= n) {
                 [(StartButtonOne *)button setImage:[UIImage imageNamed:@"content_btn_face_selected"] forState:UIControlStateNormal];
+                _n2 = n;
             }else{
                 [(StartButtonOne *)button setImage:[UIImage imageNamed:@"content_btn_face_default"] forState:UIControlStateNormal];
             }
@@ -205,6 +220,7 @@
         if ([button isKindOfClass:[StartButtonTwo class]]) {
             if (((StartButtonTwo *)button).tag <= n) {
                 [(StartButtonTwo *)button setImage:[UIImage imageNamed:@"content_btn_face_selected"] forState:UIControlStateNormal];
+                _n3 = n;
             }else{
                 [(StartButtonTwo *)button setImage:[UIImage imageNamed:@"content_btn_face_default"] forState:UIControlStateNormal];
             }
@@ -219,6 +235,7 @@
         if ([button isKindOfClass:[StartButtonThree class]]) {
             if (((StartButtonThree *)button).tag <= n) {
                 [(StartButtonThree *)button setImage:[UIImage imageNamed:@"content_btn_face_selected"] forState:UIControlStateNormal];
+                _n4 = n;
             }else{
                 [(StartButtonThree *)button setImage:[UIImage imageNamed:@"content_btn_face_default"] forState:UIControlStateNormal];
             }
@@ -228,6 +245,45 @@
 
 - (void)btnClickSure:(UIButton *)btn{
     NSLog(@"确定按钮");
+    
+    NSDictionary *dic = @{
+                          @"evaluateId": @(_model.evaluateId),
+                          @"planStars": @(_n4),
+                          @"qualityStars":@(_n2),
+                          @"remark": textView.text,
+                          @"serviceStars":@(_n3),
+                          @"totalityStars":@(_n1)
+                          };
+    [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7081/v1/student/study/evaluate" andDic:dic andSuccessBlock:^(NSArray *data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    } andDicFiledResonBlock:^(NSObject *dic) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CustomAlertView hideAlertView];
+            if ([dic isKindOfClass:[NSString class]]) {
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:(NSString *)dic preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"错误提示" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
+        });
+    }];
+    
 }
 
 - (void)didReceiveMemoryWarning {

@@ -701,7 +701,10 @@
                 if (choosedType && choosedType.length > 0) {
                     installment_ViewController *v = [[installment_ViewController alloc] init];
                     v.payNum = payNum;
-                    [self.navigationController pushViewController:v animated:YES];
+                    if ([self.delegate respondsToSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:)]) {
+                        [self.delegate performSelector:@selector(FirstViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                    }
+//                    [self.navigationController pushViewController:v animated:YES];
                 }else{
                     if (_coachData.count < 1) {
                         [self showMistake];

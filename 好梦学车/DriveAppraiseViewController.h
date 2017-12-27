@@ -7,7 +7,10 @@
 //
 
 #import "BasicViewController.h"
+#import "DoDriveExerciseModel.h"
 
 @interface DriveAppraiseViewController : BasicViewController
+
+@property (nonatomic, strong) DoDriveExerciseModel *model;
 
 @end

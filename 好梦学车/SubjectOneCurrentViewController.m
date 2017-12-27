@@ -24,6 +24,7 @@
 #import "ExaminationBookingViewController.h"
 #import "ExerciseViewController.h"
 #import "QuitAlertView.h"
+#import "DoDriveExerciseViewController.h"
 
 @interface SubjectOneCurrentViewController ()<UITableViewDelegate,UITableViewDataSource,QuitAlertViewBtnClickedDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -186,11 +187,11 @@
         }
         [((ExaminationAppointmentTableViewCell *)cell) ExaminationAppointmentWithBlock:^(UIButton *btn) {
             if (btn.tag == 1001) {
-                
+                //注意事项
             }else if (btn.tag == 1002){
-                
+                //考试导航
             }else{
-                
+                //联系交管
             }
         }];
         
@@ -362,7 +363,7 @@
     }else if ([_currentModel.periodNum isEqualToString:@"3"]){
         if ([_currentModel.studyStatus isEqualToString:@"0"]) {
             
-        }else if ([_currentModel.status isEqualToString:@"1"]){
+        }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
             if (indexPath.row == 3-1) {
                 //考试场地导航
             }
@@ -372,6 +373,36 @@
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:nil withObject:@"4"];
                 }
+            }
+            if (indexPath.row == 2-1) {
+                //科目二的视频学习
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            
+            if (indexPath.row == 4-1) {
+                //查看打卡累积
+                DoDriveExerciseViewController *v = [[DoDriveExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
+                }
+            }
+            if (indexPath.row == 5) {
+                //立即约考
+                QuitAlertView *_quitrView = [QuitAlertView createShowView];
+                _quitrView.delegate = self;
+                _quitrView.frame = self.view.bounds;
+                
+                [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelAndSure];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _quitrView.describeStr = @"请与您的教练通报并获取同意，再确定是否预约科目二考试。";
+                    _quitrView.letfTitle = @"再想想";
+                    _quitrView.rightTitle = @"立即约考";
+                });
+                
+                
             }
         }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
             if (indexPath.row == 2-1) {
@@ -384,14 +415,25 @@
             
             if (indexPath.row == 4-1) {
                 //查看打卡累积
+                DoDriveExerciseViewController *v = [[DoDriveExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
+                }
             }
             if (indexPath.row == 6-1) {
                 //立即约考
-                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
-                v.model = _currentModel;
-                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
-                }
+               
+                QuitAlertView *_quitrView = [QuitAlertView createShowView];
+                _quitrView.delegate = self;
+                _quitrView.frame = self.view.bounds;
+                
+                [_quitrView presentAddView:self.view withType:QuitBoxViewTypeCancelAndSure];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _quitrView.describeStr = @"请与您的教练通报并获取同意，再确定是否预约科目二考试。";
+                    _quitrView.letfTitle = @"再想想";
+                    _quitrView.rightTitle = @"立即约考";
+                });
+                
             }
             
         }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
@@ -980,8 +1022,11 @@
         model.examStatus = [dic objectForKeyWithNoNsnull:@"examStatus"];
         model.lastExamScore = [dic objectForKeyWithNoNsnull:@"lastExamScore"];
         model.examTimeLimit = [dic objectForKeyWithNoNsnull:@"examTimeLimit"];
+        model.studyCount = [[dic objectForKey:@"studyCount"] intValue];
         NSLog(@"%@",model);
         _currentModel = model;
+//        _currentModel.periodNum = @"3";
+//        _currentModel.studyStatus = @"3";
         [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.studyStatus andBlock:^(NSMutableArray *add) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
@@ -1018,7 +1063,22 @@
 
 #pragma mark - QuitAlertViewBtnClickedDelegate
 - (void)btnClickedWithBtn:(UIButton *)btn{
-    
+    if (btn.tag == 1001) {
+        
+    }else if (btn.tag == 1002){
+        if ([_currentModel.periodNum isEqualToString:@"3"] && ([_currentModel.studyStatus isEqualToString:@"1"] || [_currentModel.studyStatus isEqualToString:@"2"])) {
+            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+            v.model = _currentModel;
+            if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+            }
+        }
+        
+    }else if (btn.tag == 1003){
+        
+    }else{
+        
+    }
 }
 
 - (void)choosedCocoaActiveWithModel:(FirstLocationModel *)model{
@@ -1060,4 +1120,5 @@
         });
     }];
 }
+
 @end

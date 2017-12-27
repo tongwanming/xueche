@@ -109,5 +109,7 @@
 /** 下次可预约考试期限（第一次考试未通过） */
 @property (nonatomic, strong) NSDate *examTimeLimit;
 
+/** 打卡次数 */
+@property (nonatomic, assign) int studyCount;
 
 @end

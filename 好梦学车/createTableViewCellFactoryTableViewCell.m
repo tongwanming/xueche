@@ -332,14 +332,14 @@
                 [self addSubview:backView1];
                 UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(10*TYPERATION, 0, 200, model.he)];
                 titleLabel1.text = model.title;
-                titleLabel1.font = [UIFont systemFontOfSize:model.titleFont];
+                titleLabel1.font = [UIFont systemFontOfSize:model.titleFont-2];
                 titleLabel1.textColor = model.color;
                 titleLabel1.textAlignment = NSTextAlignmentLeft;
                
                 [backView addSubview:titleLabel1];
                 
                 UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(backView.frame.size.width-10*TYPERATION-105, 0, 100, model.he)];
-                titleLabel2.font = [UIFont systemFontOfSize:model.titleFont];
+                titleLabel2.font = [UIFont systemFontOfSize:model.titleFont-2];
                 titleLabel2.textColor = UNMAIN_TEXT_COLOR;
                 titleLabel2.textAlignment = NSTextAlignmentRight;
                 titleLabel2.text = model.detailTitle;

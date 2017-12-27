@@ -825,7 +825,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
             //科目二扫码打卡界面
-        }else if ([subProgress isEqualToString:@"1"]){
+        }else if ([subProgress isEqualToString:@"1"] || [subProgress isEqualToString:@"2"]){
             NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"img_waitfor",@""];
             NSArray *heights = @[@100,@20,@60,@20,@50,@250,@100];
             NSArray *title = @[@"",@"",@"",@"",@"",@"在西培学堂完成1320分钟学习后即可约考",@"立即约考"];
@@ -867,7 +867,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         
                         model.color = TEXT_COLOR;
                         model.title = @"科目二练车打卡累积";
-                        model.detailTitle = @"100次";
+                        model.detailTitle = [NSString stringWithFormat:@"%d次",modela.studyCount];
                     }
                         break;
                         

@@ -142,7 +142,7 @@
     DoDriveExerciseModel *model = _data[indexPath.row];
     
     if (model.isEvaluate) {
-        [[EventCoachView shareDefault] showEventCoachViewWithVC:self andWithName:@"张淘淘" andDes:model.evaluateRemark andImage:@"" andPoint:3 andBlock:^(NSString *str) {
+        [[EventCoachView shareDefault] showEventCoachViewWithVC:self andWithName:model.studentName andDes:model.evaluateRemark andImage:@"" andPoint:model.totalityStars andBlock:^(NSString *str) {
             
         }];
     }else{

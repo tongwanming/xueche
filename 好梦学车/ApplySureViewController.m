@@ -65,12 +65,18 @@
                             [self dismissViewControllerAnimated:YES completion:nil];
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
                         }else{
-                            SubjectOneViewControllera *v = [[SubjectOneViewControllera alloc] init];
-                            v.payNum = [dic objectForKeyWithNoNsnull:@"orderNo"];
-                            v.model = _model;
-                            v.wwlsh = [dic objectForKeyWithNoNsnull:@"wwlsh"];
-                            v.zjcx = [dic objectForKeyWithNoNsnull:@"zjcx"];
-                            [self.navigationController pushViewController:v animated:YES];
+                            if ([[dic objectForKey:@"orderNo"] isEqual:[NSNull new]]) {
+                                [self dismissViewControllerAnimated:YES completion:nil];
+                                [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
+                            }else{
+                                SubjectOneViewControllera *v = [[SubjectOneViewControllera alloc] init];
+                                v.payNum = [dic objectForKeyWithNoNsnull:@"orderNo"];
+                                v.model = _model;
+                                v.wwlsh = [dic objectForKeyWithNoNsnull:@"wwlsh"];
+                                v.zjcx = [dic objectForKeyWithNoNsnull:@"zjcx"];
+                                [self.navigationController pushViewController:v animated:YES];
+                            }
+                            
                         }
                         
                     }];

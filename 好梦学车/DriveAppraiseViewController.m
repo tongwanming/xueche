@@ -13,6 +13,7 @@
 #import "StartButtonThree.h"
 #import "CustomAlertView.h"
 #import "URLConnectionHelper.h"
+#import "Masonry.h"
 
 @interface DriveAppraiseViewController ()<UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -50,7 +51,38 @@
     _scrollView.contentSize = CGSizeMake(CURRENT_BOUNDS.width, 436+265);
     _scrollView.backgroundColor = [UIColor colorWithRed:0.96f green:0.96f blue:0.98f alpha:1.00f];
     [self createView];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardWillHideNotification object:nil];
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)keyboardDidShow:(NSNotification *)notification{
+    
+    //kbSize即為鍵盤尺寸 (有width, height)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.scrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.view.top).offset(-250);
+                make.bottom.equalTo(self.view.bottom);
+                make.left.equalTo(self.view.left);
+                make.right.equalTo(self.view.right);
+            }];
+        }];
+    });
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.scrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.view.top).offset(104);
+                make.bottom.equalTo(self.view.bottom);
+                make.left.equalTo(self.view.left);
+                make.right.equalTo(self.view.right);
+            }];
+        }];
+    });
 }
 
 - (void)createView{
@@ -65,7 +97,7 @@
     
     UILabel *appraisLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 8, topView.frame.size.width-40, 40)];
     appraisLabel.numberOfLines = 2;
-    appraisLabel.text = @"您的教练张淘淘于2017年6月3日与您完成了一次练车，请您对教练的教学进行评价";
+    appraisLabel.text = [NSString stringWithFormat:@"您的教练%@与您完成了一次练车，请您对教练的教学进行评价",_model.cocoaName];
     appraisLabel.textColor = UNMAIN_TEXT_COLOR;
     appraisLabel.textAlignment = NSTextAlignmentCenter;
     appraisLabel.font = [UIFont systemFontOfSize:14];
@@ -81,7 +113,7 @@
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.textColor = TEXT_COLOR;
     nameLabel.font = [UIFont systemFontOfSize:16];
-    nameLabel.text = @"张淘淘";
+    nameLabel.text = _model.cocoaName;
     [topView addSubview:nameLabel];
     
     UILabel *nameLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(nameLabel.frame)+25, 80, 40)];

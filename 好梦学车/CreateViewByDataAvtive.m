@@ -410,7 +410,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
     }else if ([progrss isEqualToString:@"2"]){
         
         //练题完成
-        if ([subProgress isEqualToString:@"1"]) {
+        if ([subProgress isEqualToString:@"1"] || [subProgress isEqualToString:@"0"]) {
             NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@60,@20,@150,@100];
             NSArray *title = @[@"",@"",@"",@"",@"",@"在西培学堂完成1320分钟学习后即可约考"];
@@ -1072,7 +1072,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
     }else if ([progrss isEqualToString:@"4"]){
         
         //科目三扫码打卡界面
-        if ([subProgress isEqualToString:@"0"]) {
+        if ([subProgress isEqualToString:@"0"]|| [subProgress isEqualToString:@"1"]) {
             NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@"img_waitfor",@""];
             NSArray *heights = @[@100,@20,@60,@20,@50,@250,@100];
             NSArray *title = @[@"",@"",@"",@"",@"",@"",@"立即约考"];

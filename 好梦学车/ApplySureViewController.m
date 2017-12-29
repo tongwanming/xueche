@@ -14,6 +14,7 @@
 @interface ApplySureViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *btnView;
 @property (weak, nonatomic) IBOutlet UITextField *textFiled1;
+@property (weak, nonatomic) IBOutlet UILabel *showLabel;
 
 
 
@@ -31,6 +32,7 @@
 
     _btnView.layer.masksToBounds = YES;
     _btnView.layer.cornerRadius = 20;
+
     // Do any additional setup after loading the view from its nib.
 }
 - (IBAction)btnClick:(id)sender {
@@ -39,21 +41,38 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         //[self.navigationController popViewControllerAnimated:YES];
     }else if (btn.tag == 1002){
+        NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+        NSString *userId = [userDic objectForKey:@"userId"];
         if (_textFiled1.text.length == 6) {
             [CustomAlertView showAlertViewWithVC:self];
             NSDictionary *dic = @{@"endTime":_model.endTime,
                                   @"examTimeCode":_model.examTimeCode,
                                   @"smsCode":_textFiled1.text,
                                   @"startTime":_model.startTime,
-                                  @"username":_model.username};
+                                  @"username":_model.username,
+                                  @"studentUserId":userId
+                                  };
             [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7072/fecthdata-front-service/student/v201701/exam/apply" andDic:dic andSuccessBlock:^(NSArray *data) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    NSDictionary *dic = (NSDictionary *)data;
                     [CustomAlertView hideAlertView];
                     
                     UIAlertController *v = [UIAlertController alertControllerWithTitle:@"预约成功" message:@"预约考试已经提交成功！" preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                        [self dismissViewControllerAnimated:YES completion:nil];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
+                        
+                        if ([[dic objectForKey:@"orderNo"] isEqual:[NSNull new]]) {
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
+                        }else{
+                            SubjectOneViewControllera *v = [[SubjectOneViewControllera alloc] init];
+                            v.payNum = [dic objectForKeyWithNoNsnull:@"orderNo"];
+                            v.model = _model;
+                            v.wwlsh = [dic objectForKeyWithNoNsnull:@"wwlsh"];
+                            v.zjcx = [dic objectForKeyWithNoNsnull:@"zjcx"];
+                            [self.navigationController pushViewController:v animated:YES];
+                        }
+                        
                     }];
                     [v addAction:active];
                     [self presentViewController:v animated:YES completion:^{

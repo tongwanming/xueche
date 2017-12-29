@@ -13,6 +13,7 @@
 #import "CustomAlertView.h"
 #import "URLConnectionHelper.h"
 #import <CoreLocation/CoreLocation.h>
+#import "NoticeViewController.h"
 
 @interface SuperFirstViewController ()<FirstViewControllerDelegate,SubjectOneCurrentViewControllerDelegate,CLLocationManagerDelegate>
 
@@ -191,6 +192,37 @@
 }
 
 #pragma mark - SubjectOneCurrentViewControllerDelegateActive
+
+- (void)SubjectOneCurrentViewControllerDelegate:(NSString *)tag andDes:(NSString *)des{
+    if ([tag isEqualToString:@"电话"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",des];
+            UIWebView * callWebview = [[UIWebView alloc] init];
+            [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+            [self.view addSubview:callWebview];
+        });
+    }else if ([tag isEqualToString:@"导航"]){
+        
+    }else if ([tag isEqualToString:@"注意事项"]){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NoticeViewController *v= [[NoticeViewController alloc] init];
+            v.des = des;
+            [self.navigationController pushViewController:v animated:YES];
+        });
+        
+        
+    }else if ([tag isEqualToString:@""]){
+        
+    }else if ([tag isEqualToString:@""]){
+        
+    }else if ([tag isEqualToString:@""]){
+        
+    }else if ([tag isEqualToString:@""]){
+        
+    }else{
+        
+    }
+}
 
 - (void)SubjectOneCurrentViewControllerDelegateWithActiveVC:(BasicViewController *)v andTag:(NSString *)tag{
     

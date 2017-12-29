@@ -42,7 +42,7 @@
         }
             break;
         case 1003:{
-            TestSiteChoosedViewController *v = [[TestSiteChoosedViewController alloc] init];
+            SubjectOneViewControllera *v = [[SubjectOneViewControllera alloc] init];
             [self.navigationController pushViewController:v animated:YES];
         }
             break;

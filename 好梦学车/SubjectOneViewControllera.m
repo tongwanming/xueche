@@ -10,6 +10,7 @@
 
 #import "ChoosePayTypeCell.h"
 #import "TestAppointmentViewController.h"
+#import "YHNAdditionManager.h"
 
 @interface SubjectOneViewControllera ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -25,14 +26,27 @@
 @implementation SubjectOneViewControllera
 {
     NSArray *_data1;
-    NSArray *_data2;
+    NSMutableArray *_data2;
     NSInteger _choosedPaidWay;
     NSMutableDictionary *_dic;
 }
 
+-(void)setModel:(SureApplyModel *)model{
+    _model = model;
+    if (_data2.count > 0) {
+        [_data2 removeAllObjects];
+    }
+    [_data2 addObject:model.username];
+    [_data2 addObject:_wwlsh];
+    [_data2 addObject:model.examTimeCode];
+    [_data2 addObject:model.smsCode];
+    [_data2 addObject:_zjcx];
+}
+
+
 - (IBAction)btnClick:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    //[self.navigationController popViewControllerAnimated:YES];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (NSArray *)firstData{
@@ -73,7 +87,8 @@
     [_tableView setTableHeaderView:[self createHeaderView]];
     
     _data1 = @[@"姓名",@"证件号码",@"考试时间",@"考试场地",@"准考车型"];
-    _data2 = @[@"张涛涛",@"50023619988***********1616",@"2017-15-5 15:00-18:00",@"渝北互联网",@"C1"];
+    _data2 = [[NSMutableArray alloc] init];
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -181,8 +196,164 @@
 }
 
 -(void)btnClickActive:(UIButton *)btn{
-    TestAppointmentViewController *v = [[TestAppointmentViewController alloc] init];
-    [self.navigationController pushViewController:v animated:YES];
+    
+    if (_choosedPaidWay == 5) {
+        // 微信支付
+        NSDictionary *dic =@{@"header":@{
+                                     @"cmd": @"",
+                                     @"deviceId": @"",
+                                     @"deviceName": @"",
+                                     @"osName": @"",
+                                     @"osVersion": @"",
+                                     @"source": @"app",
+                                     @"ssost": @"",
+                                     @"token": @"",
+                                     @"versionCode": @""
+                                     },
+                             @"orderNo":_payNum,
+                             @"openId":@""};
+        
+        NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
+        
+        NSMutableString *mutStr = [NSMutableString stringWithString:jsonStr];
+        
+        NSRange range = {0,jsonStr.length};
+        
+        [mutStr replaceOccurrencesOfString:@" "withString:@""options:NSLiteralSearch range:range];
+        
+        NSRange range2 = {0,mutStr.length};
+        
+        [mutStr replaceOccurrencesOfString:@"\n"withString:@""options:NSLiteralSearch range:range2];
+        NSRange range3 = {0,mutStr.length};
+        [mutStr replaceOccurrencesOfString:@"\\"withString:@""options:NSLiteralSearch range:range3];
+        
+        NSData *jsonData = [mutStr dataUsingEncoding:NSUTF8StringEncoding];
+        
+        //    NSURL *url = [NSURL URLWithString:urlstr];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/pay/weChatAppPay/toPay",PUBLIC_LOCATION]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+        NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
+        [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
+        [request setHTTPBody:jsonData];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+        
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (error == nil) {
+                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                NSString *code = [jsonDict objectForKey:@"code"];
+                if ([code isEqualToString:@"200"]) {
+                    NSDictionary *dic = [jsonDict objectForKey:@"data"];
+                    //            // NOTE: 调用支付结果开始支付
+                    [[YHNAdditionManager sharedManager] sendWeiXinPayRequestWithString:dic withDelegate:self];
+                }else{
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"支付失败" message:[NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"message"]] preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    });
+                }
+                
+                
+            }else{
+                
+            }
+        }];
+        [dataTask resume];
+        
+    }else if(_choosedPaidWay == 6){
+        //支付宝支付
+        //支付宝支付
+        NSDictionary *dic =@{@"header":@{
+                                     @"cmd": @"",
+                                     @"deviceId": @"",
+                                     @"deviceName": @"",
+                                     @"osName": @"",
+                                     @"osVersion": @"",
+                                     @"source": @"app",
+                                     @"ssost": @"",
+                                     @"token": @"",
+                                     @"versionCode": @""
+                                     },
+                             @"orderNo":@"20171228000000000059",
+                             @"openId":@""};
+        
+        NSData *data1 = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *jsonStr = [[NSString alloc] initWithData:data1 encoding:NSUTF8StringEncoding];
+        NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+        
+        //    NSURL *url = [NSURL URLWithString:urlstr];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7071/api/pay/alipayAppPay/toPay",PUBLIC_LOCATION]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+        NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:@"isLogined"];
+        [request setValue:token forHTTPHeaderField:@"HMAuthorization"];
+        [request setHTTPBody:jsonData];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+        
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (error == nil) {
+                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                NSString *code = [jsonDict objectForKey:@"code"];
+                if ([code isEqualToString:@"200"]) {
+                    NSString *appScheme = @"alisdkdemo";
+                    NSDictionary *dic = [jsonDict objectForKey:@"data"];
+                    NSString *text = [dic objectForKey:@"text"];
+                    
+                    [[YHNAdditionManager sharedManager] sendAliPayRequestWithString:text withDelegate:self];
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *v = [UIAlertController alertControllerWithTitle:@"支付失败" message:[NSString stringWithFormat:@"%@",[jsonDict objectForKey:@"message"]] preferredStyle:UIAlertControllerStyleAlert];
+                        UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        [v addAction:active];
+                        [self presentViewController:v animated:YES completion:^{
+                            
+                        }];
+                    });
+                }
+                
+            }else{
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:@"服务器异常！！" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            }
+        }];
+        [dataTask resume];
+        
+        
+    }else{
+        
+    }
+    
+}
+
+- (void)ACPaySuccess{
+    UIAlertController *v = [UIAlertController alertControllerWithTitle:@"提示" message:@"支付成功！" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"applySuccess" object:nil];
+    }];
+    [v addAction:active];
+    [self presentViewController:v animated:YES completion:^{
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

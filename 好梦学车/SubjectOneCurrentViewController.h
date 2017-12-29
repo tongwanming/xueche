@@ -12,6 +12,8 @@
 @protocol SubjectOneCurrentViewControllerDelegate <NSObject>
 
 - (void)SubjectOneCurrentViewControllerDelegateWithActiveVC:(BasicViewController *)v andTag:(NSString *)tag;
+
+- (void)SubjectOneCurrentViewControllerDelegate:(NSString *)tag andDes:(NSString *)des;
 @end
 
 @interface SubjectOneCurrentViewController : BasicViewController

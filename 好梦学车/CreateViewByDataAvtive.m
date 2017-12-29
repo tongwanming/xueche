@@ -29,7 +29,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
     
     if ([progrss isEqualToString:@"0"]) {
         
-        if ([modela.cwStatus isEqualToString:@"0"]) {
+        if ([modela.status isEqualToString:@"0"]) {
             NSArray *arra = @[@"banner_one",@"",@"content_img_watermark",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@100,@100,@20,@100,@40,@20,@40,@20,@20,@40,@20,@20,@100,@40];
             NSArray *title = @[@"",@"当前进度:科目一学时",@"恭喜你缴费成功！",@"查询体检站",@"",@"体检完成后",@"",@"",@"",@"",@"",@"",@"",@"",@"查询报名点",@""];
@@ -144,7 +144,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 
                 [data addObject:model];
             }
-        }else if ([modela.cwStatus isEqualToString:@"1"]){
+        }else if ([modela.status isEqualToString:@"1"]){
             NSArray *arra = @[@"banner_one",@"",@"content_img_watermark",@"",@"",@"",@"",@"",@"",@"",@"",@"",@""];
             NSArray *heights = @[@100,@20,@100,@40,@20,@40,@20,@20,@40,@20,@20,@100,@40];
             NSArray *title = @[@"",@"当前进度:科目一学时",@"恭喜你缴费成功！",@"",@"",@"",@"",@"",@"",@"",@"",@"查询报名点",@""];
@@ -755,9 +755,9 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
         }else if ([subProgress isEqualToString:@"6"]){
-            NSArray *arra = @[@"banner_three",@"",@"img_waitfor",@"",@"",@"",@""];
+            NSArray *arra = @[@"banner_three",@"",@"img_match",@"",@"",@"",@""];
             NSArray *heights = @[@100,@30,@130,@60,@60,@10,@120];
-            NSArray *title = @[@"",@"",@"",@"场地名称:",@"详细地址:",@"场地名称:",@"系统正在为你匹配教练，匹配成功后，教练会与您联系，如果长时间教练没有和您联系，请拨打：40000000  客服热线"];
+            NSArray *title = @[@"",@"",@"",@"场地名称:",@"详细地址:",@"场地名称:",@"系统正在为你匹配教练，匹配成功后，教练会与您联系，如果长时间教练没有和您联系，请拨打：4008392366  客服热线"];
             
             for (int i = 0; i<title.count; i++) {
                 
@@ -788,7 +788,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                     case 3:{
                         model.style = createNormalCellStyleNormal1;
                         model.color = TEXT_COLOR;
-                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:modela.trainPlaceName andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
                         
                         model.titleFont = 14;
                     }
@@ -796,7 +796,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                     case 4:{
                         model.style = createNormalCellStyleNormal1;
                         model.color = TEXT_COLOR;
-                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"两江新区互联网产业园 " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:[NSString stringWithFormat:@"%@ ",modela.trainPlaceAddress] andImage:[UIImage imageNamed:@"content_btn_link"] andOtherStr:@"" andBound:CGRectMake(0,-3,13,13)];
                         model.color = UNMAIN_TEXT_COLOR;
                         model.titleFont = 14;
                         
@@ -811,7 +811,7 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         model.style = createNormalCellStyleUserDdfinedWhite;
                         model.titleFont = 14*TYPERATION;
                         NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,14,14)];
-                        [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(str.length-14,8)];
+                        [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(str.length-16,10)];
                         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
                         [style setLineSpacing:6];
                         [str addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, str.length)];

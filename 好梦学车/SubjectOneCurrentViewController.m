@@ -189,10 +189,19 @@
         [((ExaminationAppointmentTableViewCell *)cell) ExaminationAppointmentWithBlock:^(UIButton *btn) {
             if (btn.tag == 1001) {
                 //注意事项
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:) withObject:@"注意事项" withObject:@"这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项这个是个一个很长很长的注意事项"];
+                }
             }else if (btn.tag == 1002){
                 //考试导航
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:) withObject:@"导航" withObject:_currentModel.examAddress];
+                }
             }else{
                 //联系交管
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:) withObject:@"电话" withObject:@"4008392366"];
+                }
             }
         }];
         
@@ -208,7 +217,7 @@
     NSLog(@"%@---%@---%@",_currentModel.periodNum,_currentModel.studyStatus,@(indexPath.row));
     //报名
     if ([_currentModel.periodNum isEqualToString:@"0"]) {
-        if ([_currentModel.cwStatus isEqualToString:@"0"]) {
+        if ([_currentModel.status isEqualToString:@"0"]) {
             if (indexPath.row == 3-1) {
                 CheckMedicalStationViewController *v = [[CheckMedicalStationViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
@@ -222,7 +231,7 @@
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
                 }
             }
-        }else if ([_currentModel.cwStatus isEqualToString:@"1"]){
+        }else if ([_currentModel.status isEqualToString:@"1"]){
             if (indexPath.row == 11-1) {
                 ApplyLocationViewController *v = [[ApplyLocationViewController alloc] init];
                 if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
@@ -463,6 +472,16 @@
             if (indexPath.row == 5) {
                 //继续练车
                 
+            }
+        }else if ([_currentModel.studyStatus isEqualToString:@"6"]){
+            if (indexPath.row == 5) {
+                //电话
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegate:andDes:) withObject:@"电话" withObject:@"4008392366"];
+                }
+            }
+            if (indexPath.row == 3) {
+                //导航
             }
         }
         else{
@@ -1047,12 +1066,12 @@
         model.reservationStatus = [[dic objectForKeyWithNoNsnull:@"reservationStatus"] intValue];
         
         model.cwStatus = [dic objectForKeyWithNoNsnull:@"cwStatus"];
-        model.cwSubjectOneValidTime = [[dic objectForKey:@"cwSubjectOneValidTime"] integerValue];
-        model.cwSubjectTwoValidTime = [[dic objectForKey:@"cwSubjectTwoValidTime"] integerValue];
-        model.cwSubjectThreeValidTime = [[dic objectForKey:@"cwSubjectThreeValidTime"] integerValue];
-        model.cwSubjectOneTrainTime = [[dic objectForKey:@"cwSubjectOneTrainTime"] integerValue];
-        model.cwSubjectTwoTrainTime = [[dic objectForKey:@"cwSubjectTwoTrainTime"] integerValue];
-        model.cwSubjectThreeTrainTime = [[dic objectForKey:@"cwSubjectThreeTrainTime"] integerValue];
+        model.cwSubjectOneValidTime = [[dic objectForKeyWithNoNsnull:@"cwSubjectOneValidTime"] integerValue];
+        model.cwSubjectTwoValidTime = [[dic objectForKeyWithNoNsnull:@"cwSubjectTwoValidTime"] integerValue];
+        model.cwSubjectThreeValidTime = [[dic objectForKeyWithNoNsnull:@"cwSubjectThreeValidTime"] integerValue];
+        model.cwSubjectOneTrainTime = [[dic objectForKeyWithNoNsnull:@"cwSubjectOneTrainTime"] integerValue];
+        model.cwSubjectTwoTrainTime = [[dic objectForKeyWithNoNsnull:@"cwSubjectTwoTrainTime"] integerValue];
+        model.cwSubjectThreeTrainTime = [[dic objectForKeyWithNoNsnull:@"cwSubjectThreeTrainTime"] integerValue];
         model.govCheckStatus = [dic objectForKeyWithNoNsnull:@"govCheckStatus"];
         model.govFailReason = [dic objectForKeyWithNoNsnull:@"govFailReason"];
         
@@ -1067,6 +1086,8 @@
         model.examStatus = [dic objectForKeyWithNoNsnull:@"examStatus"];
         model.lastExamScore = [dic objectForKeyWithNoNsnull:@"lastExamScore"];
         model.examTimeLimit = [dic objectForKeyWithNoNsnull:@"examTimeLimit"];
+        model.trainPlaceName = [dic objectForKeyWithNoNsnull:@"trainPlaceName"];
+        model.trainPlaceAddress = [dic objectForKeyWithNoNsnull:@"trainPlaceAddress"];
         if ([[dic objectForKey:@"studyCount"] isEqual:[NSNull new]]) {
             model.studyCount = 0;
         }else{
@@ -1077,6 +1098,9 @@
         _currentModel = model;
 //        _currentModel.periodNum = @"3";
 //        _currentModel.studyStatus = @"3";
+        
+//        model.cwStatus = @"1";
+//        model.periodNum = @"0";
         [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.studyStatus andBlock:^(NSMutableArray *add) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];

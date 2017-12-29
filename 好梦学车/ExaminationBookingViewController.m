@@ -202,7 +202,7 @@
     _textFiled1.secureTextEntry = YES;
     [view addSubview:_textFiled1];
     
-    UIImageView *logoView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_icon_password"]];
+    UIImageView *logoView2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_verification"]];
     logoView2.frame = CGRectMake((CURRENT_BOUNDS.width-200)/2*TYPERATION, CGRectGetMaxY(logoView1.frame)+20, 15, 15);
   
     [view addSubview:logoView2];

@@ -124,4 +124,11 @@
 /** 打卡次数 */
 @property (nonatomic, assign) int studyCount;
 
+
+/** 场地名称 */
+@property (nonatomic, strong) NSString *trainPlaceName;
+
+/** 场地地址 */
+@property (nonatomic, strong) NSString *trainPlaceAddress;
+
 @end

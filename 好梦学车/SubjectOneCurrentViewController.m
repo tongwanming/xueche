@@ -25,6 +25,7 @@
 #import "ExerciseViewController.h"
 #import "QuitAlertView.h"
 #import "DoDriveExerciseViewController.h"
+#import "SubjectTwoPopWebViewController.h"
 
 @interface SubjectOneCurrentViewController ()<UITableViewDelegate,UITableViewDataSource,QuitAlertViewBtnClickedDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -40,65 +41,17 @@
     int _n;
     NSMutableDictionary *_dic;
     CLLocationCoordinate2D _p;
+    NSArray *_progreeData;
 }
 - (IBAction)click:(id)sender {
     NSLog(@"点击按钮 当前的n值：%d",_n);
-    [self getDataAvite];
-    return;
-    NSArray *arr1 = @[@"0",@"0",@"1",@"1",@"2",@"2",@"2",@"2",@"2",@"3",@"3",@"3",@"3",@"3",@"3",@"4",@"4",@"4",@"4"];
-    NSArray *arr2 = @[@"0",@"1",@"0",@"1",@"0",@"1",@"2",@"3",@"4",@"0",@"1",@"2",@"3",@"4",@"5",@"0",@"1",@"2",@"3"];
-    if (_data.count > 0) {
-        [_data removeAllObjects];
+//    [self getDataAvite];
+    SubjectTwoPopWebViewController *v = [[SubjectTwoPopWebViewController alloc] init];
+    v.url = @"https://eco-api.meiqia.com/dist/standalone.html?eid=10708";
+    v.titleStr = @"在线咨询";
+    if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+        [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
     }
-    _tableView.scrollEnabled = YES;
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:arr1[_n] andSubProgress:arr2[_n] andBlock:^(NSMutableArray *add) {
-        _currentModel.periodNum = arr1[_n];
-        _currentModel.status = arr2[_n];
-        _data = add;
-        createNormalCellModel *model = add[0];
-        _progressImageView.image = [UIImage imageNamed:model.imageViewStr];
-        [_tableView reloadData];
-    }];
-    _n+=1;
-    if (_n == arr2.count) {
-        _n = 0;
-    }
-    return;
-    switch (_n) {
-        case 1:
-            [self getData];
-            break;
-        case 2:
-            [self getDataTwo];
-            break;
-        case 3:
-            [self getDataThree];
-            break;
-        case 4:
-             [self getDataForth];
-            break;
-        case 5:
-         [self getDataFifth];
-            break;
-        case 6:
-             [self getDataSix];
-            break;
-        case 7:
-            [self getDataSeven];
-            break;
-        case 8:
-            [self getDataEight];
-            break;
-            
-        default:
-            break;
-    }
-   
-    
-    if (_n == 5) {
-        _n =1;
-    }
-    _n+=1;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -113,6 +66,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _progreeData = @[@"报名入籍",@"科目一学习",@"科目二学习",@"科目三学习",@"科目四学习"];
     _n = 1;
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     _dic = [[NSMutableDictionary alloc] init];
@@ -342,11 +296,12 @@
             }
             if (indexPath.row == 5-1) {
                 //立即约考
-                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
-                v.model = _currentModel;
-                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
-                }
+                [self prepareForExamnation];
+//                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+//                v.model = _currentModel;
+//                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+//                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+//                }
             }
 
         }else if ([_currentModel.studyStatus isEqualToString:@"3"]){
@@ -502,6 +457,9 @@
                     [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"2"];
                 }
             }
+            
+            
+        }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
             if (indexPath.row == 6-1) {
                 //立即约考
                 QuitAlertView *_quitrView = [QuitAlertView createShowView];
@@ -515,9 +473,6 @@
                     _quitrView.rightTitle = @"立即约考";
                 });
             }
-            
-        }else if ([_currentModel.studyStatus isEqualToString:@"1"]){
-            
         }else if ([_currentModel.studyStatus isEqualToString:@"2"]){
             if (indexPath.row == 2-1) {
                 //科目三的学习
@@ -574,336 +529,6 @@
     }else{
         
     }
-}
-
-- (void)getDataTwo{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"1" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
-        _data = add;
-        [_tableView reloadData];
-    }];
-    
-    
-    
-}
-
-- (void)getData{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"0" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
-        _data = add;
-        [_tableView reloadData];
-    }];
-    
-
-    
-}
-
-- (void)getDataThree{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"2" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
-        _data = add;
-        [_tableView reloadData];
-    }];
-}
-
-- (void)getDataForth{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"3" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
-        _data = add;
-        [_tableView reloadData];
-    }];
-}
-
-- (void)getDataFifth{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"4" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
-        _data = add;
-        [_tableView reloadData];
-    }];
-}
-
-- (void)getDataSix{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:nil andProgress:@"1" andSubProgress:@"0" andBlock:^(NSMutableArray *add) {
-        _data = add;
-        [_tableView reloadData];
-    }];
-}
-
-- (void)getDataSeven{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    
-    [_tableView reloadData];
-}
-
-- (void)getDataEight{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    
-    [_tableView reloadData];
-}
-
-- (void)getDataNine{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@60,@20,@100,@150,@200,@40];
-    NSArray *title = @[@"",@"",@"",@"",@"",@"预约考试",@""];
-    
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-            
-            case 1:{
-                model.style = createNormalCellStyleUserDdfinedEight;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-               
-            }
-                break;
-                
-            case 2:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 3:{
-                model.style = createNormalCellStyleUserDdfinedThere;
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.detailTitle = @"很遗憾，您未能通过考试,请继续加油!";
-                model.hasFootViewLine = YES;
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleBang;
-                model.grade = 89.0;
-                
-                
-            }
-                break;
-            case 5:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-                model.detailTitle = @"根据交管部门的规定，您在首次考试10个工作日之后，即可再次预约考试。";
-                model.titleFont = 14;
-            }
-                break;
-            case 6:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-                
-                
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
-}
-
-- (void)getDataTen{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = NO;
-    NSArray *arra = @[@"banner_two",@""];
-    NSArray *heights = @[@100,@(CURRENT_BOUNDS.height-164-44)];
-    NSArray *title = @[@"",@""];
-    
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-                
-            case 1:{
-                model.style = createNormalCellStyleUserDdfinedTen;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-                
-            }
-                break;
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
-}
-
-- (void)getDataEleven{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"",@""];
-    NSArray *heights = @[@100,@30,@60,@60,@10,@60,@100];
-    NSArray *title = @[@"",@"",@"场地名称:",@"详细地址:",@"场地名称:",@"系统正在为你匹配教练，匹配成功后，教练会与您联系，如果长时间教练没有和您联系，请拨打：40000000客服热线",@"教练已联系"];
-    
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-                
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleNormal1;
-                model.color = TEXT_COLOR;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-               
-                model.titleFont = 14;
-            }
-                break;
-            case 3:{
-                model.style = createNormalCellStyleNormal1;
-                model.color = TEXT_COLOR;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"两江新区互联网产业园 " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                model.color = UNMAIN_TEXT_COLOR;
-                model.titleFont = 14;
-              
-            }
-                break;
-            case 4:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = [UIColor whiteColor];
-            }
-                break;
-            case 5:{
-                model.style = createNormalCellStyleUserDdfinedWhite;
-                model.titleFont = 14*TYPERATION;
-                NSMutableAttributedString *str = [NSMutableAttributedString textKitAboutWithStr:model.title andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,14,14)];
-                [str addAttribute:NSForegroundColorAttributeName value:BLUE_BACKGROUND_COLOR range:NSMakeRange(str.length-12,8)];
-                NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-                [style setLineSpacing:6];
-                [str addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, str.length)];
-                model.AttributedStr = str;
-                model.color = ADB1B9;
-            }
-                break;
-            case 6:{
-                model.style = createNormalCellStyleUserDdfinedTwo;
-                model.hasDefalut = YES;
-            }
-                break;
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
-}
-
-- (void)getDataTwelve{
-    if (_data.count > 0) {
-        [_data removeAllObjects];
-    }
-    _tableView.scrollEnabled = YES;
-    NSArray *arra = @[@"banner_three",@"",@""];
-    NSArray *heights = @[@100,@0,@(300+44*5)];
-    NSArray *title = @[@"",@"",@"场地名称:"];
-    
-    for (int i = 0; i<title.count; i++) {
-        
-        createNormalCellModel *model = [[createNormalCellModel alloc] init];
-        model.imageViewStr = arra[i];
-        model.he = [heights[i] floatValue];
-        model.title = title[i];
-        switch (i) {
-            case 0:{
-                model.color = BLUE_BACKGROUND_COLOR;
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.contenModel = UIViewContentModeScaleAspectFit;
-            }
-                break;
-                
-            case 1:{
-                model.style = createNormalCellStyleOnlyImageCenter;
-                model.color = EEEEEE;
-            }
-                break;
-            case 2:{
-                model.style = createNormalCellStyleUserDdfinedAppointment;
-                model.color = TEXT_COLOR;
-                model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                
-                model.titleFont = 14;
-            }
-                break;
-            
-                
-            default:
-                break;
-        }
-        
-        [_data addObject:model];
-    }
-    [_tableView reloadData];
 }
 
 - (void)showNavigationWithModel:(FirstLocationModel *)model{
@@ -1099,14 +724,21 @@
 //        _currentModel.periodNum = @"3";
 //        _currentModel.studyStatus = @"3";
         
+        
 //        model.cwStatus = @"1";
 //        model.periodNum = @"0";
         [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.studyStatus andBlock:^(NSMutableArray *add) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
-                createNormalCellModel *model = add[0];
-                _progressImageView.image = [UIImage imageNamed:model.imageViewStr];
+                createNormalCellModel *submodel = add[0];
+                _progressImageView.image = [UIImage imageNamed:submodel.imageViewStr];
                 _data = add;
+                if ([model.periodNum isEqualToString:@"0"]) {
+                    _currentProgressNameLabel.text = [NSString stringWithFormat:@"当前进度：%@",_progreeData[[model.periodNum intValue]]];
+                }else{
+                    _currentProgressNameLabel.text = [NSString stringWithFormat:@"当前进度：%@",_progreeData[[model.periodNum intValue]-1]];
+                }
+                
                 [_tableView reloadData];
             });
             
@@ -1140,25 +772,75 @@
     if (btn.tag == 1001) {
         
     }else if (btn.tag == 1002){
-        if ([_currentModel.periodNum isEqualToString:@"3"] && ([_currentModel.studyStatus isEqualToString:@"1"] || [_currentModel.studyStatus isEqualToString:@"2"])) {
-            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
-            v.model = _currentModel;
-            if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
-            }
-        }else if ([_currentModel.periodNum isEqualToString:@"4"]){
-            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
-            v.model = _currentModel;
-            if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
-                [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
-            }
+        if ([_currentModel.studyStatus isEqualToString:@"3"]) {
+            
+        }else{
+            [self prepareForExamnation];
         }
+        
+        
+//        if ([_currentModel.periodNum isEqualToString:@"3"] && ([_currentModel.studyStatus isEqualToString:@"1"] || [_currentModel.studyStatus isEqualToString:@"2"])) {
+//            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+//            v.model = _currentModel;
+//            if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+//                [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+//            }
+//        }else if ([_currentModel.periodNum isEqualToString:@"4"]){
+//            ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+//            v.model = _currentModel;
+//            if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+//                [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+//            }
+//        }
         
     }else if (btn.tag == 1003){
         
     }else{
         
     }
+}
+
+- (void)prepareForExamnation{
+    //约考界面的内容
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"personNews"]];
+    NSString *userId = [userDic objectForKey:@"userId"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dic = @{@"stuId":userId};
+        [CustomAlertView showAlertViewWithVC:self];
+        
+        [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7081/v1/student/studentExam/add" andDic:dic andSuccessBlock:^(NSArray *data) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+                NSString *des = @"提交约考请求成功！";
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"提示" message:des preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [self getDataAvite];
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            });
+        } andDicFiledResonBlock:^(NSObject *dic) {
+            NSString *des;
+            if ([dic isKindOfClass:[NSString class]]) {
+                des = (NSString *)dic;
+            }else{
+                des = @"提交提示失败";
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomAlertView hideAlertView];
+                UIAlertController *v = [UIAlertController alertControllerWithTitle:@"提示" message:des preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                [v addAction:active];
+                [self presentViewController:v animated:YES completion:^{
+                    
+                }];
+            });
+        }];
+    });
 }
 
 - (void)choosedCocoaActiveWithModel:(FirstLocationModel *)model{

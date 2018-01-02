@@ -711,8 +711,71 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 [data addObject:model];
             }
             
-        }else if ([subProgress isEqualToString:@"5"]){
+        }else if ([subProgress isEqualToString:@"3"]){
+            NSArray *arra = @[@"banner_two",@"",@"",@"",@"",@""];
+            NSArray *heights = @[@100,@20,@60,@20,@150,@100];
+            NSArray *title = @[@"",@"",@"",@"",@"",@"正在约考中"];
             
+            for (int i = 0; i<title.count; i++) {
+                
+                createNormalCellModel *model = [[createNormalCellModel alloc] init];
+                model.imageViewStr = arra[i];
+                model.he = [heights[i] floatValue];
+                model.title = title[i];
+                switch (i) {
+                    case 0:{
+                        model.color = BLUE_BACKGROUND_COLOR;
+                        model.style = createNormalCellStyleOnlyImageCenter;
+                        model.contenModel = UIViewContentModeScaleAspectFit;
+                    }
+                        break;
+                    case 1:{
+                        model.style = createNormalCellStyleOnlyImageCenter;
+                        model.color = EEEEEE;
+                    }
+                        break;
+                    case 2:{
+                        model.style = createNormalCellStyleUserDdfinedSix;
+                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"立即练题  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                        model.color = UNMAIN_TEXT_COLOR;
+                        model.titleFont = 14;
+                        
+                    }
+                        break;
+                        
+                    case 3:{
+                        model.style = createNormalCellStyleOnlyImageCenter;
+                        model.color = EEEEEE;
+                    }
+                        break;
+                    case 4:{
+                        model.style = createNormalCellStyleUserDdfinedOne;
+                        model.titleFont = 20*TYPERATION;
+                        
+                        model.color = TEXT_COLOR;
+                        model.title = @"1320min";
+                        model.detailTitle = [NSString stringWithFormat:@"%ldmin",(long)modela.cwSubjectOneValidTime];
+                    }
+                        break;
+                        
+                    case 5:{
+                        model.style = createNormalCellStyleUserDdfinedSeven;
+                        model.titleFont = 18*TYPERATION;
+                        model.color = [UIColor whiteColor];
+                        model.bgColor = BLUE_BACKGROUND_COLOR;
+                        
+                    }
+                        break;
+                        
+                        
+                        
+                        
+                    default:
+                        break;
+                }
+                
+                [data addObject:model];
+            }
         }else {
             
         }
@@ -899,9 +962,9 @@ static CreateViewByDataAvtive *_shareDefaulte;
             }
             // 科目二预约
         }else if ([subProgress isEqualToString:@"3"]){
-            NSArray *arra = @[@"banner_three",@"",@""];
-            NSArray *heights = @[@100,@0,@(300+44*5)];
-            NSArray *title = @[@"",@"",@"场地名称:"];
+            NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"img_waitfor",@""];
+            NSArray *heights = @[@100,@20,@60,@20,@50,@250,@100];
+            NSArray *title = @[@"",@"",@"",@"",@"",@"在西培学堂完成1320分钟学习后即可约考",@"正在约考中"];
             
             for (int i = 0; i<title.count; i++) {
                 
@@ -916,21 +979,46 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         model.contenModel = UIViewContentModeScaleAspectFit;
                     }
                         break;
-                        
                     case 1:{
                         model.style = createNormalCellStyleOnlyImageCenter;
                         model.color = EEEEEE;
                     }
                         break;
                     case 2:{
-                        model.style = createNormalCellStyleUserDdfinedAppointment;
-                        model.color = TEXT_COLOR;
-                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                        
+                        model.style = createNormalCellStyleUserDdfinedSix;
+                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"科目二学习视频  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                        model.color = UNMAIN_TEXT_COLOR;
                         model.titleFont = 14;
                     }
                         break;
                         
+                    case 3:{
+                        model.style = createNormalCellStyleOnlyImageCenter;
+                        model.color = EEEEEE;
+                    }
+                        break;
+                    case 4:{
+                        model.style = createNormalCellStyleValue1;
+                        model.titleFont = 20*TYPERATION;
+                        
+                        model.color = TEXT_COLOR;
+                        model.title = @"科目二练车打卡累积";
+                        model.detailTitle = [NSString stringWithFormat:@"%d次",modela.studyCount];
+                    }
+                        break;
+                        
+                    case 5:{
+                        model.style = createNormalCellStyleOnlyImageCenter;
+                        //                model.contenModel = UIViewContentModeCenter;
+                        model.hasFootViewLine = YES;
+                        
+                        
+                    }
+                        break;
+                    case 6:{
+                        model.style = createNormalCellStyleUserDdfinedTwo;
+                    }
+                        break;
                         
                     default:
                         break;
@@ -938,6 +1026,47 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 
                 [data addObject:model];
             }
+            
+#warning mark - 下面为原始的月考中界面，暂时隐藏
+//            NSArray *arra = @[@"banner_three",@"",@""];
+//            NSArray *heights = @[@100,@0,@(300+44*5)];
+//            NSArray *title = @[@"",@"",@"场地名称:"];
+//
+//            for (int i = 0; i<title.count; i++) {
+//
+//                createNormalCellModel *model = [[createNormalCellModel alloc] init];
+//                model.imageViewStr = arra[i];
+//                model.he = [heights[i] floatValue];
+//                model.title = title[i];
+//                switch (i) {
+//                    case 0:{
+//                        model.color = BLUE_BACKGROUND_COLOR;
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.contenModel = UIViewContentModeScaleAspectFit;
+//                    }
+//                        break;
+//
+//                    case 1:{
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.color = EEEEEE;
+//                    }
+//                        break;
+//                    case 2:{
+//                        model.style = createNormalCellStyleUserDdfinedAppointment;
+//                        model.color = TEXT_COLOR;
+//                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+//
+//                        model.titleFont = 14;
+//                    }
+//                        break;
+//
+//
+//                    default:
+//                        break;
+//                }
+//
+//                [data addObject:model];
+//            }
             //科目二未通过考试
         }else if ([subProgress isEqualToString:@"5"]){
             NSArray *arra = @[@"banner_three",@"",@"",@"",@"",@"",@"",@""];
@@ -1139,50 +1268,10 @@ static CreateViewByDataAvtive *_shareDefaulte;
             }
            //科目三预约考试
         }else if ([subProgress isEqualToString:@"3"]){
-            NSArray *arra = @[@"banner_four",@"",@""];
-            NSArray *heights = @[@100,@0,@(300+44*5)];
-            NSArray *title = @[@"",@"",@"场地名称:"];
             
-            for (int i = 0; i<title.count; i++) {
-                
-                createNormalCellModel *model = [[createNormalCellModel alloc] init];
-                model.imageViewStr = arra[i];
-                model.he = [heights[i] floatValue];
-                model.title = title[i];
-                switch (i) {
-                    case 0:{
-                        model.color = BLUE_BACKGROUND_COLOR;
-                        model.style = createNormalCellStyleOnlyImageCenter;
-                        model.contenModel = UIViewContentModeScaleAspectFit;
-                    }
-                        break;
-                        
-                    case 1:{
-                        model.style = createNormalCellStyleOnlyImageCenter;
-                        model.color = EEEEEE;
-                    }
-                        break;
-                    case 2:{
-                        model.style = createNormalCellStyleUserDdfinedAppointment;
-                        model.color = TEXT_COLOR;
-                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
-                        
-                        model.titleFont = 14;
-                    }
-                        break;
-                        
-                        
-                    default:
-                        break;
-                }
-                
-                [data addObject:model];
-            }
-             //科目三未通过考试
-        }else if ([subProgress isEqualToString:@"5"]){
-            NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@"",@"",@""];
-            NSArray *heights = @[@100,@20,@60,@20,@100,@150,@200,@40];
-            NSArray *title = @[@"",@"",@"",@"",@"",@"",@"再次练车",@""];
+            NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@"img_waitfor",@""];
+            NSArray *heights = @[@100,@20,@60,@20,@50,@250,@100];
+            NSArray *title = @[@"",@"",@"",@"",@"",@"",@"正在约考中"];
             
             for (int i = 0; i<title.count; i++) {
                 
@@ -1204,10 +1293,9 @@ static CreateViewByDataAvtive *_shareDefaulte;
                         break;
                     case 2:{
                         model.style = createNormalCellStyleUserDdfinedSix;
-                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"观看视频  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"科目三学习视频  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
                         model.color = UNMAIN_TEXT_COLOR;
                         model.titleFont = 14;
-                        
                     }
                         break;
                         
@@ -1217,28 +1305,25 @@ static CreateViewByDataAvtive *_shareDefaulte;
                     }
                         break;
                     case 4:{
-                        model.style = createNormalCellStyleUserDdfinedThere;
-                        model.color = BLUE_BACKGROUND_COLOR;
-                        model.detailTitle = @"很遗憾，您未能通过考试,请继续加油!";
-                        model.hasFootViewLine = YES;
+                        model.style = createNormalCellStyleValue1;
+                        model.titleFont = 20*TYPERATION;
+                        
+                        model.color = TEXT_COLOR;
+                        model.title = @"科目三练车打卡累积";
+                        model.detailTitle = [NSString stringWithFormat:@"%d次",modela.studyCount];
                     }
                         break;
+                        
                     case 5:{
-                        model.style = createNormalCellStyleBang;
-                        model.grade = [modela.lastExamScore floatValue];
+                        model.style = createNormalCellStyleOnlyImageCenter;
+                        //                model.contenModel = UIViewContentModeCenter;
+                        model.hasFootViewLine = YES;
                         
                         
                     }
                         break;
                     case 6:{
                         model.style = createNormalCellStyleUserDdfinedTwo;
-                        model.detailTitle = @"根据交管部门的规定，您在首次考试10个工作日之后，即可再次预约考试。";
-                        model.titleFont = 14;
-                    }
-                        break;
-                    case 7:{
-                        model.style = createNormalCellStyleOnlyImageCenter;
-                        model.color = EEEEEE;
                     }
                         break;
                         
@@ -1248,6 +1333,117 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 
                 [data addObject:model];
             }
+            
+#warning mark - 下面为原始的月考中界面，暂时隐藏
+//            NSArray *arra = @[@"banner_four",@"",@""];
+//            NSArray *heights = @[@100,@0,@(300+44*5)];
+//            NSArray *title = @[@"",@"",@"场地名称:"];
+//
+//            for (int i = 0; i<title.count; i++) {
+//
+//                createNormalCellModel *model = [[createNormalCellModel alloc] init];
+//                model.imageViewStr = arra[i];
+//                model.he = [heights[i] floatValue];
+//                model.title = title[i];
+//                switch (i) {
+//                    case 0:{
+//                        model.color = BLUE_BACKGROUND_COLOR;
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.contenModel = UIViewContentModeScaleAspectFit;
+//                    }
+//                        break;
+//
+//                    case 1:{
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.color = EEEEEE;
+//                    }
+//                        break;
+//                    case 2:{
+//                        model.style = createNormalCellStyleUserDdfinedAppointment;
+//                        model.color = TEXT_COLOR;
+//                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"产业园教练场地" andImage:[UIImage imageNamed:@""] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+//
+//                        model.titleFont = 14;
+//                    }
+//                        break;
+//
+//
+//                    default:
+//                        break;
+//                }
+//
+//                [data addObject:model];
+//            }
+//             //科目三未通过考试
+//        }else if ([subProgress isEqualToString:@"5"]){
+//            NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@"",@"",@""];
+//            NSArray *heights = @[@100,@20,@60,@20,@100,@150,@200,@40];
+//            NSArray *title = @[@"",@"",@"",@"",@"",@"",@"再次练车",@""];
+//
+//            for (int i = 0; i<title.count; i++) {
+//
+//                createNormalCellModel *model = [[createNormalCellModel alloc] init];
+//                model.imageViewStr = arra[i];
+//                model.he = [heights[i] floatValue];
+//                model.title = title[i];
+//                switch (i) {
+//                    case 0:{
+//                        model.color = BLUE_BACKGROUND_COLOR;
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.contenModel = UIViewContentModeScaleAspectFit;
+//                    }
+//                        break;
+//                    case 1:{
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.color = EEEEEE;
+//                    }
+//                        break;
+//                    case 2:{
+//                        model.style = createNormalCellStyleUserDdfinedSix;
+//                        model.AttributedStr = [NSMutableAttributedString textKitAboutWithStr:@"观看视频  " andImage:[UIImage imageNamed:@"btn_go"] andOtherStr:@"" andBound:CGRectMake(0,-3,8,13)];
+//                        model.color = UNMAIN_TEXT_COLOR;
+//                        model.titleFont = 14;
+//
+//                    }
+//                        break;
+//
+//                    case 3:{
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.color = EEEEEE;
+//                    }
+//                        break;
+//                    case 4:{
+//                        model.style = createNormalCellStyleUserDdfinedThere;
+//                        model.color = BLUE_BACKGROUND_COLOR;
+//                        model.detailTitle = @"很遗憾，您未能通过考试,请继续加油!";
+//                        model.hasFootViewLine = YES;
+//                    }
+//                        break;
+//                    case 5:{
+//                        model.style = createNormalCellStyleBang;
+//                        model.grade = [modela.lastExamScore floatValue];
+//
+//
+//                    }
+//                        break;
+//                    case 6:{
+//                        model.style = createNormalCellStyleUserDdfinedTwo;
+//                        model.detailTitle = @"根据交管部门的规定，您在首次考试10个工作日之后，即可再次预约考试。";
+//                        model.titleFont = 14;
+//                    }
+//                        break;
+//                    case 7:{
+//                        model.style = createNormalCellStyleOnlyImageCenter;
+//                        model.color = EEEEEE;
+//                    }
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
+//
+//                [data addObject:model];
+//            }
             //科目三通过考试
         }else if ([subProgress isEqualToString:@"4"]){
             NSArray *arra = @[@"banner_four",@"",@"",@"",@"",@""];

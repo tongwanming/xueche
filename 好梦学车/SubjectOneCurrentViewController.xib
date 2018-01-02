@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SubjectOneCurrentViewController">
             <connections>
+                <outlet property="currentProgressNameLabel" destination="dIG-TH-dqY" id="Zlh-xh-NWS"/>
                 <outlet property="progressImageView" destination="OUj-eE-2gg" id="kPi-s0-mrv"/>
                 <outlet property="tableView" destination="UeA-hF-KQI" id="U2W-0V-8QB"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>

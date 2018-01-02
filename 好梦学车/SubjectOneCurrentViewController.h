@@ -26,5 +26,6 @@
 
 @property (nonatomic, strong) NSString *refreshAvtive;
 @property (weak, nonatomic) IBOutlet UIImageView *progressImageView;
+@property (weak, nonatomic) IBOutlet UILabel *currentProgressNameLabel;
 
 @end

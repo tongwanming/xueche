@@ -18,9 +18,9 @@
 
 @property (nonatomic, strong) NSString *origialPrice;//原始价格
 
-@property (nonatomic, strong) NSString *isUseCoupon;//是否用了优惠卷；Y为用了优惠卷
+@property (nonatomic, strong) NSString *isUseCoupon;//是否用了优惠券；Y为用了优惠券
 
-@property (nonatomic, strong) NSString *couponPrice;//优惠卷的金额
+@property (nonatomic, strong) NSString *couponPrice;//优惠券的金额
 
 @property (nonatomic, strong) NSString *urlName;
 

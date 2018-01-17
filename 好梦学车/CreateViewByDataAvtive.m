@@ -1192,8 +1192,6 @@ static CreateViewByDataAvtive *_shareDefaulte;
                 
                 [data addObject:model];
             }
-        }else if ([subProgress isEqualToString:@"6"]){
-            
         }else {
             
         }

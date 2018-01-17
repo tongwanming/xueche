@@ -372,7 +372,7 @@
 - (NSMutableArray *)titleData{
     NSArray *arr1 = @[@"我的班型",@"训练场地",@"我的教练"];
     
-    NSArray *arr2 = @[@"我的优惠卷",@"学车流程",@"订单管理",@"设置中心"];
+    NSArray *arr2 = @[@"我的优惠券",@"学车流程",@"订单管理",@"设置中心"];
     if (!_titleData) {
         _titleData = [[NSMutableArray alloc] init];
         [_titleData addObject:arr1];

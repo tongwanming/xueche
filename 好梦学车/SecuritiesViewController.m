@@ -57,7 +57,7 @@
     _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CURRENT_BOUNDS.width, 20)];
     _titleLable.textAlignment = NSTextAlignmentCenter;
     _titleLable.font = [UIFont systemFontOfSize:18];
-    _titleLable.text = @"暂无可用的优惠卷";
+    _titleLable.text = @"暂无可用的优惠券";
     _titleLable.center = CGPointMake(CURRENT_BOUNDS.width/2, CURRENT_BOUNDS.height/2);
     _titleLable.textColor = TEXT_COLOR;
     [self.view addSubview:_titleLable];

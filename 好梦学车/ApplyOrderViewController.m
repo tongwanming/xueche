@@ -319,8 +319,8 @@
 //                    ((ApplyOrderTableViewCell *)cell).secondName.textColor = UNMAIN_TEXT_COLOR;
 //                    ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:15];
                     ((ApplyOrderTableViewCell *)cell).accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"优惠卷";
-                    ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"%@优惠卷",_choosedSecurities];
+                    ((ApplyOrderTableViewCell *)cell).titleLabel.text = @"优惠券";
+                    ((ApplyOrderTableViewCell *)cell).secondName.text = [NSString stringWithFormat:@"%@优惠券",_choosedSecurities];
                     ((ApplyOrderTableViewCell *)cell).secondName.textColor = UNMAIN_TEXT_COLOR;
                     ((ApplyOrderTableViewCell *)cell).secondName.font = [UIFont systemFontOfSize:15];
                     
@@ -509,16 +509,16 @@
             if ([_choosedSecurities isEqualToString:@"分期不可使用"]) {
                 return;
             }
-            //优惠卷
+            //优惠券
             ChoosedSecuritiesViewController *billNewVC = [[ChoosedSecuritiesViewController alloc] init];
-            // billNewVC.data =  data;所有可以用的优惠卷
+            // billNewVC.data =  data;所有可以用的优惠券
             billNewVC.categoryCode = _model.categoryCode;
             billNewVC.price = _practicalpriceLabel.text;
             [billNewVC returnChoosedSecuritiesBlock:^(SecuritiesModel *model) {
                 if (model) {
                     _isUsedSer = YES;
                 }
-               //返回的优惠卷
+               //返回的优惠券
                 _securitiesModel = model;
                 _choosedSecurities = model.couponPrice;
             

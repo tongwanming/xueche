@@ -329,7 +329,24 @@
                 [self getLearnChangedActive];
             }
             
-        }else{
+        }else if ([_currentModel.studyStatus isEqualToString:@"5"]){
+            if (indexPath.row == 2-1) {
+                //立即练题
+                ExerciseViewController *v = [[ExerciseViewController alloc] init];
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+            if (indexPath.row == 6-1) {
+                //预约考试
+                ExaminationBookingViewController *v = [[ExaminationBookingViewController alloc] init];
+                v.model = _currentModel;
+                if ([self.delegate respondsToSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:)]) {
+                    [self.delegate performSelector:@selector(SubjectOneCurrentViewControllerDelegateWithActiveVC:andTag:) withObject:v withObject:@"1"];
+                }
+            }
+        }
+        else{
             
         }
         //科目二
@@ -730,16 +747,19 @@
         [[CreateViewByDataAvtive shareDefaulte] getViewDataWithModel:model andProgress:model.periodNum andSubProgress:model.studyStatus andBlock:^(NSMutableArray *add) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
-                createNormalCellModel *submodel = add[0];
-                _progressImageView.image = [UIImage imageNamed:submodel.imageViewStr];
-                _data = add;
-                if ([model.periodNum isEqualToString:@"0"]) {
-                    _currentProgressNameLabel.text = [NSString stringWithFormat:@"当前进度：%@",_progreeData[[model.periodNum intValue]]];
-                }else{
-                    _currentProgressNameLabel.text = [NSString stringWithFormat:@"当前进度：%@",_progreeData[[model.periodNum intValue]-1]];
+                if (add.count > 0) {
+                    createNormalCellModel *submodel = add[0];
+                    _progressImageView.image = [UIImage imageNamed:submodel.imageViewStr];
+                    _data = add;
+                    if ([model.periodNum isEqualToString:@"0"]) {
+                        _currentProgressNameLabel.text = [NSString stringWithFormat:@"当前进度：%@",_progreeData[[model.periodNum intValue]]];
+                    }else{
+                        _currentProgressNameLabel.text = [NSString stringWithFormat:@"当前进度：%@",_progreeData[[model.periodNum intValue]-1]];
+                    }
+                    
+                    [_tableView reloadData];
                 }
                 
-                [_tableView reloadData];
             });
             
         }];
@@ -811,7 +831,7 @@
         [[URLConnectionHelper shareDefaulte] loadPostDataWithUrl:@"http://101.37.161.13:7081/v1/student/studentExam/add" andDic:dic andSuccessBlock:^(NSArray *data) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [CustomAlertView hideAlertView];
-                NSString *des = @"提交约考请求成功！";
+                NSString *des = @"提交约考请求成功！您的学车顾问会主动联系您并帮助您完成预约考试。";
                 UIAlertController *v = [UIAlertController alertControllerWithTitle:@"提示" message:des preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     [self getDataAvite];

@@ -21,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>2.10</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -139,10 +139,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>choicePic</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>YES</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>YES</string>
+	<string>Using GPS can help him pinpoint a nearby practice area</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>choicePic</string>
 	<key>UIBackgroundModes</key>

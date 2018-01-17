@@ -130,9 +130,9 @@
             NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 if (error == nil) {
                     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                    NSString *dic = [jsonDict objectForKey:@"success"];
+                    BOOL success = [[jsonDict objectForKey:@"success"] boolValue];
                     _message = [jsonDict objectForKey:@"message"];
-
+                    
                     if (_message && [_message isEqualToString:@"用户名已经注册"] && ![_message isEqual:[NSNull null]]) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             UIAlertController *v = [UIAlertController alertControllerWithTitle:@"获取验证码失败" message:@"该电话号码已经注册，请直接登录！！" preferredStyle:UIAlertControllerStyleAlert];
@@ -148,9 +148,24 @@
                         });
                     }else{
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            UIAlertController *v = [UIAlertController alertControllerWithTitle:@"验证失败" message:_message preferredStyle:UIAlertControllerStyleAlert];
+                            NSString *str = @"";
+                            if (success) {
+                                str = @"发送成功";
+                            }else{
+                                str = @"发送失败";
+                            }
+                            UIAlertController *v = [UIAlertController alertControllerWithTitle:str message:_message preferredStyle:UIAlertControllerStyleAlert];
                             UIAlertAction *active = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                                
+                                if (success) {
+                                    if (_timer) {
+                                        _time = 60;
+                                        [_timer invalidate];
+                                        _timer = nil;
+                                    }
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshBtn) userInfo:nil repeats:YES];
+                                    });
+                                }
                             }];
                             [v addAction:active];
                             [self presentViewController:v animated:YES completion:^{
@@ -173,19 +188,6 @@
                     
                 }
                 
-                if (_timer) {
-                    _time = 60;
-                    [_timer invalidate];
-                    _timer = nil;
-                }
-                if ([_message isEqualToString:@"用户名已经注册"]) {
-                    
-                }else{
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshBtn) userInfo:nil repeats:YES];
-                    });
-                    
-                }
                 
             }];
             [dataTask resume];

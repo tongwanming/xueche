@@ -164,11 +164,10 @@
             _choosedClassModel.price2 = _choosedModel.C2Str;
             _choosedClassModel.backGroundImageName = _choosedModel.imageStr;
             _tableView.tableHeaderView = [self createHenderView];
+//
         });
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_tableView reloadData];
-        });
+       
     } andFiledBlock:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CustomAlertView hideAlertView];
@@ -249,8 +248,10 @@
     if (indexPath.row == 0) {
         if (_choosedModel.contentServers && _choosedModel.contentServers.length > 0) {
             NSArray *arr = [self arrAddWidthStr:_choosedModel.contentServers];
-            
-            return arr.count * 40+30;
+            if (arr.count == 2) {
+                return arr.count * 50+30;
+            }else
+                return arr.count * 40+30;
         }else{
             return 100;
         }
@@ -258,7 +259,10 @@
     }else{
         if (_choosedModel.detailPrice && _choosedModel.detailPrice.length > 0) {
             NSArray *arr = [self arrAddWidthStr:_choosedModel.detailPrice];
-            return 70*arr.count+30;
+            
+            float height = [self getAllHeightWithData:arr];
+            height = height+arr.count*12+80;
+            return height;
         }else{
             
             return 275;
@@ -382,7 +386,8 @@
         _v3.hidden = NO;
         [headView addSubview:_v3];
     }
- 
+    
+    [_tableView reloadData];
     return headView;
 }
 
@@ -541,11 +546,25 @@
     
     NSMutableString *mutStr = [NSMutableString stringWithString:str];
     
-    NSMutableArray *mutArr = [mutStr componentsSeparatedByString:@"#"];
+    NSArray *mutArr = [mutStr componentsSeparatedByString:@"#"];
     
     NSArray *arr = [NSArray arrayWithArray:mutArr];
     
     return arr;
+}
+
+- (float)getAllHeightWithData:(NSArray*)data{
+    float _allHeight = 0;
+    for (int i = 0; i < data.count; i++) {
+        _allHeight += [self heightForString:data[i]];
+    }
+    return _allHeight;
+}
+
+- (float)heightForString:(NSString *)titleString{
+    CGSize titleSize = [titleString boundingRectWithSize:CGSizeMake(CURRENT_BOUNDS.width-16-20-17*TYPERATION, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15*TYPERATION]} context:nil].size;
+    
+    return titleSize.height;
 }
 
 //点击方法

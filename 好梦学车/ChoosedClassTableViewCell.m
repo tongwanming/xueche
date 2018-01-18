@@ -31,7 +31,7 @@
     
     NSMutableString *mutStr = [NSMutableString stringWithString:str];
     
-    NSMutableArray *mutArr = [mutStr componentsSeparatedByString:@"#"];
+    NSArray *mutArr = [mutStr componentsSeparatedByString:@"#"];
     
     NSArray *arr = [NSArray arrayWithArray:mutArr];
     
@@ -42,7 +42,7 @@
     
     NSMutableString *mutStr = [NSMutableString stringWithString:str];
     
-    NSMutableArray *mutArr = [mutStr componentsSeparatedByString:@"@"];
+    NSArray *mutArr = [mutStr componentsSeparatedByString:@"@"];
     
     NSArray *arr = [NSArray arrayWithArray:mutArr];
     
@@ -55,6 +55,8 @@
         [view removeFromSuperview];
     }
     
+    float _heightLast = 0.0;
+    
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 30, CURRENT_BOUNDS.width-40, 16)];
     _titleLabel.font = [UIFont systemFontOfSize:16*TYPERATION];
     _titleLabel.text = @"费用明细";
@@ -62,28 +64,41 @@
     [self.contentView addSubview:_titleLabel];
     
     for (int i = 0; i<arr.count; i++) {
-        
+        float _currentHeight = 0;
+        if (_heightLast == 0.0) {
+            _currentHeight = CGRectGetMaxY(_titleLabel.frame)+20;
+        }else{
+            _currentHeight = 0.0;
+        }
         NSArray *subArr = [self arrAddWidthStrOther:arr[i]];
-        UIView *layerView = [[UIView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(_titleLabel.frame)+25+4+(15+28+15*TYPERATION)*i, 7*TYPERATION, 7*TYPERATION)];
+        UIView *layerView = [[UIView alloc] initWithFrame:CGRectMake(20, _currentHeight+_heightLast, 7*TYPERATION, 7*TYPERATION)];
         layerView.layer.masksToBounds = YES;
         layerView.layer.cornerRadius = 3.5*TYPERATION;
         layerView.backgroundColor = TEXT_COLOR;
         [self.contentView addSubview:layerView];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(layerView.frame)+16, CGRectGetMaxY(_titleLabel.frame)+25+(15+28+15*TYPERATION)*i, CURRENT_BOUNDS.width-16, 15*TYPERATION)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(layerView.frame)+16, _currentHeight+_heightLast, CURRENT_BOUNDS.width-16, 15*TYPERATION)];
         label.textColor = TEXT_COLOR;
         label.text = [NSString stringWithFormat:@"%@:",subArr[0]];
         label.font = [UIFont systemFontOfSize:15*TYPERATION];
         [self.contentView addSubview:label];
         
-        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(layerView.frame)+16, CGRectGetMaxY(label.frame), CURRENT_BOUNDS.width-16-20-7*TYPERATION, 15*TYPERATION+28)];
+        UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(layerView.frame)+16, CGRectGetMaxY(label.frame)+5, CURRENT_BOUNDS.width-16-20-17*TYPERATION, 15*TYPERATION+28)];
         label1.textColor = UNMAIN_TEXT_COLOR;
         label1.text = subArr[1];
-        label1.numberOfLines = 2;
+        label1.numberOfLines = 0;
 //        label1.backgroundColor = [UIColor redColor];
         label1.font = [UIFont systemFontOfSize:15*TYPERATION];
+        label1.frame = CGRectMake(CGRectGetMaxX(layerView.frame)+16, CGRectGetMaxY(label.frame)+5, CURRENT_BOUNDS.width-16-20-17*TYPERATION, [self heightForString:label1.text andWidth:label1.frame.size.width amdFont:15*TYPERATION]);
         [self.contentView addSubview:label1];
+        _heightLast = CGRectGetMaxY(label1.frame)+10;
     }
+}
+
+- (float)heightForString:(NSString *)titleString andWidth:(float)width amdFont:(float)font{
+    CGSize titleSize = [titleString boundingRectWithSize:CGSizeMake(width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:font]} context:nil].size;
+    
+    return titleSize.height;
 }
 
 - (void)awakeFromNib {
